@@ -1,0 +1,28 @@
+{
+  "name": "ai-engineering-workflows",
+  "version": "0.1.0",
+  "description": "AI engineering workflow orchestration scaffold with commands for phases, triggers, logs, and impact reports.",
+  "type": "module",
+  "bin": {
+    "ai-workflow": "scripts/ai-workflow.mjs"
+  },
+  "scripts": {
+    "ai": "node scripts/ai-workflow.mjs",
+    "ai:status": "node scripts/ai-workflow.mjs status",
+    "ai:init": "node scripts/ai-workflow.mjs init",
+    "ai:start": "node scripts/ai-workflow.mjs start-phase",
+    "ai:trigger": "node scripts/ai-workflow.mjs trigger",
+    "ai:impact": "node scripts/ai-workflow.mjs impact",
+    "ai:handoff": "node scripts/ai-workflow.mjs handoff",
+    "ai:validate": "node scripts/ai-workflow.mjs validate",
+    "ai:demo": "node scripts/ai-workflow.mjs demo"
+  },
+  "keywords": [
+    "ai",
+    "workflow",
+    "sdlc",
+    "agents",
+    "orchestration"
+  ],
+  "license": "MIT"
+}

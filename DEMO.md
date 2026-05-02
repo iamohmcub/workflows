@@ -41,6 +41,12 @@ project:
 
 ## 3. Start the AI Worker
 
+Optional command check:
+
+```bash
+npm run ai:status
+```
+
 Give the worker this prompt:
 
 ```text
@@ -66,6 +72,15 @@ The worker should:
 9. Complete the DoD item by item.
 10. Write a handoff note before the next phase.
 
+Equivalent command flow:
+
+```bash
+npm run ai:trigger -- on_phase_start --phase okr
+npm run ai:trigger -- on_impact_detected --title "Checkout analytics definitions" --phase okr --affected-roles data-analyst --affected-repos analytics-events
+npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
+npm run ai:validate
+```
+
 ## 5. Demo Evidence
 
 These files show the expected output:
@@ -87,4 +102,3 @@ The worker does not just code. It knows:
 - What evidence is required
 - When to report impact
 - When to stop at a gate
-

@@ -51,6 +51,7 @@ project:
     logs: .ai/runtime/logs
     reports: .ai/runtime/reports
     decisions: .ai/runtime/decisions
+    handoffs: .ai/runtime/handoffs
 
   startup:
     worker_prompt_template: .ai/templates/worker-startup-prompt.md
@@ -58,4 +59,5 @@ project:
       - AGENTS.md
       - .ai/manifest.yml
       - .ai/SKILLS.md
+      - .ai/AUTOMATION.md
       - .ai/project.yml

@@ -30,6 +30,7 @@ hierarchy:
 
 load_order:
   - .ai/SKILLS.md
+  - .ai/AUTOMATION.md
   - .ai/project.yml
   - .ai/global/company.skills.yml
   - .ai/global/company.hooks.yml
@@ -55,6 +56,7 @@ runtime:
   phase_logs: .ai/runtime/logs
   impact_reports: .ai/runtime/reports
   decisions: .ai/runtime/decisions
+  handoffs: .ai/runtime/handoffs
   templates: .ai/templates
 
 hard_requirements:

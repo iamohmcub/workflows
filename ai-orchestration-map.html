@@ -434,6 +434,7 @@
         <a href="#cycle">SDLC</a>
         <a href="#roles">Roles</a>
         <a href="#reports">Reports</a>
+        <a href="#commands">Commands</a>
       </nav>
     </div>
   </header>
@@ -698,6 +699,34 @@
         <div class="flow-step">
           <strong>Handoff</strong>
           <span>Write handoff note and link evidence before next phase.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="commands">
+      <div class="section-title">
+        <h2>Commands and Triggers</h2>
+        <p>The CLI turns hooks into repeatable local commands, while GitHub Actions validates the `.ai` system on push and pull request.</p>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Local Commands</h3>
+          <ul class="rule-list">
+            <li>`npm run ai:status`</li>
+            <li>`npm run ai:start -- okr`</li>
+            <li>`npm run ai:trigger -- on_phase_start --phase okr`</li>
+            <li>`npm run ai:impact -- --title "API changed"`</li>
+            <li>`npm run ai:handoff -- --from product-manager --to ux-designer`</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Automation</h3>
+          <ul class="rule-list">
+            <li>GitHub Actions runs `npm run ai:validate`.</li>
+            <li>Triggers on push to `main`.</li>
+            <li>Triggers on pull request to `main`.</li>
+            <li>Can be run manually with `workflow_dispatch`.</li>
+          </ul>
         </div>
       </div>
     </section>

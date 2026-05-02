@@ -67,6 +67,12 @@ The worker should then:
 6. Create a phase log.
 7. Work only inside the current phase unless the orchestrator changes phase.
 
+Useful command:
+
+```bash
+npm run ai:status
+```
+
 ## 6. Evidence Rules
 
 The worker must create:
@@ -74,6 +80,7 @@ The worker must create:
 - Phase logs in `.ai/runtime/logs`
 - Impact reports in `.ai/runtime/reports`
 - Decision logs in `.ai/runtime/decisions`
+- Handoff notes in `.ai/runtime/handoffs`
 
 The phase is not complete until the log and evidence exist.
 
@@ -96,3 +103,21 @@ To see the full shape before using it in a real repo, read:
 - `.ai/examples/demo-worker-run.md`
 - `.ai/examples/runtime/logs/2026-05-02-okr-checkout-service.md`
 
+## 9. Commands and Automation
+
+Command reference:
+
+- `COMMANDS.md`
+
+Automation trigger reference:
+
+- `.ai/AUTOMATION.md`
+
+Most common first commands:
+
+```bash
+npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr
+npm run ai:status
+npm run ai:start -- okr
+npm run ai:validate
+```

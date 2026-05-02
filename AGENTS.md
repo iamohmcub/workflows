@@ -50,3 +50,20 @@ When this `.ai` system is copied into a new project:
 3. Keep `AGENTS.md` at the repo root.
 4. Start every AI worker with the prompt in `.ai/templates/worker-startup-prompt.md`.
 5. Use `.ai/PROJECT_SETUP.md` as the full checklist.
+
+## Commands
+
+Use `COMMANDS.md` for the local command reference.
+
+Common commands:
+
+```bash
+npm run ai:status
+npm run ai:start -- okr
+npm run ai:trigger -- on_phase_start --phase okr
+npm run ai:impact -- --title "Analytics contract changed" --phase okr
+npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
+npm run ai:validate
+```
+
+Automation trigger documentation lives in `.ai/AUTOMATION.md`.

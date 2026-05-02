@@ -44,6 +44,14 @@ The worker creates:
 - `runtime/decisions/2026-05-02-checkout-okr-scope.md`
 - `runtime/handoffs/2026-05-02-pm-to-ux-checkout.md`
 
+Command equivalent:
+
+```bash
+npm run ai:trigger -- on_phase_start --phase okr
+npm run ai:trigger -- on_impact_detected --title "Checkout analytics definitions" --phase okr --affected-roles data-analyst --affected-repos analytics-events
+npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
+```
+
 ## Worker Gate Check
 
 Gate question:
@@ -57,4 +65,3 @@ Demo answer:
 ```text
 Yes, with one tracked impact. UX can begin user research, but Data Analyst must confirm the checkout abandonment metric and analytics event definitions before Gate 2.
 ```
-
