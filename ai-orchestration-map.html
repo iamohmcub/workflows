@@ -431,6 +431,7 @@
         <a href="#hierarchy">Hierarchy</a>
         <a href="#startup">Startup</a>
         <a href="#cycle">SDLC</a>
+        <a href="#parallel">Parallel</a>
         <a href="#roles">Roles</a>
         <a href="#commits">Commits</a>
         <a href="#reports">Reports</a>
@@ -581,6 +582,33 @@
       </div>
     </section>
 
+    <section id="parallel">
+      <div class="section-title">
+        <h2>Parallel MVP Lanes</h2>
+        <p>Product, design, engineering, QA, release, and learning can work on different MVPs at the same time once handoffs lock the contract for each work item.</p>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Allowed Flow</h3>
+          <ul class="rule-list">
+            <li>Business hands off `mvp-1` to design or engineering.</li>
+            <li>Engineering builds `mvp-1` while business starts `mvp-2` discovery.</li>
+            <li>QA tests `mvp-1` while frontend/backend continue implementation tasks.</li>
+            <li>Monitoring measures released MVPs while product plans the next iteration.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Guardrails</h3>
+          <ul class="rule-list">
+            <li>Every parallel log names work item, lane, upstream handoff, and dependencies.</li>
+            <li>Handoff locks scope, AC, design, API, data, and release expectation.</li>
+            <li>Changing a locked handoff needs an impact report.</li>
+            <li>Shared security, compliance, environment, API, data, or customer dependencies can block multiple lanes.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section id="roles">
       <div class="section-title">
         <h2>Expert Roles</h2>
@@ -712,6 +740,7 @@
           <ul class="rule-list">
             <li>`npm run ai:status`</li>
             <li>`npm run ai:start -- okr`</li>
+            <li>`npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery`</li>
             <li>`npm run ai:trigger -- on_phase_start --phase okr`</li>
             <li>`npm run ai:impact -- --title "API changed"`</li>
             <li>`npm run ai:handoff -- --from product-manager --to ux-designer`</li>

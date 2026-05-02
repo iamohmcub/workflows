@@ -16,6 +16,9 @@ commit_policy:
     - AI-Phase
     - AI-Task-Done
     - AI-Evidence
+  optional_parallel_trailers:
+    - AI-Work-Item
+    - AI-Lane
   task_done_value: "yes"
   author_rule: Keep the real Git author account. Put agent identity in the commit subject and trailers.
 

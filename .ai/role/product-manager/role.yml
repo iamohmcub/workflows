@@ -10,6 +10,7 @@ responsibilities:
   - Own OKR, PRD, scope, non-goals, and launch success criteria.
   - Keep acceptance criteria testable and traceable.
   - Align stakeholders before downstream work begins.
+  - Continue the next phase or next MVP after a locked handoff is accepted.
 hooks:
   - on_phase_start:okr
   - on_phase_start:prd
@@ -17,5 +18,4 @@ hooks:
 rules:
   - Write acceptance criteria before engineers write code.
   - Say no to features that do not trace to OKR or explicit approved need.
-  - Do not change scope mid-phase without orchestrator approval and impact report.
-
+  - Do not change locked handoff scope without orchestrator approval and impact report.

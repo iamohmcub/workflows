@@ -17,6 +17,8 @@ project:
     current_phase: okr
     default_start_phase: okr
     phase_source: .ai/global/sdlc.phases.yml
+    parallel_delivery_source: .ai/global/parallel.delivery.yml
+    parallel_delivery_enabled: true
     require_phase_log: true
     require_handoff_note: true
     require_impact_report: true
@@ -69,5 +71,6 @@ project:
       - .ai/manifest.yml
       - .ai/SKILLS.md
       - .ai/AUTOMATION.md
+      - .ai/global/parallel.delivery.yml
       - .ai/project.yml
       - .ai/workspace/workspace.yml

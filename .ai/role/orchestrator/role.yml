@@ -9,6 +9,7 @@ skills:
 responsibilities:
   - Load and enforce `.ai` rules.
   - Assign roles to phases.
+  - Route parallel MVP/work item lanes and protect locked handoff contracts.
   - Resolve conflicts between roles, repos, and repo groups.
   - Block gates when DoD, evidence, or impact reports are missing.
 hooks:
@@ -20,4 +21,3 @@ rules:
   - Document every final decision.
   - Enforce hard rules with no exceptions, including self.
   - Do not produce implementation artifacts owned by specialist roles.
-

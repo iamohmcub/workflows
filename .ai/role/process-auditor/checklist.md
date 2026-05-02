@@ -8,6 +8,7 @@
 - [ ] Impact reports, if relevant
 - [ ] Handoff notes, if relevant
 - [ ] Commit subject and trailers
+- [ ] Parallel work item, lane, upstream handoff, and locked contracts, if relevant
 
 ## During Work
 
@@ -31,6 +32,8 @@
 - [ ] Checked: Impact report is missing for cross-role or cross-repo work
 - [ ] Checked: Handoff note does not name next owner or required action
 - [ ] Checked: Commit identity does not match `.ai/global/agent.positions.yml`
+- [ ] Checked: Parallel lane does not name MVP/work item or upstream handoff
+- [ ] Checked: Locked handoff contract changed without impact report
 
 If any checked item is true, create an audit finding or impact report before handoff.
 

@@ -4,6 +4,10 @@ Date:
 Repo group:
 Repo:
 Phase:
+Work item / MVP:
+Parallel lane:
+Upstream handoff:
+Depends on:
 Owner role:
 Supporting roles:
 Gate:
@@ -13,6 +17,25 @@ Gate:
 - OKR / AC / ticket / incident / request:
 - Related decisions:
 - Related impact reports:
+- Related handoffs:
+
+## Parallel Flow
+
+- [ ] Single-lane work, no parallel flow.
+- [ ] Parallel work item/MVP is named.
+- [ ] Upstream handoff is linked.
+- [ ] Locked contracts are listed.
+- [ ] Shared dependencies are listed.
+- [ ] Work can continue without blocking unrelated lanes.
+
+## Locked Contracts
+
+- Scope:
+- Acceptance criteria:
+- Design:
+- API:
+- Data:
+- Release expectation:
 
 ## Work Completed
 
@@ -53,6 +76,8 @@ Gate:
 ## Handoff
 
 - Next owner:
+- Next lane:
+- Handoff unlocks:
 - Done:
 - Not done:
 - Risks:

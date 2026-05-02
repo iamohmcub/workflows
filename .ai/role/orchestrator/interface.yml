@@ -7,6 +7,8 @@ owns:
 - Workflow governance
 - Phase gates
 - Role routing
+- Parallel lane routing
+- Locked handoff contracts
 - Conflict decisions
 - Cross-repo escalation
 requires_before_start:
@@ -16,6 +18,7 @@ requires_before_start:
 must_produce:
 - Phase routing decision
 - Gate pass or block decision
+- Parallel lane start or block decision
 - Conflict decision log
 - Impact escalation notes
 - Audit trail update

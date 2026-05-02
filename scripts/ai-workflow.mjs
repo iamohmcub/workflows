@@ -9,6 +9,7 @@ const AI_DIR = path.join(ROOT, ".ai");
 const PROJECT_FILE = path.join(AI_DIR, "project.yml");
 const PHASE_FILE = path.join(AI_DIR, "global", "sdlc.phases.yml");
 const AGENT_POSITIONS_FILE = path.join(AI_DIR, "global", "agent.positions.yml");
+const PARALLEL_DELIVERY_FILE = path.join(AI_DIR, "global", "parallel.delivery.yml");
 const RUNTIME_DIR = path.join(AI_DIR, "runtime");
 const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
 
@@ -28,12 +29,14 @@ const REQUIRED_FILES = [
   ".ai/global/company.hooks.yml",
   ".ai/global/company.rules.yml",
   ".ai/global/agent.positions.yml",
+  ".ai/global/parallel.delivery.yml",
   ".ai/global/sdlc.phases.yml"
 ];
 
 const EVENT_ALIASES = {
   on_project_init: "init",
   on_phase_start: "start-phase",
+  on_parallel_lane_start: "start-phase",
   on_impact_detected: "impact",
   on_bug_detected: "impact",
   on_agent_task_done: "commit"
@@ -98,7 +101,9 @@ Usage:
   npm run ai:status
   npm run ai:init -- --repo-group-id acme --repo-group-name "Acme Platform" --repo-id checkout-service --repo-name "Checkout Service" --type product-service --phase okr --workspace-profile web-saas --frontend-stack nextjs-typescript --backend-stack node-api-typescript --infra-stack netlify-or-container --qa-profile playwright-vitest
   npm run ai:start -- okr
+  npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
   npm run ai:trigger -- on_phase_start --phase prd
+  npm run ai:trigger -- on_parallel_lane_start --phase prd --mvp mvp-2 --lane business-discovery
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
   npm run ai:impact -- --title "API contract changed" --phase technical-design --severity P2
   npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
@@ -131,6 +136,7 @@ Gate:       ${phase?.gate || "unknown"}
 
 Next commands:
   npm run ai:start -- ${project.currentPhase}
+  npm run ai:start -- ${project.currentPhase} --mvp <mvp-id> --lane ${defaultLaneForPhase(project.currentPhase)}
   npm run ai:trigger -- on_phase_start --phase ${project.currentPhase}
   npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"
   npm run ai:validate
@@ -206,16 +212,22 @@ function startPhase(argv) {
   const project = readProject();
   const phases = readPhases();
   const phase = phaseById(phases, phaseId);
+  const workItem = options.mvp || options["mvp-id"] || options["work-item"] || options["work-item-id"] || "";
+  const lane = options.lane || defaultLaneForPhase(phaseId);
+  const dependsOn = options["depends-on"] || options.handoff || "";
+  const upstreamHandoff = options["upstream-handoff"] || dependsOn;
+  const isParallel = Boolean(workItem || options.parallel || options.lane || dependsOn);
 
   if (!phase) {
     fail(`Unknown phase: ${phaseId}\nKnown phases: ${phases.map((item) => item.id).join(", ")}`);
   }
 
   ensureRuntimeDirs();
-  updateCurrentPhase(phase.id);
+  if (!isParallel || options["set-current"]) updateCurrentPhase(phase.id);
 
   const date = today();
-  const file = path.join(RUNTIME_DIR, "logs", `${date}-${phase.id}-${slug(project.repoId)}.md`);
+  const fileName = [date, workItem, phase.id, lane, project.repoId].filter(Boolean).map(slug).join("-");
+  const file = path.join(RUNTIME_DIR, "logs", `${fileName}.md`);
 
   if (fs.existsSync(file) && !options.force) {
     console.log(`Phase log already exists: ${relative(file)}
@@ -234,6 +246,10 @@ Date: ${date}
 Repo group: ${project.repoGroupName}
 Repo: ${project.repoName}
 Phase: ${phase.id}
+Work item / MVP: ${workItem || "single-lane"}
+Parallel lane: ${lane}
+Upstream handoff: ${upstreamHandoff || "n/a"}
+Depends on: ${dependsOn || "n/a"}
 Owner role: ${phase.owner}
 Supporting roles: ${supporting}
 Gate: ${phase.gate}
@@ -243,12 +259,32 @@ Gate: ${phase.gate}
 - OKR / AC / ticket / incident / request:
 - Related decisions:
 - Related impact reports:
+- Related handoffs:
+
+## Parallel Flow
+
+- [${isParallel ? " " : "x"}] Single-lane work, no parallel flow.
+- [${isParallel ? "x" : " "}] Parallel work item/MVP is named.
+- [${upstreamHandoff ? "x" : " "}] Upstream handoff is linked.
+- [ ] Locked contracts are listed.
+- [ ] Shared dependencies are listed.
+- [ ] Work can continue without blocking unrelated lanes.
+
+## Locked Contracts
+
+- Scope:
+- Acceptance criteria:
+- Design:
+- API:
+- Data:
+- Release expectation:
 
 ## Worker Boot
 
 - [x] Read AGENTS.md
 - [x] Read .ai/manifest.yml
 - [x] Read .ai/SKILLS.md
+- [x] Read .ai/global/parallel.delivery.yml
 - [x] Read .ai/project.yml
 - [x] Loaded shared workspace standards: .ai/workspace/
 - [x] Loaded role module: .ai/role/${phase.owner}/
@@ -301,6 +337,8 @@ Answer:
 ## Handoff
 
 - Next owner:
+- Next lane:
+- Handoff unlocks:
 - Done:
 - Not done:
 - Risks:
@@ -317,6 +355,11 @@ Owner role:
 Created phase log:
   ${relative(file)}
 
+Parallel:
+  Work item/MVP: ${workItem || "single-lane"}
+  Lane: ${lane}
+  Repo current phase changed: ${!isParallel || options["set-current"] ? "yes" : "no"}
+
 Next:
   Read .ai/role/${phase.owner}/role.yml
   Read .ai/role/${phase.owner}/interface.yml
@@ -326,6 +369,7 @@ Next:
   Complete DoD item by item
   Run npm run ai:impact -- --title "<title>" if another role or repo is affected
   Run npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>" when the task is done
+  Keep upstream lanes moving when handoff contracts are locked and dependencies are clear
 `);
 }
 
@@ -337,6 +381,7 @@ function trigger(argv) {
 
   on_project_init      -> npm run ai:init
   on_phase_start       -> npm run ai:start -- <phase>
+  on_parallel_lane_start -> npm run ai:start -- <phase> --mvp <mvp-id> --lane <lane>
   on_impact_detected   -> npm run ai:impact -- --title "<title>"
   on_bug_detected      -> npm run ai:impact -- --title "<bug title>" --severity P1
   on_agent_task_done   -> npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"
@@ -344,6 +389,7 @@ function trigger(argv) {
 Usage patterns:
   npm run ai:trigger -- on_project_init
   npm run ai:trigger -- on_phase_start --phase okr
+  npm run ai:trigger -- on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
   npm run ai:trigger -- on_agent_task_done --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 `);
@@ -381,6 +427,8 @@ function impact(argv) {
   const affectedRoles = options["affected-roles"] || "TBD";
   const affectedRepos = options["affected-repos"] || project.repoId;
   const gateBlocking = options["gate-blocking"] || "yes";
+  const workItem = options.mvp || options["mvp-id"] || options["work-item"] || options["work-item-id"] || "TBD";
+  const lane = options.lane || defaultLaneForPhase(phaseId);
 
   ensureRuntimeDirs();
 
@@ -402,6 +450,8 @@ Repo group: ${project.repoGroupName}
 Source repo: ${project.repoId}
 Source role: ${sourceRole}
 Phase: ${phaseId}
+Work item / MVP: ${workItem}
+Parallel lane: ${lane}
 Severity: ${severity}
 Gate blocking: ${gateBlocking}
 
@@ -413,6 +463,7 @@ ${options.summary || "Describe what changed and why it matters."}
 
 - Affected repos: ${affectedRepos}
 - Affected roles: ${affectedRoles}
+- Affected lanes: ${options["affected-lanes"] || "TBD"}
 - Affected environments: ${options.environments || "TBD"}
 - Affected APIs or data contracts: ${options.contracts || "TBD"}
 - Affected customers or commitments: ${options.customers || "TBD"}
@@ -468,11 +519,15 @@ function handoff(argv) {
   const phaseId = options.phase || project.currentPhase;
   const from = options.from || "TBD";
   const to = options.to || "TBD";
+  const workItem = options.mvp || options["mvp-id"] || options["work-item"] || options["work-item-id"] || "";
+  const fromLane = options["from-lane"] || options.lane || defaultLaneForPhase(phaseId);
+  const toLane = options["to-lane"] || "";
 
   ensureRuntimeDirs();
 
   const date = today();
-  const file = path.join(RUNTIME_DIR, "handoffs", `${date}-${slug(from)}-to-${slug(to)}-${slug(phaseId)}.md`);
+  const fileName = [date, workItem, slug(from), "to", slug(to), phaseId].filter(Boolean).map(slug).join("-");
+  const file = path.join(RUNTIME_DIR, "handoffs", `${fileName}.md`);
 
   if (fs.existsSync(file) && !options.force) {
     console.log(`Handoff note already exists: ${relative(file)}
@@ -489,6 +544,18 @@ From role: ${from}
 To role: ${to}
 Repo: ${project.repoId}
 Phase: ${phaseId}
+Work item / MVP: ${workItem || "single-lane"}
+From lane: ${fromLane}
+To lane: ${toLane || "TBD"}
+
+## Locked Contracts
+
+- Scope:
+- Acceptance criteria:
+- Design:
+- API:
+- Data:
+- Release expectation:
 
 ## Done
 
@@ -514,6 +581,12 @@ Phase: ${phaseId}
 ## Required Next Action
 
 -
+
+## Parallel Continuation
+
+- Upstream role may continue next phase or next MVP: yes | no
+- Downstream lane is unlocked: yes | no
+- Impact report required for later contract changes: yes
 `;
 
   fs.writeFileSync(file, content);
@@ -553,15 +626,19 @@ ${agents.map((item) => `  ${item.id}`).join("\n")}
 
   const phase = options.phase || project.currentPhase;
   const role = options.role || agent.mapsToRole;
+  const workItem = options.mvp || options["mvp-id"] || options["work-item"] || options["work-item-id"];
+  const lane = options.lane || defaultLaneForPhase(phase);
   const summary = message.startsWith(`${agent.id}:`) ? message.slice(agent.id.length + 1).trim() : message;
   const subject = `${agent.id}: ${summary}`;
   const body = [
     `AI-Agent: ${agent.id}`,
     `AI-Role: ${role}`,
     `AI-Phase: ${phase}`,
+    workItem ? `AI-Work-Item: ${workItem}` : "",
+    lane ? `AI-Lane: ${lane}` : "",
     "AI-Task-Done: yes",
     `AI-Evidence: ${evidence}`
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 
   if (options["dry-run"]) {
     console.log(`${subject}
@@ -632,6 +709,7 @@ function validate() {
 
   ensureFile(PROJECT_FILE, "Missing .ai/project.yml");
   ensureFile(PHASE_FILE, "Missing .ai/global/sdlc.phases.yml");
+  ensureFile(PARALLEL_DELIVERY_FILE, "Missing .ai/global/parallel.delivery.yml");
   ensureFile(WORKSPACE_FILE, "Missing .ai/workspace/workspace.yml");
 
   const project = readProject();
@@ -693,6 +771,11 @@ function validate() {
 
   for (const agent of agents) {
     if (!agent.mapsToRole) errors.push(`Agent position is missing maps_to_role: ${agent.id}`);
+  }
+
+  const parallelText = fs.readFileSync(PARALLEL_DELIVERY_FILE, "utf8");
+  for (const lane of ["business-discovery", "product-design", "engineering-delivery", "quality-release", "operations-learning"]) {
+    if (!parallelText.includes(`${lane}:`)) errors.push(`Missing parallel delivery lane: ${lane}`);
   }
 
   if (errors.length) {
@@ -992,6 +1075,22 @@ function relative(file) {
 
 function unique(items) {
   return [...new Set(items.filter(Boolean))];
+}
+
+function defaultLaneForPhase(phaseId) {
+  const lanes = {
+    okr: "business-discovery",
+    "user-research": "product-design",
+    prd: "business-discovery",
+    "ux-design": "product-design",
+    "technical-design": "engineering-delivery",
+    development: "engineering-delivery",
+    "qa-testing": "quality-release",
+    "release-deployment": "quality-release",
+    monitoring: "operations-learning",
+    "measure-iterate": "operations-learning"
+  };
+  return lanes[phaseId] || "business-discovery";
 }
 
 function gitOutput(args) {

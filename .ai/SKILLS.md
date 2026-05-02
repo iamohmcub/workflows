@@ -17,6 +17,7 @@ When a worker starts:
 7. Select the correct role module from `.ai/role/<role-id>/`.
 8. Read the role module in this order: `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, `workspace.yml`.
 9. Create or update the current phase log.
+10. For parallel work, read `.ai/global/parallel.delivery.yml` and name the work item, lane, upstream handoff, locked contracts, and dependencies.
 
 If the worker cannot identify the repo group, repo, phase, or owner role, it must stop and ask for that missing information.
 
@@ -32,9 +33,31 @@ Every task must be mapped to:
 - Impacted roles
 - Impacted repos
 - Required evidence
+- MVP, slice, or work item id when work is parallel
+- Lane and upstream handoff when another lane has unlocked this work
 - Shared stack, style, tools, project structure, and QA standards
 
 The worker should make the smallest useful change that completes the current phase goal and preserves downstream handoff quality.
+
+## Parallel Delivery Skill
+
+Work may move in parallel by MVP, slice, or work item.
+
+Use `.ai/global/parallel.delivery.yml` when:
+
+- Business, product, or design handed work to engineering and wants to continue the next phase or next MVP.
+- Engineering, QA, release, monitoring, or measurement is still working on an earlier MVP.
+- One lane is blocked but unrelated lanes can continue.
+- A handoff contract changed after downstream work started.
+
+Rules:
+
+1. Name the work item/MVP in every log, report, handoff, and commit when work is parallel.
+2. Keep a lane-specific phase log.
+3. Do not change repo `current_phase` for parallel lane work unless the orchestrator explicitly sets it.
+4. Treat handoff as a locked contract for that work item.
+5. Create an impact report before changing locked scope, acceptance criteria, design, API, data, or release expectations.
+6. Escalate shared dependency conflicts to the orchestrator.
 
 ## Logging Skill
 
@@ -90,6 +113,7 @@ The worker must:
 4. Include `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, and `AI-Evidence` trailers.
 5. Set `AI-Task-Done: yes` only when the assigned task is complete.
 6. Link evidence from the phase log, impact report, handoff note, tests, review, or deployment output.
+7. Add `AI-Work-Item` and `AI-Lane` trailers when the commit belongs to parallel MVP/work item delivery.
 
 If the task is not done, do not create a done commit. Create or update a handoff, impact report, or blocker note instead.
 

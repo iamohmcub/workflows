@@ -69,13 +69,15 @@ The worker should then:
 2. Read `.ai/manifest.yml`.
 3. Read `.ai/SKILLS.md`.
 4. Read `.ai/global/agent.positions.yml`.
-5. Read `.ai/project.yml`.
-6. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
-7. Load global rules, hooks, phases, repo group policy, and the selected role module.
-8. Load the selected role workspace overlay.
-9. Create a phase log.
-10. Work only inside the current phase unless the orchestrator changes phase.
-11. Commit completed work with the correct agent id when the assigned task is done.
+5. Read `.ai/global/parallel.delivery.yml`.
+6. Read `.ai/project.yml`.
+7. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
+8. Load global rules, hooks, phases, repo group policy, and the selected role module.
+9. Load the selected role workspace overlay.
+10. Create a phase log.
+11. Work only inside the current phase unless the orchestrator changes phase.
+12. For parallel MVP work, keep lane-specific phase logs and do not move repo current phase unless orchestrator sets it.
+13. Commit completed work with the correct agent id when the assigned task is done.
 
 Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
 
@@ -101,9 +103,10 @@ The phase is not complete until the log and evidence exist.
 ```text
 Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
 Read .ai/global/agent.positions.yml.
+Read .ai/global/parallel.delivery.yml.
 Read .ai/workspace/workspace.yml and the shared workspace standards.
 Follow the .ai load order.
-Identify the repo group, repo, current phase, owner role, supporting roles, and impacted roles.
+Identify the repo group, repo, current phase, MVP/work item, lane, owner role, supporting roles, and impacted roles.
 Create a phase log.
 Then continue the current phase using the correct role definition.
 ```
@@ -124,6 +127,7 @@ Most common first commands:
 npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr --workspace-profile web-saas
 npm run ai:status
 npm run ai:start -- okr
+npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
 npm run ai:commit -- --agent orchestrator-agent --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npm run ai:validate
 ```

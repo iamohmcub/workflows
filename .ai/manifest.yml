@@ -37,6 +37,7 @@ load_order:
   - .ai/global/company.hooks.yml
   - .ai/global/company.rules.yml
   - .ai/global/agent.positions.yml
+  - .ai/global/parallel.delivery.yml
   - .ai/global/sdlc.phases.yml
   - .ai/workspace/workspace.yml
   - .ai/workspace/stacks.yml
@@ -91,3 +92,4 @@ hard_requirements:
   - New projects must configure `.ai/project.yml` before AI workers begin delivery work.
   - New projects must configure `.ai/workspace/workspace.yml` before stack, style, tool, or QA decisions are made.
   - Every agent position can commit when its assigned task is done, using the agent commit format in `.ai/global/agent.positions.yml`.
+  - Parallel delivery is allowed by MVP or work item when handoff evidence and locked contracts are recorded in `.ai/global/parallel.delivery.yml`.

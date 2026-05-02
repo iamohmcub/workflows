@@ -17,6 +17,21 @@ hooks:
       - Assign owner role and supporting roles.
       - Create phase log from template.
 
+  on_parallel_lane_start:
+    trigger: A role starts a phase for a specific MVP, slice, or work item while another lane continues.
+    actions:
+      - Confirm work item id, lane, phase, owner role, and upstream handoff.
+      - Create a lane-specific phase log.
+      - Do not change repo current phase unless orchestrator explicitly sets it.
+      - Link dependencies and locked contracts.
+
+  on_handoff_accepted:
+    trigger: A downstream owner accepts a completed handoff for a work item.
+    actions:
+      - Mark the downstream lane as unlocked.
+      - Allow upstream business, product, or design roles to continue next phase or next MVP.
+      - Require impact report for any later change to locked handoff contracts.
+
   on_artifact_created:
     trigger: Any artifact, design, code, test, report, or release note is produced.
     actions:

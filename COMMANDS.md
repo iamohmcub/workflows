@@ -72,6 +72,28 @@ Equivalent hook trigger:
 npm run ai:trigger -- on_phase_start --phase okr
 ```
 
+## Start Parallel MVP Work
+
+Create a lane-specific phase log without changing the repo current phase:
+
+```bash
+npm run ai:start -- technical-design \
+  --mvp mvp-1 \
+  --lane engineering-delivery \
+  --depends-on ".ai/runtime/handoffs/2026-05-02-mvp-1-designer-agent-to-tech-lead-agent-ux-design.md"
+```
+
+Equivalent hook trigger:
+
+```bash
+npm run ai:trigger -- on_parallel_lane_start \
+  --phase prd \
+  --mvp mvp-2 \
+  --lane business-discovery
+```
+
+Use `--set-current` only when the orchestrator wants the repo-level current phase to move.
+
 ## Create an Impact Report
 
 When another role or repo is affected:
@@ -80,6 +102,8 @@ When another role or repo is affected:
 npm run ai:impact -- \
   --title "Analytics contract changed" \
   --phase okr \
+  --mvp mvp-1 \
+  --lane business-discovery \
   --severity P2 \
   --affected-roles data-analyst,backend-engineer \
   --affected-repos analytics-events
@@ -102,7 +126,10 @@ Before moving work downstream:
 npm run ai:handoff -- \
   --from product-manager \
   --to ux-designer \
-  --phase okr
+  --phase okr \
+  --mvp mvp-1 \
+  --from-lane business-discovery \
+  --to-lane product-design
 ```
 
 ## Commit as an Agent
@@ -114,6 +141,8 @@ npm run ai:commit -- \
   --agent frontend-agent \
   --message "implement checkout form" \
   --phase development \
+  --mvp mvp-1 \
+  --lane engineering-delivery \
   --evidence ".ai/runtime/logs/2026-05-02-development-checkout-service.md"
 ```
 

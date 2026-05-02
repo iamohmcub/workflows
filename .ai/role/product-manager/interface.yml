@@ -10,6 +10,7 @@ owns:
 - Non-goals
 - Success metrics
 - Product tradeoff decisions
+- Parallel MVP discovery
 requires_before_start:
 - Business context or user request
 - Target user or customer segment
@@ -24,9 +25,11 @@ must_produce:
 must_not_do:
 - Ask engineers to implement before acceptance criteria exist
 - Change scope mid-phase without impact report
+- Change locked handoff contracts without impact report
 - Define vague success metrics that cannot be measured
 report_when:
 - Scope changes after downstream work starts
+- Locked handoff contract changes
 - Success metric changes
 - Customer promise or SLA changes
 - Another repo is needed for product delivery

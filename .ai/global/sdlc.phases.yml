@@ -4,6 +4,8 @@ scope: company
 definition:
   gate_question: Is this ready for the next role to do their best work?
   phase_log_required: true
+  gate_scope_default: per work item or MVP
+  parallel_delivery_source: .ai/global/parallel.delivery.yml
   impact_report_required_when: Work affects another role, repo, environment, API, data contract, SLA, security boundary, or customer commitment.
 
 phases:
@@ -106,4 +108,3 @@ phases:
       - Learning is documented.
       - Follow-up decisions are added to backlog or next OKR.
       - Repo group learnings are reported if reusable across repos.
-

@@ -1,0 +1,116 @@
+version: 1
+scope: company
+
+principle: >
+  Delivery is not one global waterfall. Work can move in parallel by MVP,
+  work item, phase, and lane when handoff evidence is clear and downstream
+  contracts are stable.
+
+unit_of_flow:
+  preferred_id: work_item_id
+  aliases:
+    - mvp_id
+    - slice_id
+    - epic_id
+  rule: Every parallel phase log, handoff, report, and commit should name the work item or MVP it belongs to.
+
+lanes:
+  business-discovery:
+    owns:
+      - okr
+      - user-research
+      - prd
+      - measure-iterate
+    roles:
+      - product-manager
+      - product-owner
+      - data-analyst
+      - ux-designer
+
+  product-design:
+    owns:
+      - user-research
+      - ux-design
+      - prd
+    roles:
+      - ux-designer
+      - product-manager
+      - product-owner
+
+  engineering-delivery:
+    owns:
+      - technical-design
+      - development
+    roles:
+      - tech-lead
+      - frontend-engineer
+      - backend-engineer
+      - security-engineer
+
+  quality-release:
+    owns:
+      - qa-testing
+      - release-deployment
+    roles:
+      - qa-sdet
+      - devops-platform
+      - security-engineer
+      - legal-compliance
+
+  operations-learning:
+    owns:
+      - monitoring
+      - measure-iterate
+    roles:
+      - devops-platform
+      - data-analyst
+      - product-manager
+
+parallel_rules:
+  - A downstream lane may start when the upstream handoff for the same work item is complete and evidence is linked.
+  - An upstream lane may continue to the next phase or next MVP after handoff, without waiting for downstream implementation to finish.
+  - Handoff locks the agreed scope, acceptance criteria, design contract, API contract, data contract, and release expectation for that work item.
+  - Any change to a locked handoff contract requires an impact report before downstream work is changed.
+  - Shared platform, security, compliance, environment, API, data, design system, or release dependency conflicts must be escalated to the orchestrator.
+  - Parallel work must not hide blockers. Each lane keeps its own phase log and links cross-lane handoffs.
+
+gate_scope:
+  default: per_work_item
+  release: per_environment
+  repo_group: cross_repo_or_shared_contract
+  rule: A blocked gate for one work item does not block unrelated work items unless the blocker touches shared contracts, environments, customers, security, compliance, or repo-group dependencies.
+
+handoff_unlocks:
+  product_to_design:
+    from: product-manager
+    to: ux-designer
+    unlocks:
+      - user-research
+      - ux-design
+  design_to_engineering:
+    from: ux-designer
+    to: tech-lead
+    unlocks:
+      - technical-design
+      - development
+  engineering_to_quality:
+    from: tech-lead
+    to: qa-sdet
+    unlocks:
+      - qa-testing
+  quality_to_release:
+    from: qa-sdet
+    to: devops-platform
+    unlocks:
+      - release-deployment
+
+required_parallel_fields:
+  - work_item_id
+  - lane
+  - phase
+  - owner_role
+  - upstream_handoff
+  - downstream_owner
+  - locked_contracts
+  - dependencies
+  - evidence

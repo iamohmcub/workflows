@@ -10,3 +10,5 @@ This folder is where future AI or human-led workflow runs leave evidence.
 Do not treat a phase as complete until its log is present and linked to required evidence.
 
 When an assigned task is done, the responsible agent position can commit with the agent id, phase, task-done status, and evidence link required by `.ai/global/agent.positions.yml`.
+
+For parallel MVP or work item delivery, include the work item id, lane, upstream handoff, locked contracts, and dependencies in the phase log and handoff note.

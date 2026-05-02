@@ -19,6 +19,7 @@ Before starting work:
 5. Read the selected role workspace overlay at `.ai/role/<role-id>/workspace.yml`.
 6. Confirm the previous phase gate is complete before beginning the next phase.
 7. Create a phase log from `.ai/templates/phase-log.md`.
+8. For parallel work, identify the MVP/work item, lane, upstream handoff, locked contracts, and dependencies from `.ai/global/parallel.delivery.yml`.
 
 During work:
 
@@ -33,6 +34,17 @@ Before handoff:
 2. Record test, review, security, compliance, and rollout evidence.
 3. Write a handoff note from `.ai/templates/handoff-note.md`.
 4. Link any impact reports and decisions in the phase log.
+
+## Parallel Delivery Rule
+
+This workflow supports parallel work by MVP, slice, or work item.
+
+- Product, business, and design roles may continue the next phase or next MVP after they hand off a locked contract to the downstream owner.
+- Engineering, QA, release, monitoring, and measurement can continue their own lanes for earlier MVPs at the same time.
+- A gate is scoped to the work item by default. A blocked gate for one MVP does not block unrelated MVPs.
+- Shared API, data, design system, environment, security, compliance, customer, or repo-group dependencies can block multiple lanes.
+- Any change after handoff to locked scope, acceptance criteria, design, API, data, or release expectations requires an impact report.
+- Parallel phase logs must name the work item/MVP, lane, upstream handoff, downstream owner, dependencies, and evidence.
 
 ## Hard Rules
 
@@ -90,6 +102,8 @@ AI-Task-Done: yes
 AI-Evidence: <phase log, report, handoff, test, or review link>
 ```
 
+For parallel MVP/work item commits, also include `AI-Work-Item` and `AI-Lane`.
+
 Keep the real Git author account. Put the agent identity in the commit subject and trailers.
 
 ## Commands
@@ -101,6 +115,7 @@ Common commands:
 ```bash
 npm run ai:status
 npm run ai:start -- okr
+npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
 npm run ai:trigger -- on_phase_start --phase okr
 npm run ai:impact -- --title "Analytics contract changed" --phase okr
 npm run ai:handoff -- --from product-manager --to ux-designer --phase okr

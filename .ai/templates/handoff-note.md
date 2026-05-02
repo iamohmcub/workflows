@@ -5,6 +5,18 @@ From role:
 To role:
 Repo:
 Phase:
+Work item / MVP:
+From lane:
+To lane:
+
+## Locked Contracts
+
+- Scope:
+- Acceptance criteria:
+- Design:
+- API:
+- Data:
+- Release expectation:
 
 ## Done
 
@@ -31,3 +43,8 @@ Phase:
 
 - 
 
+## Parallel Continuation
+
+- Upstream role may continue next phase or next MVP: yes | no
+- Downstream lane is unlocked: yes | no
+- Impact report required for later contract changes: yes

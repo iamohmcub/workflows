@@ -5,6 +5,8 @@ Repo group:
 Source repo:
 Source role:
 Phase:
+Work item / MVP:
+Parallel lane:
 Severity: P0 | P1 | P2 | P3
 Gate blocking: yes | no
 
@@ -16,6 +18,7 @@ What changed and why it matters.
 
 - Affected repos:
 - Affected roles:
+- Affected lanes:
 - Affected environments:
 - Affected APIs or data contracts:
 - Affected customers or commitments:
@@ -49,4 +52,3 @@ What changed and why it matters.
 Decision:
 Owner:
 Date:
-

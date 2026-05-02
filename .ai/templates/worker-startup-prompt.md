@@ -10,15 +10,19 @@ Before making changes:
 4. Read `.ai/AUTOMATION.md`.
 5. Read `.ai/project.yml`.
 6. Read `.ai/global/agent.positions.yml`.
-7. Read `.ai/workspace/workspace.yml`.
-8. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
-9. Follow the manifest `load_order`.
+7. Read `.ai/global/parallel.delivery.yml`.
+8. Read `.ai/workspace/workspace.yml`.
+9. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
+10. Follow the manifest `load_order`.
 
 Identify:
 
 - Repo group
 - Repo
 - Current phase
+- MVP / work item
+- Parallel lane
+- Upstream handoff
 - Owner role
 - Supporting roles
 - Impacted roles
@@ -33,10 +37,11 @@ Then:
 4. Apply shared workspace standards unless the orchestrator approved a stricter exception.
 5. Create or update the phase log in `.ai/runtime/logs`.
 6. Work only inside the current phase unless the orchestrator changes phase.
-7. Create an impact report if another role or repo is affected.
-8. Create a handoff note before moving downstream.
-9. Complete DoD item by item before handoff.
-10. Commit completed work with the correct agent id from `.ai/global/agent.positions.yml`.
+7. For parallel MVP work, keep a lane-specific phase log and do not move repo current phase unless the orchestrator sets it.
+8. Create an impact report if another role or repo is affected.
+9. Create a handoff note before moving downstream.
+10. Complete DoD item by item before handoff.
+11. Commit completed work with the correct agent id from `.ai/global/agent.positions.yml`.
 
 Hard rules:
 
@@ -45,3 +50,4 @@ Hard rules:
 - No gate may pass by bulk approval.
 - CI, review, and secret scanning are required for code changes.
 - Agent commits must use `<agent-id>: <completed task summary>` and include required AI commit trailers.
+- Parallel work must name MVP/work item, lane, upstream handoff, locked contracts, and dependencies.

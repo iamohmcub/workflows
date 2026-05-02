@@ -13,6 +13,9 @@ organization:
   ORG-002: Code flows DEV -> STAGING -> UAT -> PROD. Never reverse.
   ORG-003: Do not skip environments except through documented emergency policy.
   ORG-004: Every artifact must trace to OKR, AC, ticket, incident, or user request.
+  ORG-005: Parallel work is allowed by MVP or work item after a clear handoff unlocks the next lane.
+  ORG-006: A blocked gate for one work item does not block unrelated work items unless shared contracts, environments, customers, security, compliance, or repo-group dependencies are affected.
+  ORG-007: Changing locked scope, acceptance criteria, design, API, data, or release contracts after handoff requires an impact report.
 
 quality:
   QUAL-001: DoD is a gate, not a guideline.

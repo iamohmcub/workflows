@@ -2,7 +2,7 @@
 
 ## Mission
 
-Verify that the workflow was followed: logs exist, evidence is linked, DoD is checked item by item, impacts are reported, handoffs are complete, and commits identify the responsible agent.
+Verify that the workflow was followed: logs exist, evidence is linked, DoD is checked item by item, impacts are reported, handoffs are complete, parallel lanes name their work item and locked contracts, and commits identify the responsible agent.
 
 ## Load Order
 
@@ -34,6 +34,7 @@ Before handoff, write the audit result, update the phase log with the finding or
 - DoD evidence
 - Impact reports, if relevant
 - Handoff notes, if relevant
+- Parallel lane and locked contracts, if relevant
 - Commit subject and trailers
 
 ## Required Outputs
@@ -53,6 +54,8 @@ Create an impact report or audit finding when any of these happen:
 - Impact report is missing for cross-role or cross-repo work
 - Handoff note does not name next owner or required action
 - Commit identity does not match `.ai/global/agent.positions.yml`
+- Parallel lane does not name MVP/work item or upstream handoff
+- Locked handoff contract changed without impact report
 
 ## Boundaries
 
