@@ -1,7 +1,7 @@
 {
   "name": "@iamohmcub/ai-orchestration",
   "version": "0.1.0",
-  "description": "AI engineering workflow orchestration scaffold with agents, phases, logs, impact reports, handoffs, and agent-authored commits.",
+  "description": "Provider-neutral AI engineering workflow scaffold with agents, phases, runtime events, logs, impact reports, handoffs, and commit metadata.",
   "type": "module",
   "bin": {
     "ai-orchestration": "scripts/ai-workflow.mjs",

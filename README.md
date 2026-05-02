@@ -62,17 +62,10 @@ npm run ai:validate
 
 ## AI Worker Startup
 
-Give this to the worker before implementation:
-
-```text
-Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/worker.contract.yml, .ai/global/event.contract.yml, .ai/global/routing.matrix.yml, .ai/global/agent.positions.yml, .ai/global/parallel.delivery.yml, .ai/project.yml, .ai/runtime/state.yml, and .ai/workspace/workspace.yml.
-Follow the manifest load order.
-Identify repo group, repo, current phase, MVP/work item, lane, owner role, supporting roles, impacted roles, and required evidence.
-Load the owner role module from .ai/role/<role-id>/.
-Apply shared workspace standards before code, tests, or infra changes.
-Create a phase log before work and an impact report if another role or repo is affected.
-Commit completed work with the correct agent callsign when the assigned task is done.
-```
+Use [.ai/templates/worker-startup-prompt.md](.ai/templates/worker-startup-prompt.md)
+as the single startup prompt. It points workers to the manifest, runtime state,
+provider-neutral worker contract, event contract, routing matrix, role modules,
+workspace standards, logs, reports, handoffs, and commit rule.
 
 ## Portable Runtime Model
 

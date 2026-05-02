@@ -8,16 +8,12 @@ YAML files define structured configuration. This Markdown file defines how the w
 
 When a worker starts:
 
-1. Read `AGENTS.md`.
-2. Read `.ai/manifest.yml`.
-3. Read this file.
-4. Read `.ai/project.yml`.
-5. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
-6. Follow the manifest `load_order`.
-7. Select the correct role module from `.ai/role/<role-id>/`.
-8. Read the role module in this order: `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, `workspace.yml`.
-9. Create or update the current phase log.
-10. For parallel work, read `.ai/global/parallel.delivery.yml` and name the work item, lane, upstream handoff, locked contracts, and dependencies.
+1. Use `.ai/templates/worker-startup-prompt.md` as the canonical startup checklist.
+2. Follow `.ai/manifest.yml` load order.
+3. Follow `.ai/global/worker.contract.yml` for provider-neutral worker behavior.
+4. Read `.ai/runtime/state.yml` before acting.
+5. Use `.ai/global/routing.matrix.yml` to identify responsible, consulted, and informed roles.
+6. For parallel work, read `.ai/global/parallel.delivery.yml` and name the work item, lane, upstream handoff, locked contracts, and dependencies.
 
 If the worker cannot identify the repo group, repo, phase, or owner role, it must stop and ask for that missing information.
 

@@ -425,11 +425,12 @@
     <div class="wrap topbar">
       <div class="brand">
         <h1>AI Engineering Orchestration Map</h1>
-        <p>How `.ai` and `AGENTS.md` organize repo groups, repos, expert roles, SDLC gates, logs, and impact reports.</p>
+        <p>How `.ai` and `AGENTS.md` organize provider-neutral AI work across repo groups, repos, roles, runtime events, SDLC gates, logs, and impact reports.</p>
       </div>
       <nav aria-label="Page sections">
         <a href="#hierarchy">Hierarchy</a>
         <a href="#startup">Startup</a>
+        <a href="#runtime">Runtime</a>
         <a href="#cycle">SDLC</a>
         <a href="#parallel">Parallel</a>
         <a href="#roles">Roles</a>
@@ -483,7 +484,7 @@
     <section id="startup">
       <div class="section-title">
         <h2>Worker Startup</h2>
-        <p>Markdown gives behavior. YAML gives configuration. A new project edits `.ai/project.yml` and `.ai/workspace/workspace.yml` first.</p>
+        <p>Use `.ai/templates/worker-startup-prompt.md` as the single startup prompt. YAML gives contracts and runtime state; Markdown gives behavior and playbooks.</p>
       </div>
       <div class="panel flow">
         <div class="flow-step">
@@ -499,6 +500,18 @@
           <span>Human-readable worker behavior: logging, gates, handoffs, impact reports.</span>
         </div>
         <div class="flow-step">
+          <strong>worker.contract.yml</strong>
+          <span>Provider-neutral rules for Codex, hosted AI, local LLMs, humans, CLIs, plugins, and runners.</span>
+        </div>
+        <div class="flow-step">
+          <strong>event.contract.yml</strong>
+          <span>Portable event language for triggers such as `impact.detected`, `phase.started`, and `agent.task_done`.</span>
+        </div>
+        <div class="flow-step">
+          <strong>routing.matrix.yml</strong>
+          <span>RACI-style routing for accountable, responsible, consulted, and informed roles.</span>
+        </div>
+        <div class="flow-step">
           <strong>project.yml</strong>
           <span>Project identity: repo group, repo, current phase, active roles, environments.</span>
         </div>
@@ -509,6 +522,33 @@
         <div class="flow-step">
           <strong>role modules</strong>
           <span>Each role has role.yml, interface.yml, playbook.md, checklist.md, and workspace.yml.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="runtime">
+      <div class="section-title">
+        <h2>Portable Runtime</h2>
+        <p>`.ai` is the source of truth. Adapters, plugins, CI, MCP, and local LLM runners are optional engines that read the same files.</p>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Stable Standard</h3>
+          <ul class="rule-list">
+            <li>`AGENTS.md` and `.ai/manifest.yml` define load order.</li>
+            <li>`worker.contract.yml` defines provider-neutral worker behavior.</li>
+            <li>`routing.matrix.yml` decides who does, reviews, and must be notified.</li>
+            <li>`parallel.delivery.yml` keeps MVP lanes independent unless shared contracts collide.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Changing Runtime</h3>
+          <ul class="rule-list">
+            <li>`project.yml` stores repo identity, active roles, and current phase.</li>
+            <li>`runtime/state.yml` stores current work item, lane, queue, and evidence roots.</li>
+            <li>`runtime/queue` holds pending provider-neutral events.</li>
+            <li>`runtime/events` holds completed or archived events.</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -696,6 +736,7 @@
           <li>`Agent Brandeis`, `Agent Deming`, `Agent Gene`, `Agent Shewhart`, `Agent Holmes`</li>
           <li>Subject format: `<agent-callsign>: <completed task summary>`</li>
           <li>Required trailers: `AI-Agent-Name`, `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, `AI-Evidence`</li>
+          <li>Git author remains the real account. Agent identity lives in the subject and trailers.</li>
         </ul>
       </div>
     </section>
