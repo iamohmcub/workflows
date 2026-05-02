@@ -12,7 +12,7 @@ Canonical load order lives in `.ai/manifest.yml`.
 
 ## Folders
 
-- `global/`: company-wide skills, hooks, rules, agent positions, worker contract, event contract, routing matrix, parallel delivery, and SDLC phases.
+- `global/`: company-wide skills, hooks, rules, agent positions, worker contract, event contract, trigger words, routing matrix, parallel delivery, and SDLC phases.
 - `workspace/`: shared stack, code style, project structure, tools, and QA standards.
 - `repo-group/`: workspace/group policy and impact rules.
 - `role/`: role modules.
@@ -55,4 +55,5 @@ the manifest load order, then continue the workflow.
 
 Optional plugins, runners, CI jobs, or local LLM adapters may automate events
 and gates, but they must follow `.ai/global/worker.contract.yml`,
-`.ai/global/event.contract.yml`, and `.ai/global/routing.matrix.yml`.
+`.ai/global/event.contract.yml`, `.ai/global/trigger.words.yml`, and
+`.ai/global/routing.matrix.yml`.

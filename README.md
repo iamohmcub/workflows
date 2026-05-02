@@ -33,6 +33,7 @@ Copy this into a project and the AI worker gets:
 - `.ai/global/agent.positions.yml`: 15 agent positions and commit authority.
 - `.ai/global/worker.contract.yml`: provider-neutral AI worker contract.
 - `.ai/global/event.contract.yml`: portable event trigger contract for humans, AI workers, CLIs, plugins, and local runners.
+- `.ai/global/trigger.words.yml`: natural-language trigger guide for mapping chat requests to workflow events.
 - `.ai/global/routing.matrix.yml`: RACI-style routing for phase work and impact types.
 - `.ai/global/parallel.delivery.yml`: MVP/work item lanes so product, design, engineering, QA, release, and learning can move in parallel.
 - `.ai/runtime/state.yml`: project runtime context that can change per repo or sprint.
@@ -71,8 +72,8 @@ npx @iamohmcub/ai-orchestration init --commands
 
 Use [.ai/templates/worker-startup-prompt.md](.ai/templates/worker-startup-prompt.md)
 as the single startup prompt. It points workers to the manifest, runtime state,
-provider-neutral worker contract, event contract, routing matrix, role modules,
-workspace standards, logs, reports, handoffs, and commit rule.
+provider-neutral worker contract, event contract, trigger words, routing matrix,
+role modules, workspace standards, logs, reports, handoffs, and commit rule.
 
 ## Portable Runtime Model
 
@@ -96,7 +97,7 @@ Use Markdown for behavior, explanation, templates, playbooks, and human/AI readi
 
 File mapping:
 
-- `.yml`: `manifest.yml`, `project.yml`, `workspace.yml`, `interface.yml`, `role.yml`
+- `.yml`: `manifest.yml`, `project.yml`, `workspace.yml`, `interface.yml`, `role.yml`, `trigger.words.yml`
 - `.md`: `AGENTS.md`, `SKILLS.md`, `playbook.md`, `checklist.md`, `COMMANDS.md`
 
 ## Main Docs

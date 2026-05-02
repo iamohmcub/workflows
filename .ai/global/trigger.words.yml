@@ -1,0 +1,331 @@
+version: 1
+scope: provider_neutral_chat_triggers
+
+principle: >
+  Users should be able to speak naturally in chat. The AI worker maps trigger
+  words, phrases, and intent to the matching workflow event or command behavior.
+  CLI commands are fallback tools, not the primary user experience.
+
+rules:
+  - Match intent, not exact wording.
+  - Support English, Thai, and mixed Thai-English prompts.
+  - Prefer creating required runtime evidence over asking the user to run a command.
+  - Ask a short clarifying question only when the phase, role, work item, or target owner cannot be inferred.
+  - If multiple triggers match, choose the highest-risk workflow first: incident, secret, impact, bug, gate, handoff, phase, status.
+  - Never skip gates, reports, handoffs, tests, reviews, or security checks because the user used casual wording.
+
+priority_order:
+  - secret.detected
+  - incident.detected
+  - impact.detected
+  - bug.detected
+  - gate.review
+  - handoff.created
+  - phase.started
+  - lane.started
+  - agent.task_done
+  - status.requested
+  - validation.requested
+
+triggers:
+  project.initialized:
+    intent: Create or configure `.ai` for a repo.
+    maps_to_event: project.initialized
+    maps_to_hook: on_project_init
+    words:
+      en:
+        - init
+        - initialize
+        - setup ai workflow
+        - create ai folder
+        - install workflow
+        - configure project
+      th:
+        - เริ่มโปรเจค
+        - ตั้งค่าโปรเจค
+        - สร้าง .ai
+        - ติดตั้ง workflow
+        - ลงระบบเอไอ
+    required_context:
+      - repo_id
+      - repo_name
+    expected_action:
+      - Ensure `.ai/` and `AGENTS.md` exist.
+      - Configure `.ai/project.yml` and `.ai/workspace/workspace.yml` when details are provided.
+
+  phase.started:
+    intent: Start or continue an SDLC phase.
+    maps_to_event: phase.started
+    maps_to_hook: on_phase_start
+    words:
+      en:
+        - start phase
+        - begin phase
+        - continue phase
+        - start okr
+        - start prd
+        - start design
+        - start development
+        - start qa
+        - start release
+      th:
+        - เริ่มเฟส
+        - ต่อเฟส
+        - เริ่ม okr
+        - เริ่ม prd
+        - เริ่ม design
+        - เริ่ม dev
+        - เริ่ม qa
+        - เริ่ม release
+    required_context:
+      - phase
+    expected_action:
+      - Create or update a phase log.
+      - Load the owner role and routing matrix.
+
+  lane.started:
+    intent: Start parallel MVP, slice, feature, or work item lane.
+    maps_to_event: lane.started
+    maps_to_hook: on_parallel_lane_start
+    words:
+      en:
+        - start lane
+        - parallel
+        - mvp
+        - feature lane
+        - work item
+        - continue mvp
+        - split frontend backend
+      th:
+        - เริ่ม lane
+        - ทำขนาน
+        - แยกงาน
+        - แยกฟีเจอร์
+        - ทำ mvp
+        - งาน frontend backend ขนานกัน
+    required_context:
+      - work_item_id
+      - lane
+      - phase
+    expected_action:
+      - Create a lane-specific phase log.
+      - Link upstream handoff and dependencies when known.
+
+  impact.detected:
+    intent: Work affects another role, repo, lane, contract, environment, security boundary, or customer commitment.
+    maps_to_event: impact.detected
+    maps_to_hook: on_impact_detected
+    words:
+      en:
+        - impact
+        - affects
+        - breaking change
+        - api changed
+        - contract changed
+        - schema changed
+        - migration
+        - notify frontend
+        - notify backend
+        - notify qa
+        - cross repo
+      th:
+        - กระทบ
+        - มีผลกับ
+        - เปลี่ยน api
+        - เปลี่ยน contract
+        - เปลี่ยน schema
+        - แจ้ง frontend
+        - แจ้ง backend
+        - แจ้ง qa
+        - ข้าม repo
+    required_context:
+      - summary
+      - impacted_roles_or_repos
+    expected_action:
+      - Create an impact report.
+      - Route acknowledgement with `.ai/global/routing.matrix.yml`.
+      - Block the next gate until acknowledged or accepted by orchestrator.
+
+  handoff.created:
+    intent: Send completed work from one role to another role.
+    maps_to_event: handoff.created
+    maps_to_hook: on_handoff_accepted
+    words:
+      en:
+        - handoff
+        - pass to
+        - send to qa
+        - send to dev
+        - ready for frontend
+        - ready for backend
+        - ready for review
+      th:
+        - ส่งงาน
+        - ส่งต่อ
+        - ส่งให้ qa
+        - ส่งให้ dev
+        - พร้อมให้ frontend
+        - พร้อมให้ backend
+        - พร้อม review
+    required_context:
+      - from_role
+      - to_role
+      - phase
+    expected_action:
+      - Create a handoff note.
+      - Include done, not done, risks, evidence, and DoD status.
+
+  bug.detected:
+    intent: Report a defect, failed test, regression, or broken behavior.
+    maps_to_event: bug.detected
+    maps_to_hook: on_bug_detected
+    words:
+      en:
+        - bug
+        - defect
+        - failed test
+        - regression
+        - broken
+        - error
+        - issue
+      th:
+        - บั๊ก
+        - bug
+        - เทสตก
+        - พัง
+        - error
+        - issue
+        - regression
+    required_context:
+      - title
+      - severity
+    expected_action:
+      - Classify severity.
+      - Create bug impact report.
+      - Require regression evidence for the fix.
+
+  incident.detected:
+    intent: Production outage, data loss, breach, all users blocked, or P0/P1 emergency.
+    maps_to_event: incident.detected
+    maps_to_hook: on_p0_emergency
+    words:
+      en:
+        - incident
+        - p0
+        - p1
+        - outage
+        - down
+        - breach
+        - data loss
+        - all users blocked
+      th:
+        - incident
+        - ระบบล่ม
+        - โปรดักชันล่ม
+        - ข้อมูลหาย
+        - ข้อมูลรั่ว
+        - ผู้ใช้ทั้งหมดใช้ไม่ได้
+    required_context:
+      - severity
+      - affected_environment
+    expected_action:
+      - Pause non-critical work.
+      - Create incident evidence.
+      - Follow emergency policy and post-mortem rule.
+
+  gate.review:
+    intent: Check whether a phase, lane, or work item can move forward.
+    maps_to_event: gate.review
+    maps_to_hook: on_artifact_created
+    words:
+      en:
+        - gate
+        - review gate
+        - ready for next phase
+        - can move forward
+        - definition of done
+        - dod
+        - signoff
+      th:
+        - เช็ค gate
+        - ผ่าน gate ไหม
+        - ไปเฟสต่อไปได้ไหม
+        - dod
+        - signoff
+        - ตรวจความพร้อม
+    required_context:
+      - phase
+      - work_item_id
+    expected_action:
+      - Check DoD item by item.
+      - Link evidence and blockers.
+      - Do not bulk approve.
+
+  agent.task_done:
+    intent: A role/agent finished an assigned task and needs evidence or commit metadata.
+    maps_to_event: agent.task_done
+    maps_to_hook: on_agent_task_done
+    words:
+      en:
+        - done
+        - finished
+        - task done
+        - commit this
+        - agent finished
+        - ready to commit
+      th:
+        - เสร็จแล้ว
+        - งานเสร็จ
+        - commit
+        - คอมมิต
+        - agent ทำเสร็จ
+        - พร้อม commit
+    required_context:
+      - agent
+      - summary
+      - evidence
+    expected_action:
+      - Verify evidence exists.
+      - Commit with real Git author and agent trailers when requested.
+
+  status.requested:
+    intent: Ask where the project, phase, lane, role, or workflow currently stands.
+    maps_to_event: status.requested
+    maps_to_hook: on_artifact_created
+    words:
+      en:
+        - status
+        - where are we
+        - current phase
+        - what next
+        - progress
+      th:
+        - สถานะ
+        - ถึงไหนแล้ว
+        - ตอนนี้อยู่เฟสไหน
+        - ทำอะไรต่อ
+        - progress
+    required_context: []
+    expected_action:
+      - Summarize project, phase, lane, owner role, blockers, and next action.
+
+  validation.requested:
+    intent: Check whether `.ai` workflow files and current commit metadata are valid.
+    maps_to_event: validation.requested
+    maps_to_hook: on_artifact_created
+    words:
+      en:
+        - validate
+        - check workflow
+        - audit workflow
+        - is this valid
+        - verify
+      th:
+        - ตรวจ workflow
+        - validate
+        - เช็คระบบ
+        - ตรวจว่าใช้ได้ไหม
+        - audit
+    required_context: []
+    expected_action:
+      - Validate required files, runtime folders, role modules, routing, events, and commit metadata.

@@ -14,6 +14,7 @@ const AGENT_POSITIONS_FILE = path.join(AI_DIR, "global", "agent.positions.yml");
 const PARALLEL_DELIVERY_FILE = path.join(AI_DIR, "global", "parallel.delivery.yml");
 const WORKER_CONTRACT_FILE = path.join(AI_DIR, "global", "worker.contract.yml");
 const EVENT_CONTRACT_FILE = path.join(AI_DIR, "global", "event.contract.yml");
+const TRIGGER_WORDS_FILE = path.join(AI_DIR, "global", "trigger.words.yml");
 const ROUTING_MATRIX_FILE = path.join(AI_DIR, "global", "routing.matrix.yml");
 const RUNTIME_DIR = path.join(AI_DIR, "runtime");
 const RUNTIME_STATE_FILE = path.join(RUNTIME_DIR, "state.yml");
@@ -36,6 +37,7 @@ const REQUIRED_FILES = [
   ".ai/global/agent.positions.yml",
   ".ai/global/worker.contract.yml",
   ".ai/global/event.contract.yml",
+  ".ai/global/trigger.words.yml",
   ".ai/global/routing.matrix.yml",
   ".ai/global/parallel.delivery.yml",
   ".ai/global/sdlc.phases.yml",
@@ -765,6 +767,7 @@ function validate() {
   ensureFile(PARALLEL_DELIVERY_FILE, "Missing .ai/global/parallel.delivery.yml");
   ensureFile(WORKER_CONTRACT_FILE, "Missing .ai/global/worker.contract.yml");
   ensureFile(EVENT_CONTRACT_FILE, "Missing .ai/global/event.contract.yml");
+  ensureFile(TRIGGER_WORDS_FILE, "Missing .ai/global/trigger.words.yml");
   ensureFile(ROUTING_MATRIX_FILE, "Missing .ai/global/routing.matrix.yml");
   ensureFile(RUNTIME_STATE_FILE, "Missing .ai/runtime/state.yml");
   ensureFile(WORKSPACE_FILE, "Missing .ai/workspace/workspace.yml");
@@ -846,6 +849,14 @@ function validate() {
   const eventText = fs.readFileSync(EVENT_CONTRACT_FILE, "utf8");
   for (const eventName of ["impact.detected:", "agent.task_done:", "phase.started:", "lane.started:"]) {
     if (!eventText.includes(eventName)) errors.push(`Missing event contract event type: ${eventName}`);
+  }
+
+  const triggerText = fs.readFileSync(TRIGGER_WORDS_FILE, "utf8");
+  for (const triggerName of ["impact.detected:", "handoff.created:", "agent.task_done:", "status.requested:", "validation.requested:"]) {
+    if (!triggerText.includes(triggerName)) errors.push(`Missing trigger words mapping: ${triggerName}`);
+  }
+  for (const phrase of ["เริ่มเฟส", "กระทบ", "ส่งงาน", "เสร็จแล้ว"]) {
+    if (!triggerText.includes(phrase)) errors.push(`Missing Thai trigger phrase: ${phrase}`);
   }
 
   const routingText = fs.readFileSync(ROUTING_MATRIX_FILE, "utf8");

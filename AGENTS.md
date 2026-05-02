@@ -17,7 +17,7 @@ Before starting work:
 3. Read `.ai/workspace/workspace.yml` and the shared standards in `.ai/workspace`.
 4. Read the relevant files in `.ai/global`, `.ai/repo-group`, and the selected `.ai/role/<role-id>/` module.
 5. Read the selected role workspace overlay at `.ai/role/<role-id>/workspace.yml`.
-6. Read `.ai/global/worker.contract.yml`, `.ai/global/event.contract.yml`, and `.ai/global/routing.matrix.yml`.
+6. Read `.ai/global/worker.contract.yml`, `.ai/global/event.contract.yml`, `.ai/global/trigger.words.yml`, and `.ai/global/routing.matrix.yml`.
 7. Confirm the previous phase gate is complete before beginning the next phase.
 8. Create a phase log from `.ai/templates/phase-log.md`.
 9. For parallel work, identify the MVP/work item, lane, upstream handoff, locked contracts, and dependencies from `.ai/global/parallel.delivery.yml`.
@@ -55,12 +55,15 @@ Always follow:
 
 - `.ai/global/worker.contract.yml` for provider-neutral worker behavior.
 - `.ai/global/event.contract.yml` for trigger and event shape.
+- `.ai/global/trigger.words.yml` for mapping natural-language chat requests to workflow events.
 - `.ai/global/routing.matrix.yml` for accountable, responsible, consulted, and informed roles.
 - `.ai/runtime/state.yml` for current runtime context.
 
 Adapters and plugins are optional engines. They may automate dispatch, queue processing, validation, notification, or gate enforcement, but they must not replace `.ai` as the source of truth.
 
 If no adapter or plugin is present, the AI worker still follows the same files manually.
+
+Users do not need to type CLI commands. If the user says "เริ่ม okr", "API เปลี่ยนกระทบ frontend", "ส่งให้ QA", "งานเสร็จ commit", or similar natural language, map it with `.ai/global/trigger.words.yml` and create the required evidence.
 
 ## Hard Rules
 

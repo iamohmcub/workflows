@@ -26,6 +26,7 @@ startup_contract:
     - .ai/runtime/state.yml
   then_read:
     - Files listed in `.ai/manifest.yml` load_order.
+    - Read .ai/global/trigger.words.yml before interpreting natural-language workflow requests.
     - The selected role module files listed in role_module_load_order.
     - The selected role workspace overlay.
   identify:
@@ -43,6 +44,7 @@ startup_contract:
 execution_contract:
   every_worker_must:
     - Work only inside the assigned role, phase, lane, and work item unless the orchestrator expands scope.
+    - Map natural-language trigger words to workflow events before asking the user to run commands.
     - Keep decisions traceable to OKR, acceptance criteria, ticket, incident, or explicit user request.
     - Create or update phase logs, impact reports, decisions, and handoffs when the rules require them.
     - Use the routing matrix to decide which roles must be consulted or notified.

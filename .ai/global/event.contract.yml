@@ -103,6 +103,7 @@ event_types:
 
 processing_rules:
   - Read `.ai/runtime/state.yml` before processing any event.
+  - Use `.ai/global/trigger.words.yml` to map natural-language chat requests into event types.
   - Validate required fields before acting.
   - Route target and impacted roles with `.ai/global/routing.matrix.yml`.
   - Create required runtime evidence before marking an event complete.
