@@ -36,6 +36,7 @@ load_order:
   - .ai/global/company.skills.yml
   - .ai/global/company.hooks.yml
   - .ai/global/company.rules.yml
+  - .ai/global/agent.positions.yml
   - .ai/global/sdlc.phases.yml
   - .ai/workspace/workspace.yml
   - .ai/workspace/stacks.yml
@@ -58,6 +59,7 @@ load_order:
   - .ai/role/security-engineer/
   - .ai/role/data-analyst/
   - .ai/role/legal-compliance/
+  - .ai/role/process-auditor/
 
 role_module_load_order:
   - role.yml
@@ -88,3 +90,4 @@ hard_requirements:
   - The orchestrator is the only role that can resolve unresolved role conflicts.
   - New projects must configure `.ai/project.yml` before AI workers begin delivery work.
   - New projects must configure `.ai/workspace/workspace.yml` before stack, style, tool, or QA decisions are made.
+  - Every agent position can commit when its assigned task is done, using the agent commit format in `.ai/global/agent.positions.yml`.

@@ -54,6 +54,44 @@ When this `.ai` system is copied into a new project:
 5. Start every AI worker with the prompt in `.ai/templates/worker-startup-prompt.md`.
 6. Use `.ai/PROJECT_SETUP.md` as the full checklist.
 
+## Agent Commit Rule
+
+Every agent position can commit when its assigned task is done:
+
+1. `prompter-agent`
+2. `orchestrator-agent`
+3. `product-manager-agent`
+4. `data-analyst-agent`
+5. `designer-agent`
+6. `product-owner-agent`
+7. `tech-lead-agent`
+8. `frontend-agent`
+9. `backend-agent`
+10. `security-agent`
+11. `legal-agent`
+12. `qa-agent`
+13. `devops-agent`
+14. `monitoring-agent`
+15. `auditor-agent`
+
+Commit subject format:
+
+```text
+<agent-id>: <completed task summary>
+```
+
+Required commit trailers:
+
+```text
+AI-Agent: <agent-id>
+AI-Role: <role-id>
+AI-Phase: <phase-id>
+AI-Task-Done: yes
+AI-Evidence: <phase log, report, handoff, test, or review link>
+```
+
+Keep the real Git author account. Put the agent identity in the commit subject and trailers.
+
 ## Commands
 
 Use `COMMANDS.md` for the local command reference.

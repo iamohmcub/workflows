@@ -1,0 +1,111 @@
+version: 1
+scope: company
+
+commit_policy:
+  rule: Every agent position can commit when its assigned task is done.
+  when_allowed:
+    - Assigned task is complete.
+    - Phase log is created or updated.
+    - Evidence is linked.
+    - Required impact reports are created.
+    - Required handoff note is created before downstream work starts.
+  subject_format: "<agent-id>: <completed task summary>"
+  required_trailers:
+    - AI-Agent
+    - AI-Role
+    - AI-Phase
+    - AI-Task-Done
+    - AI-Evidence
+  task_done_value: "yes"
+  author_rule: Keep the real Git author account. Put agent identity in the commit subject and trailers.
+
+positions:
+  - number: 1
+    id: prompter-agent
+    name: Prompter Agent
+    maps_to_role: requester
+    can_commit_when: Task request, acceptance note, or sponsor decision is done.
+
+  - number: 2
+    id: orchestrator-agent
+    name: Orchestrator Agent
+    maps_to_role: orchestrator
+    can_commit_when: Routing, gate decision, conflict decision, or workflow update is done.
+
+  - number: 3
+    id: product-manager-agent
+    name: Product Manager Agent
+    maps_to_role: product-manager
+    can_commit_when: OKR, PRD, scope, acceptance criteria, or product decision is done.
+
+  - number: 4
+    id: data-analyst-agent
+    name: Data Analyst Agent
+    maps_to_role: data-analyst
+    can_commit_when: Metrics, event schema, dashboard notes, or measurement report is done.
+
+  - number: 5
+    id: designer-agent
+    name: Designer Agent
+    maps_to_role: ux-designer
+    can_commit_when: User flow, design handoff, accessibility notes, or UX decision is done.
+
+  - number: 6
+    id: product-owner-agent
+    name: Product Owner Agent
+    maps_to_role: product-owner
+    can_commit_when: Acceptance review, backlog decision, or product signoff is done.
+
+  - number: 7
+    id: tech-lead-agent
+    name: Tech Lead Agent
+    maps_to_role: tech-lead
+    can_commit_when: Technical design, ADR, task split, or architecture decision is done.
+
+  - number: 8
+    id: frontend-agent
+    name: Frontend Agent
+    maps_to_role: frontend-engineer
+    can_commit_when: Frontend implementation, UI state, client integration, or frontend test is done.
+
+  - number: 9
+    id: backend-agent
+    name: Backend Agent
+    maps_to_role: backend-engineer
+    can_commit_when: API, data, auth, migration, observability, or backend test is done.
+
+  - number: 10
+    id: security-agent
+    name: Security Agent
+    maps_to_role: security-engineer
+    can_commit_when: Security review, risk decision, threat note, or security fix is done.
+
+  - number: 11
+    id: legal-agent
+    name: Legal Compliance Agent
+    maps_to_role: legal-compliance
+    can_commit_when: Privacy, policy, consent, compliance, or legal review is done.
+
+  - number: 12
+    id: qa-agent
+    name: QA Agent
+    maps_to_role: qa-sdet
+    can_commit_when: Test plan, regression, bug verification, or QA signoff evidence is done.
+
+  - number: 13
+    id: devops-agent
+    name: DevOps Agent
+    maps_to_role: devops-platform
+    can_commit_when: CI/CD, environment, release, rollback, or infra change is done.
+
+  - number: 14
+    id: monitoring-agent
+    name: Monitoring Agent
+    maps_to_role: devops-platform
+    can_commit_when: Dashboard, alert, SLO, incident signal, or production monitoring evidence is done.
+
+  - number: 15
+    id: auditor-agent
+    name: Auditor Agent
+    maps_to_role: process-auditor
+    can_commit_when: Audit review, evidence verification, gate check, or process finding is done.

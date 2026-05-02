@@ -105,6 +105,46 @@ npm run ai:handoff -- \
   --phase okr
 ```
 
+## Commit as an Agent
+
+Every agent position can commit when its assigned task is done:
+
+```bash
+npm run ai:commit -- \
+  --agent frontend-agent \
+  --message "implement checkout form" \
+  --phase development \
+  --evidence ".ai/runtime/logs/2026-05-02-development-checkout-service.md"
+```
+
+Valid agent ids:
+
+```text
+prompter-agent
+orchestrator-agent
+product-manager-agent
+data-analyst-agent
+designer-agent
+product-owner-agent
+tech-lead-agent
+frontend-agent
+backend-agent
+security-agent
+legal-agent
+qa-agent
+devops-agent
+monitoring-agent
+auditor-agent
+```
+
+The command keeps the real Git author and writes the agent identity into the commit subject and trailers.
+
+Check the latest commit:
+
+```bash
+npm run ai:commit-check
+```
+
 ## Validate
 
 Check required files, runtime folders, and current phase config:
@@ -118,7 +158,7 @@ npm run ai:validate
 Give the AI worker this before asking it to implement:
 
 ```text
-Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
+Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/agent.positions.yml, and .ai/project.yml.
 Follow the .ai load order.
 Run npm run ai:status.
 Run npm run ai:start -- <current-phase> if no phase log exists.
@@ -127,4 +167,5 @@ Read `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.
 Apply shared standards from `.ai/workspace` before producing code, tests, or infra changes.
 Create an impact report if another role or repo is affected.
 Create a handoff note before moving to the next phase.
+Commit completed work with `npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"`.
 ```

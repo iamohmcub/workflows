@@ -432,6 +432,7 @@
         <a href="#startup">Startup</a>
         <a href="#cycle">SDLC</a>
         <a href="#roles">Roles</a>
+        <a href="#commits">Commits</a>
         <a href="#reports">Reports</a>
         <a href="#commands">Commands</a>
       </nav>
@@ -646,6 +647,28 @@
           <h3>Legal Compliance</h3>
           <p>Owns privacy, accessibility, vendors, licenses, and regulated risk.</p>
         </article>
+        <article class="role-card">
+          <span class="tag quality">Audit</span>
+          <h3>Process Auditor</h3>
+          <p>Owns evidence review, gate audit, commit identity, and process findings.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="commits">
+      <div class="section-title">
+        <h2>Agent Commits</h2>
+        <p>All 15 agent positions can commit when their assigned task is done, evidence is linked, and required reports or handoffs are created.</p>
+      </div>
+      <div class="panel">
+        <h3>Commit Identity</h3>
+        <ul class="rule-list">
+          <li>`prompter-agent`, `orchestrator-agent`, `product-manager-agent`, `data-analyst-agent`, `designer-agent`</li>
+          <li>`product-owner-agent`, `tech-lead-agent`, `frontend-agent`, `backend-agent`, `security-agent`</li>
+          <li>`legal-agent`, `qa-agent`, `devops-agent`, `monitoring-agent`, `auditor-agent`</li>
+          <li>Subject format: `<agent-id>: <completed task summary>`</li>
+          <li>Required trailers: `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, `AI-Evidence`</li>
+        </ul>
       </div>
     </section>
 
@@ -692,12 +715,15 @@
             <li>`npm run ai:trigger -- on_phase_start --phase okr`</li>
             <li>`npm run ai:impact -- --title "API changed"`</li>
             <li>`npm run ai:handoff -- --from product-manager --to ux-designer`</li>
+            <li>`npm run ai:commit -- --agent frontend-agent --message "implement UI" --evidence "<link>"`</li>
+            <li>`npm run ai:commit-check`</li>
           </ul>
         </div>
         <div class="panel">
           <h3>Automation</h3>
           <ul class="rule-list">
             <li>GitHub Actions runs `npm run ai:validate`.</li>
+            <li>GitHub Actions runs `npm run ai:commit-check`.</li>
             <li>Triggers on push to `main`.</li>
             <li>Triggers on pull request to `main`.</li>
             <li>Can be run manually with `workflow_dispatch`.</li>

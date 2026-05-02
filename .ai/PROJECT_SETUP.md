@@ -45,8 +45,9 @@ For a smaller project, you may start with:
 - `qa-sdet`
 - `devops-platform`
 - `security-engineer`
+- `process-auditor`
 
-Do not remove `orchestrator`.
+Do not remove `orchestrator`. Keep `process-auditor` when you need independent gate and evidence verification.
 
 ## 4. Start the First Phase
 
@@ -67,12 +68,14 @@ The worker should then:
 1. Read `AGENTS.md`.
 2. Read `.ai/manifest.yml`.
 3. Read `.ai/SKILLS.md`.
-4. Read `.ai/project.yml`.
-5. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
-6. Load global rules, hooks, phases, repo group policy, and the selected role module.
-7. Load the selected role workspace overlay.
-8. Create a phase log.
-9. Work only inside the current phase unless the orchestrator changes phase.
+4. Read `.ai/global/agent.positions.yml`.
+5. Read `.ai/project.yml`.
+6. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
+7. Load global rules, hooks, phases, repo group policy, and the selected role module.
+8. Load the selected role workspace overlay.
+9. Create a phase log.
+10. Work only inside the current phase unless the orchestrator changes phase.
+11. Commit completed work with the correct agent id when the assigned task is done.
 
 Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
 
@@ -97,6 +100,7 @@ The phase is not complete until the log and evidence exist.
 
 ```text
 Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
+Read .ai/global/agent.positions.yml.
 Read .ai/workspace/workspace.yml and the shared workspace standards.
 Follow the .ai load order.
 Identify the repo group, repo, current phase, owner role, supporting roles, and impacted roles.
@@ -120,5 +124,6 @@ Most common first commands:
 npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr --workspace-profile web-saas
 npm run ai:status
 npm run ai:start -- okr
+npm run ai:commit -- --agent orchestrator-agent --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npm run ai:validate
 ```

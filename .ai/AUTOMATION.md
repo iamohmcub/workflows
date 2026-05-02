@@ -11,6 +11,9 @@ npm run ai:trigger -- on_project_init
 npm run ai:trigger -- on_phase_start --phase okr
 npm run ai:trigger -- on_impact_detected --title "API contract changed" --phase technical-design
 npm run ai:trigger -- on_bug_detected --title "Checkout payment failure" --phase qa-testing --severity P1
+npm run ai:trigger -- on_agent_task_done --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npm run ai:commit -- --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npm run ai:commit-check
 ```
 
 Hook mapping:
@@ -21,6 +24,14 @@ Hook mapping:
 | `on_phase_start` | Creates a phase log and loads the owner role for the phase. |
 | `on_impact_detected` | Creates an impact report in `.ai/runtime/reports`. |
 | `on_bug_detected` | Creates an impact report with default severity `P1` unless specified. |
+| `on_agent_task_done` | Creates a Git commit using the completed agent position identity. |
+
+Agent commit commands:
+
+| Command | Behavior |
+| --- | --- |
+| `npm run ai:commit` | Creates a Git commit for a done task using one of the 15 agent ids. |
+| `npm run ai:commit-check` | Validates that the latest commit uses agent identity and required AI trailers. |
 
 ## 2. GitHub Actions Trigger
 
@@ -30,6 +41,7 @@ It runs:
 
 ```bash
 npm run ai:validate
+npm run ai:commit-check
 ```
 
 Triggers:
@@ -52,4 +64,3 @@ It prepares and validates evidence. An AI worker still needs to be prompted to r
 - `.ai/project.yml`
 
 Then the worker can run the commands as part of its process.
-

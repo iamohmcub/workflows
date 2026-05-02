@@ -12,7 +12,7 @@ Canonical load order lives in `.ai/manifest.yml`.
 
 ## Folders
 
-- `global/`: company-wide skills, hooks, rules, and SDLC phases.
+- `global/`: company-wide skills, hooks, rules, agent positions, and SDLC phases.
 - `workspace/`: shared stack, code style, project structure, tools, and QA standards.
 - `repo-group/`: workspace/group policy and impact rules.
 - `role/`: role modules.

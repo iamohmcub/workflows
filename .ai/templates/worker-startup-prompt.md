@@ -9,9 +9,10 @@ Before making changes:
 3. Read `.ai/SKILLS.md`.
 4. Read `.ai/AUTOMATION.md`.
 5. Read `.ai/project.yml`.
-6. Read `.ai/workspace/workspace.yml`.
-7. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
-8. Follow the manifest `load_order`.
+6. Read `.ai/global/agent.positions.yml`.
+7. Read `.ai/workspace/workspace.yml`.
+8. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
+9. Follow the manifest `load_order`.
 
 Identify:
 
@@ -35,6 +36,7 @@ Then:
 7. Create an impact report if another role or repo is affected.
 8. Create a handoff note before moving downstream.
 9. Complete DoD item by item before handoff.
+10. Commit completed work with the correct agent id from `.ai/global/agent.positions.yml`.
 
 Hard rules:
 
@@ -42,3 +44,4 @@ Hard rules:
 - No impact report means cross-role or cross-repo impact is not accepted.
 - No gate may pass by bulk approval.
 - CI, review, and secret scanning are required for code changes.
+- Agent commits must use `<agent-id>: <completed task summary>` and include required AI commit trailers.

@@ -11,7 +11,8 @@ Copy this into a project and the AI worker gets:
 - `.ai/project.yml`: project identity and current phase.
 - `.ai/workspace/`: shared company standards for stack, style, structure, tools, and QA.
 - `.ai/role/<role-id>/`: role modules with config, interface, playbook, checklist, and workspace overlay.
-- `scripts/ai-workflow.mjs`: local CLI for init, status, phase logs, impact reports, handoffs, and validation.
+- `.ai/global/agent.positions.yml`: 15 agent positions and commit authority.
+- `scripts/ai-workflow.mjs`: local CLI for init, status, phase logs, impact reports, handoffs, agent commits, and validation.
 
 ## Quick Start
 
@@ -31,6 +32,7 @@ npm run ai:init -- \
 
 npm run ai:status
 npm run ai:start -- okr
+npm run ai:commit -- --agent orchestrator-agent --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npm run ai:validate
 ```
 
@@ -39,12 +41,13 @@ npm run ai:validate
 Give this to the worker before implementation:
 
 ```text
-Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/project.yml, and .ai/workspace/workspace.yml.
+Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/agent.positions.yml, .ai/project.yml, and .ai/workspace/workspace.yml.
 Follow the manifest load order.
 Identify repo group, repo, current phase, owner role, supporting roles, impacted roles, and required evidence.
 Load the owner role module from .ai/role/<role-id>/.
 Apply shared workspace standards before code, tests, or infra changes.
 Create a phase log before work and an impact report if another role or repo is affected.
+Commit completed work with the correct agent id when the assigned task is done.
 ```
 
 ## File Type Rule

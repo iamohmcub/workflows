@@ -32,8 +32,14 @@ communication:
   COMM-002: Write decisions where future roles can find them.
   COMM-003: Use plain language for status, risk, and tradeoff reports.
 
+source_control:
+  COMMIT-001: "Every agent position can commit when its assigned task is done."
+  COMMIT-002: "Commit subject must start with the agent id, for example `frontend-agent: implement checkout form`."
+  COMMIT-003: "Commit body must include AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers."
+  COMMIT-004: "Keep the real Git author account. Do not fake a human identity; put agent identity in commit metadata."
+  COMMIT-005: "Do not commit unfinished work as done. If work is partial, write a handoff or impact report instead."
+
 incident:
   INC-001: P0 and P1 incidents require post-mortems within 24 hours.
   INC-002: Same production bug twice is a process failure.
   INC-003: Feature flag mitigation is checked before rollback or hotfix.
-

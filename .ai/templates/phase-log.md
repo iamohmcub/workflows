@@ -44,6 +44,12 @@ Gate:
 - [ ] Cross-repo impact report created.
 - [ ] Affected owners acknowledged.
 
+## Agent Commit
+
+- Agent id:
+- Commit:
+- Evidence linked:
+
 ## Handoff
 
 - Next owner:
@@ -51,4 +57,3 @@ Gate:
 - Not done:
 - Risks:
 - Required action:
-

@@ -46,6 +46,7 @@ project:
       - security-engineer
       - data-analyst
       - legal-compliance
+      - process-auditor
 
   environments:
     enabled:

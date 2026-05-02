@@ -1,0 +1,20 @@
+version: 1
+role_workspace:
+  role: process-auditor
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/workspace/tools.yml
+    - .ai/workspace/qa-process.yml
+    - .ai/role/process-auditor/interface.yml
+  specialization:
+    audit_sources:
+      - .ai/runtime/logs
+      - .ai/runtime/reports
+      - .ai/runtime/decisions
+      - .ai/runtime/handoffs
+      - git commit subject and trailers
+    required_before_handoff:
+      - Phase log has current evidence.
+      - DoD is checked item by item.
+      - Required impact reports are linked and acknowledged.
+      - Commit identity uses a valid agent id.

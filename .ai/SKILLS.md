@@ -78,6 +78,21 @@ Before passing work to the next role:
 
 Use `.ai/templates/handoff-note.md`.
 
+## Commit Skill
+
+Every agent position can commit when its assigned task is done.
+
+The worker must:
+
+1. Use one of the 15 agent ids in `.ai/global/agent.positions.yml`.
+2. Keep the real Git author account.
+3. Prefix the commit subject with the agent id.
+4. Include `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, and `AI-Evidence` trailers.
+5. Set `AI-Task-Done: yes` only when the assigned task is complete.
+6. Link evidence from the phase log, impact report, handoff note, tests, review, or deployment output.
+
+If the task is not done, do not create a done commit. Create or update a handoff, impact report, or blocker note instead.
+
 ## Gatekeeping Skill
 
 The gate question is:

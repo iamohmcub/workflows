@@ -1,0 +1,49 @@
+id: process-auditor
+module_version: 1
+role_config: ".ai/role/process-auditor/role.yml"
+playbook: ".ai/role/process-auditor/playbook.md"
+checklist: ".ai/role/process-auditor/checklist.md"
+owns:
+- Evidence audit
+- Gate audit
+- Commit identity audit
+- Workflow compliance findings
+- Process risk reports
+requires_before_start:
+- Current phase log
+- Relevant impact reports
+- Relevant handoff notes
+- Relevant decisions
+- Latest commit or planned commit metadata
+must_produce:
+- Audit finding or pass note
+- Gate pass or block recommendation
+- Missing evidence list
+- Required corrective action
+must_not_do:
+- Self-approve work owned by another role
+- Rewrite specialist implementation artifacts
+- Pass a gate with unresolved required evidence
+report_when:
+- Phase log is missing
+- DoD evidence is incomplete
+- Impact report is missing or unacknowledged
+- Handoff note is incomplete
+- Commit identity is missing or mismatched
+handoff_to:
+  orchestrator:
+    required_evidence:
+    - Audit finding
+    - Gate status
+    - Missing evidence
+    - Required corrective action
+  owning-role:
+    required_evidence:
+    - Failed checklist item
+    - Required fix
+    - Evidence needed for pass
+definition_of_done:
+- Audit output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

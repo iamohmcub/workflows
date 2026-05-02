@@ -24,6 +24,14 @@ hooks:
       - Scan for secrets and PII.
       - Add artifact link to the phase log.
 
+  on_agent_task_done:
+    trigger: An agent position completes its assigned task.
+    actions:
+      - Confirm phase log and evidence are updated.
+      - Confirm impact report and handoff note exist when required.
+      - Commit with `<agent-id>: <completed task summary>`.
+      - Include AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers.
+
   on_artifact_rejected:
     trigger: Artifact fails DoD or reviewer acceptance.
     actions:
@@ -67,4 +75,3 @@ hooks:
       - Schedule post-mortem within 24 hours.
       - Record timeline, impact, root cause, and action items.
       - Add follow-up work to backlog.
-

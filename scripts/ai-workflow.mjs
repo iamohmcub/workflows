@@ -2,11 +2,13 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 
 const ROOT = process.cwd();
 const AI_DIR = path.join(ROOT, ".ai");
 const PROJECT_FILE = path.join(AI_DIR, "project.yml");
 const PHASE_FILE = path.join(AI_DIR, "global", "sdlc.phases.yml");
+const AGENT_POSITIONS_FILE = path.join(AI_DIR, "global", "agent.positions.yml");
 const RUNTIME_DIR = path.join(AI_DIR, "runtime");
 const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
 
@@ -25,6 +27,7 @@ const REQUIRED_FILES = [
   ".ai/global/company.skills.yml",
   ".ai/global/company.hooks.yml",
   ".ai/global/company.rules.yml",
+  ".ai/global/agent.positions.yml",
   ".ai/global/sdlc.phases.yml"
 ];
 
@@ -32,7 +35,8 @@ const EVENT_ALIASES = {
   on_project_init: "init",
   on_phase_start: "start-phase",
   on_impact_detected: "impact",
-  on_bug_detected: "impact"
+  on_bug_detected: "impact",
+  on_agent_task_done: "commit"
 };
 
 const ROLE_MODULE_FILES = ["role.yml", "interface.yml", "playbook.md", "checklist.md", "workspace.yml"];
@@ -69,6 +73,12 @@ function main(argv) {
       case "handoff":
         handoff(rest);
         break;
+      case "commit":
+        commitAsAgent(rest);
+        break;
+      case "commit-check":
+        commitCheck(rest);
+        break;
       case "validate":
         validate();
         break;
@@ -92,6 +102,8 @@ Usage:
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
   npm run ai:impact -- --title "API contract changed" --phase technical-design --severity P2
   npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
+  npm run ai:commit -- --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  npm run ai:commit-check
   npm run ai:validate
 
 Core idea:
@@ -120,6 +132,7 @@ Gate:       ${phase?.gate || "unknown"}
 Next commands:
   npm run ai:start -- ${project.currentPhase}
   npm run ai:trigger -- on_phase_start --phase ${project.currentPhase}
+  npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"
   npm run ai:validate
 `);
 }
@@ -279,6 +292,12 @@ Is this ready for the next role to do their best work?
 
 Answer:
 
+## Agent Commit
+
+- Agent id:
+- Commit:
+- Evidence linked:
+
 ## Handoff
 
 - Next owner:
@@ -306,6 +325,7 @@ Next:
   Read .ai/role/${phase.owner}/workspace.yml
   Complete DoD item by item
   Run npm run ai:impact -- --title "<title>" if another role or repo is affected
+  Run npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>" when the task is done
 `);
 }
 
@@ -319,11 +339,13 @@ function trigger(argv) {
   on_phase_start       -> npm run ai:start -- <phase>
   on_impact_detected   -> npm run ai:impact -- --title "<title>"
   on_bug_detected      -> npm run ai:impact -- --title "<bug title>" --severity P1
+  on_agent_task_done   -> npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"
 
 Usage patterns:
   npm run ai:trigger -- on_project_init
   npm run ai:trigger -- on_phase_start --phase okr
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
+  npm run ai:trigger -- on_agent_task_done --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 `);
     return;
   }
@@ -343,6 +365,7 @@ Usage patterns:
     if (hook === "on_bug_detected" && !options.severity) forwarded.push("--severity", "P1");
     impact(forwarded);
   }
+  if (command === "commit") commitAsAgent(argv.slice(1));
 }
 
 function impact(argv) {
@@ -503,6 +526,103 @@ Next:
 `);
 }
 
+function commitAsAgent(argv) {
+  const options = parseOptions(argv);
+  const project = readProject();
+  const agents = readAgentPositions();
+  const agentId = options.agent || options["agent-id"];
+  const message = options.message;
+  const evidence = options.evidence;
+
+  if (!agentId) fail("Missing --agent <agent-id>");
+  if (!message) fail('Missing --message "completed task summary"');
+  if (!evidence) fail("Missing --evidence <phase log, report, handoff, test, or review link>");
+
+  const agent = agents.find((item) => item.id === agentId);
+  if (!agent) {
+    fail(`Unknown agent: ${agentId}
+
+Known agents:
+${agents.map((item) => `  ${item.id}`).join("\n")}
+`);
+  }
+
+  if (!options["dry-run"] && !hasStagedChanges()) {
+    fail("No staged changes. Stage the completed task files before running ai:commit.");
+  }
+
+  const phase = options.phase || project.currentPhase;
+  const role = options.role || agent.mapsToRole;
+  const summary = message.startsWith(`${agent.id}:`) ? message.slice(agent.id.length + 1).trim() : message;
+  const subject = `${agent.id}: ${summary}`;
+  const body = [
+    `AI-Agent: ${agent.id}`,
+    `AI-Role: ${role}`,
+    `AI-Phase: ${phase}`,
+    "AI-Task-Done: yes",
+    `AI-Evidence: ${evidence}`
+  ].join("\n");
+
+  if (options["dry-run"]) {
+    console.log(`${subject}
+
+${body}
+`);
+    return;
+  }
+
+  execFileSync("git", ["commit", "-m", subject, "-m", body], { cwd: ROOT, stdio: "inherit" });
+}
+
+function commitCheck(argv) {
+  const options = parseOptions(argv);
+  const agents = readAgentPositions();
+  const subject = options.subject || gitOutput(["log", "-1", "--pretty=%s"]);
+  const body = options.body || gitOutput(["log", "-1", "--pretty=%b"]);
+  const agentId = subject.split(":")[0].trim();
+  const agent = agents.find((item) => item.id === agentId);
+  const errors = [];
+
+  if (!agent) {
+    errors.push(`Commit subject must start with a known agent id, like "frontend-agent: ...". Found: ${subject}`);
+  }
+
+  const trailers = parseTrailers(body);
+  const required = ["AI-Agent", "AI-Role", "AI-Phase", "AI-Task-Done", "AI-Evidence"];
+
+  for (const key of required) {
+    if (!trailers[key]) errors.push(`Missing commit trailer: ${key}`);
+  }
+
+  if (trailers["AI-Agent"] && trailers["AI-Agent"] !== agentId) {
+    errors.push(`AI-Agent trailer must match subject agent id. Subject=${agentId}, trailer=${trailers["AI-Agent"]}`);
+  }
+
+  if (trailers["AI-Task-Done"] && trailers["AI-Task-Done"].toLowerCase() !== "yes") {
+    errors.push('AI-Task-Done must be "yes" for agent done commits.');
+  }
+
+  if (["tbd", "todo", "none", "n/a"].includes(String(trailers["AI-Evidence"] || "").toLowerCase())) {
+    errors.push("AI-Evidence must link real evidence, not a placeholder.");
+  }
+
+  if (errors.length) {
+    console.error(`Agent commit check failed
+
+${errors.map((item) => `- ${item}`).join("\n")}
+`);
+    process.exitCode = 1;
+    return;
+  }
+
+  console.log(`Agent commit check passed
+
+Agent: ${agent.id}
+Role:  ${trailers["AI-Role"]}
+Phase: ${trailers["AI-Phase"]}
+`);
+}
+
 function validate() {
   const errors = [];
 
@@ -544,6 +664,37 @@ function validate() {
     if (!fs.existsSync(full)) errors.push(`Missing runtime folder: .ai/runtime/${dir}`);
   }
 
+  const agents = readAgentPositions();
+  const expectedAgents = [
+    "prompter-agent",
+    "orchestrator-agent",
+    "product-manager-agent",
+    "data-analyst-agent",
+    "designer-agent",
+    "product-owner-agent",
+    "tech-lead-agent",
+    "frontend-agent",
+    "backend-agent",
+    "security-agent",
+    "legal-agent",
+    "qa-agent",
+    "devops-agent",
+    "monitoring-agent",
+    "auditor-agent"
+  ];
+
+  if (agents.length !== expectedAgents.length) {
+    errors.push(`Expected ${expectedAgents.length} agent positions, found ${agents.length}`);
+  }
+
+  for (const agentId of expectedAgents) {
+    if (!agents.some((agent) => agent.id === agentId)) errors.push(`Missing agent position: ${agentId}`);
+  }
+
+  for (const agent of agents) {
+    if (!agent.mapsToRole) errors.push(`Agent position is missing maps_to_role: ${agent.id}`);
+  }
+
   if (errors.length) {
     console.error(`AI workflow validation failed
 
@@ -562,6 +713,35 @@ Role module: .ai/role/${phase.owner}/
 Workspace: ${project.workspaceProfile}
 Known phases: ${phases.length}
 `);
+}
+
+function readAgentPositions() {
+  ensureFile(AGENT_POSITIONS_FILE, "Missing .ai/global/agent.positions.yml");
+  const lines = fs.readFileSync(AGENT_POSITIONS_FILE, "utf8").split(/\r?\n/);
+  const agents = [];
+  let current = null;
+
+  for (const line of lines) {
+    if (/^  - number:\s*/.test(line)) {
+      if (current) agents.push(current);
+      current = {};
+      continue;
+    }
+
+    if (!current) continue;
+
+    const field = line.match(/^    ([a-zA-Z0-9_-]+):\s*(.*?)\s*$/);
+    if (!field) continue;
+
+    const key = field[1];
+    const value = clean(field[2]);
+    if (key === "id") current.id = value;
+    if (key === "name") current.name = value;
+    if (key === "maps_to_role") current.mapsToRole = value;
+  }
+
+  if (current) agents.push(current);
+  return agents.filter((agent) => agent.id);
 }
 
 function readProject() {
@@ -812,6 +992,29 @@ function relative(file) {
 
 function unique(items) {
   return [...new Set(items.filter(Boolean))];
+}
+
+function gitOutput(args) {
+  return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim();
+}
+
+function hasStagedChanges() {
+  try {
+    execFileSync("git", ["diff", "--cached", "--quiet"], { cwd: ROOT, stdio: "ignore" });
+    return false;
+  } catch (error) {
+    if (error.status === 1) return true;
+    throw error;
+  }
+}
+
+function parseTrailers(text) {
+  const trailers = {};
+  for (const line of String(text || "").split(/\r?\n/)) {
+    const match = line.match(/^([A-Za-z0-9-]+):\s*(.*?)\s*$/);
+    if (match) trailers[match[1]] = match[2];
+  }
+  return trailers;
 }
 
 function fail(message) {
