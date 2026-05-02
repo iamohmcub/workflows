@@ -166,7 +166,7 @@ Agent Shewhart    monitoring-agent
 Agent Holmes      auditor-agent
 ```
 
-The command accepts the callsign, short name, position, or stable id. It keeps the real Git author and writes the agent callsign plus stable id into the commit subject and trailers.
+The command accepts the callsign, short name, position, or stable id. It writes the agent callsign as the Git author and keeps the stable id in trailers.
 
 Check the latest commit:
 

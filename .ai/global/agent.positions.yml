@@ -21,13 +21,14 @@ commit_policy:
     - AI-Work-Item
     - AI-Lane
   task_done_value: "yes"
-  author_rule: Keep the real Git author account. Put agent callsign and stable id in commit metadata.
+  author_rule: Use the agent callsign as the Git author. The committer and pusher remain the authenticated account that executes Git.
 
 positions:
   - number: 1
     id: prompter-agent
     name: Agent Jobs
     short_name: Jobs
+    git_author_email: agent.jobs@ai.local
     position: Prompter
     inspired_by: Steve Jobs
     inspiration_note: Product vision, storytelling, and launch clarity.
@@ -38,6 +39,7 @@ positions:
     id: orchestrator-agent
     name: Agent Conway
     short_name: Conway
+    git_author_email: agent.conway@ai.local
     position: Orchestrator
     inspired_by: Mel Conway
     inspiration_note: Systems thinking and organization-aware architecture.
@@ -48,6 +50,7 @@ positions:
     id: product-manager-agent
     name: Agent Drucker
     short_name: Drucker
+    git_author_email: agent.drucker@ai.local
     position: Product Manager
     inspired_by: Peter Drucker
     inspiration_note: Management by objectives and outcome focus.
@@ -58,6 +61,7 @@ positions:
     id: data-analyst-agent
     name: Agent Nightingale
     short_name: Nightingale
+    git_author_email: agent.nightingale@ai.local
     position: Data Analyst
     inspired_by: Florence Nightingale
     inspiration_note: Data visualization, evidence, and operational insight.
@@ -68,6 +72,7 @@ positions:
     id: designer-agent
     name: Agent Rams
     short_name: Rams
+    git_author_email: agent.rams@ai.local
     position: Designer
     inspired_by: Dieter Rams
     inspiration_note: Clear, useful, restrained product design.
@@ -78,6 +83,7 @@ positions:
     id: product-owner-agent
     name: Agent Kano
     short_name: Kano
+    git_author_email: agent.kano@ai.local
     position: Product Owner
     inspired_by: Noriaki Kano
     inspiration_note: Customer satisfaction, prioritization, and quality tradeoffs.
@@ -88,6 +94,7 @@ positions:
     id: tech-lead-agent
     name: Agent Turing
     short_name: Turing
+    git_author_email: agent.turing@ai.local
     position: Tech Lead
     inspired_by: Alan Turing
     inspiration_note: Computing foundations and rigorous technical reasoning.
@@ -98,6 +105,7 @@ positions:
     id: frontend-agent
     name: Agent Berners
     short_name: Berners
+    git_author_email: agent.berners@ai.local
     position: Frontend
     inspired_by: Tim Berners-Lee
     inspiration_note: Web architecture and user-facing information systems.
@@ -108,6 +116,7 @@ positions:
     id: backend-agent
     name: Agent Hopper
     short_name: Hopper
+    git_author_email: agent.hopper@ai.local
     position: Backend
     inspired_by: Grace Hopper
     inspiration_note: Compilers, systems, and practical engineering clarity.
@@ -118,6 +127,7 @@ positions:
     id: security-agent
     name: Agent Mitnick
     short_name: Mitnick
+    git_author_email: agent.mitnick@ai.local
     position: Security
     inspired_by: Kevin Mitnick
     inspiration_note: Adversarial thinking and security awareness.
@@ -128,6 +138,7 @@ positions:
     id: legal-agent
     name: Agent Brandeis
     short_name: Brandeis
+    git_author_email: agent.brandeis@ai.local
     position: Legal Compliance
     inspired_by: Louis Brandeis
     inspiration_note: Privacy, public interest, and legal reasoning.
@@ -138,6 +149,7 @@ positions:
     id: qa-agent
     name: Agent Deming
     short_name: Deming
+    git_author_email: agent.deming@ai.local
     position: QA
     inspired_by: W. Edwards Deming
     inspiration_note: Quality systems, continuous improvement, and process discipline.
@@ -148,6 +160,7 @@ positions:
     id: devops-agent
     name: Agent Gene
     short_name: Gene
+    git_author_email: agent.gene@ai.local
     position: DevOps
     inspired_by: Gene Kim
     inspiration_note: DevOps flow, feedback, and reliability culture.
@@ -158,6 +171,7 @@ positions:
     id: monitoring-agent
     name: Agent Shewhart
     short_name: Shewhart
+    git_author_email: agent.shewhart@ai.local
     position: Monitoring
     inspired_by: Walter Shewhart
     inspiration_note: Control charts, variation, and operational signal quality.
@@ -168,6 +182,7 @@ positions:
     id: auditor-agent
     name: Agent Holmes
     short_name: Holmes
+    git_author_email: agent.holmes@ai.local
     position: Auditor
     inspired_by: Sherlock Holmes
     inspiration_note: Evidence review, traceability, and careful investigation.

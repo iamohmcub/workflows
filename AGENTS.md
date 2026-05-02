@@ -105,7 +105,7 @@ AI-Evidence: <phase log, report, handoff, test, or review link>
 
 For parallel MVP/work item commits, also include `AI-Work-Item` and `AI-Lane`.
 
-Keep the real Git author account. Put the agent callsign and stable id in the commit subject and trailers.
+Use the agent callsign as the Git author. The committer and pusher remain the authenticated account that executes Git.
 
 ## Commands
 
