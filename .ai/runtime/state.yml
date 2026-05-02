@@ -1,0 +1,16 @@
+version: 1
+runtime:
+  mode: portable_file_standard
+  runner: optional
+  adapter: optional
+  current_work_item: default
+  current_lane: business-discovery
+  event_queue: .ai/runtime/queue
+  event_history: .ai/runtime/events
+  evidence_root: .ai/runtime
+
+rules:
+  - This state file is runtime context, not global policy.
+  - Project-specific agents or runners may update this file as work moves.
+  - Do not put secrets, credentials, or private customer data here.
+  - If no runner is installed, AI workers still read this file before acting.

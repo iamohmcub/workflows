@@ -68,16 +68,20 @@ The worker should then:
 1. Read `AGENTS.md`.
 2. Read `.ai/manifest.yml`.
 3. Read `.ai/SKILLS.md`.
-4. Read `.ai/global/agent.positions.yml`.
-5. Read `.ai/global/parallel.delivery.yml`.
-6. Read `.ai/project.yml`.
-7. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
-8. Load global rules, hooks, phases, repo group policy, and the selected role module.
-9. Load the selected role workspace overlay.
-10. Create a phase log.
-11. Work only inside the current phase unless the orchestrator changes phase.
-12. For parallel MVP work, keep lane-specific phase logs and do not move repo current phase unless orchestrator sets it.
-13. Commit completed work with the correct agent callsign when the assigned task is done.
+4. Read `.ai/global/worker.contract.yml`.
+5. Read `.ai/global/event.contract.yml`.
+6. Read `.ai/global/routing.matrix.yml`.
+7. Read `.ai/global/agent.positions.yml`.
+8. Read `.ai/global/parallel.delivery.yml`.
+9. Read `.ai/project.yml`.
+10. Read `.ai/runtime/state.yml`.
+11. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
+12. Load global rules, hooks, phases, repo group policy, and the selected role module.
+13. Load the selected role workspace overlay.
+14. Create a phase log.
+15. Work only inside the current phase unless the orchestrator changes phase.
+16. For parallel MVP work, keep lane-specific phase logs and do not move repo current phase unless orchestrator sets it.
+17. Commit completed work with the correct agent callsign when the assigned task is done.
 
 Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
 
@@ -92,6 +96,8 @@ npm run ai:status
 The worker must create:
 
 - Phase logs in `.ai/runtime/logs`
+- Pending events in `.ai/runtime/queue`
+- Completed events in `.ai/runtime/events`
 - Impact reports in `.ai/runtime/reports`
 - Decision logs in `.ai/runtime/decisions`
 - Handoff notes in `.ai/runtime/handoffs`
@@ -102,8 +108,12 @@ The phase is not complete until the log and evidence exist.
 
 ```text
 Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
+Read .ai/global/worker.contract.yml.
+Read .ai/global/event.contract.yml.
+Read .ai/global/routing.matrix.yml.
 Read .ai/global/agent.positions.yml.
 Read .ai/global/parallel.delivery.yml.
+Read .ai/runtime/state.yml.
 Read .ai/workspace/workspace.yml and the shared workspace standards.
 Follow the .ai load order.
 Identify the repo group, repo, current phase, MVP/work item, lane, owner role, supporting roles, and impacted roles.

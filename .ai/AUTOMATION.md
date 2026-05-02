@@ -58,11 +58,23 @@ This validates that the `.ai` rulebook and project config are still usable after
 
 The current automation does not call an LLM by itself.
 
-It prepares and validates evidence. An AI worker still needs to be prompted to read:
+It prepares and validates evidence. This is intentional: `.ai` is the portable
+workflow standard, while CLIs, plugins, adapters, GitHub Actions, and local LLM
+runners are optional engines.
+
+An AI worker still needs to be prompted to read:
 
 - `AGENTS.md`
 - `.ai/manifest.yml`
 - `.ai/SKILLS.md`
 - `.ai/project.yml`
+- `.ai/global/worker.contract.yml`
+- `.ai/global/event.contract.yml`
+- `.ai/global/routing.matrix.yml`
+- `.ai/runtime/state.yml`
 
 Then the worker can run the commands as part of its process.
+
+Future plugin or runner behavior should process `.ai/runtime/queue` events using
+`.ai/global/event.contract.yml`, route roles with `.ai/global/routing.matrix.yml`,
+and keep `.ai` as the source of truth.

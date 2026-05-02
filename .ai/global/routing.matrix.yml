@@ -1,0 +1,209 @@
+version: 1
+scope: company
+
+principle: >
+  Phase ownership is not the same as task responsibility. Use this matrix to
+  decide who owns, contributes, reviews, and must be notified for each phase,
+  lane, and impact type.
+
+raci_terms:
+  responsible: Does the work.
+  accountable: Owns final phase or gate outcome.
+  consulted: Must be asked before irreversible decisions.
+  informed: Must be told when the work affects their area.
+
+phase_routing:
+  okr:
+    accountable: product-manager
+    responsible:
+      - product-manager
+      - data-analyst
+    consulted:
+      - product-owner
+      - ux-designer
+    informed:
+      - orchestrator
+
+  user-research:
+    accountable: ux-designer
+    responsible:
+      - ux-designer
+      - data-analyst
+    consulted:
+      - product-manager
+      - product-owner
+    informed:
+      - orchestrator
+
+  prd:
+    accountable: product-manager
+    responsible:
+      - product-manager
+      - product-owner
+    consulted:
+      - ux-designer
+      - tech-lead
+      - data-analyst
+    informed:
+      - orchestrator
+
+  ux-design:
+    accountable: ux-designer
+    responsible:
+      - ux-designer
+    consulted:
+      - product-owner
+      - frontend-engineer
+      - qa-sdet
+    informed:
+      - product-manager
+      - orchestrator
+
+  technical-design:
+    accountable: tech-lead
+    responsible:
+      - tech-lead
+      - frontend-engineer
+      - backend-engineer
+      - devops-platform
+    consulted:
+      - security-engineer
+      - qa-sdet
+      - data-analyst
+    informed:
+      - product-manager
+      - orchestrator
+
+  development:
+    accountable: tech-lead
+    responsible:
+      - frontend-engineer
+      - backend-engineer
+      - devops-platform
+    consulted:
+      - qa-sdet
+      - security-engineer
+    informed:
+      - product-owner
+      - orchestrator
+
+  qa-testing:
+    accountable: qa-sdet
+    responsible:
+      - qa-sdet
+      - frontend-engineer
+      - backend-engineer
+    consulted:
+      - tech-lead
+      - security-engineer
+    informed:
+      - product-owner
+      - devops-platform
+      - orchestrator
+
+  release-deployment:
+    accountable: devops-platform
+    responsible:
+      - devops-platform
+      - qa-sdet
+    consulted:
+      - tech-lead
+      - security-engineer
+      - legal-compliance
+    informed:
+      - product-manager
+      - product-owner
+      - orchestrator
+
+  monitoring:
+    accountable: devops-platform
+    responsible:
+      - devops-platform
+      - data-analyst
+    consulted:
+      - backend-engineer
+      - frontend-engineer
+    informed:
+      - product-manager
+      - qa-sdet
+      - orchestrator
+
+  measure-iterate:
+    accountable: data-analyst
+    responsible:
+      - data-analyst
+      - product-manager
+    consulted:
+      - product-owner
+      - ux-designer
+      - tech-lead
+    informed:
+      - orchestrator
+
+impact_routing:
+  api_contract:
+    consulted:
+      - backend-engineer
+      - frontend-engineer
+      - qa-sdet
+    informed:
+      - tech-lead
+      - product-owner
+
+  data_contract:
+    consulted:
+      - backend-engineer
+      - data-analyst
+      - qa-sdet
+    informed:
+      - tech-lead
+      - product-manager
+
+  design_system:
+    consulted:
+      - ux-designer
+      - frontend-engineer
+      - qa-sdet
+    informed:
+      - product-owner
+
+  infrastructure:
+    consulted:
+      - devops-platform
+      - security-engineer
+      - backend-engineer
+    informed:
+      - tech-lead
+      - qa-sdet
+
+  security_boundary:
+    consulted:
+      - security-engineer
+      - tech-lead
+      - devops-platform
+    informed:
+      - product-manager
+      - legal-compliance
+      - qa-sdet
+
+  legal_or_compliance:
+    consulted:
+      - legal-compliance
+      - security-engineer
+      - product-manager
+    informed:
+      - orchestrator
+
+  customer_commitment:
+    consulted:
+      - product-manager
+      - product-owner
+      - qa-sdet
+    informed:
+      - orchestrator
+
+rules:
+  - If a role is responsible, it may commit done work for its own task.
+  - If a role is consulted, it must acknowledge material changes before the next gate.
+  - If a role is informed, the phase log or impact report must link the notification.
+  - The orchestrator resolves conflicts when accountable and consulted roles disagree.

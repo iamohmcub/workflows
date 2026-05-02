@@ -1,0 +1,75 @@
+version: 1
+scope: provider_neutral_ai_worker
+
+principle: >
+  The `.ai` folder is the portable source of truth. Any AI worker, human,
+  hosted model, local model, CLI, plugin, or future runner must be able to
+  read the same files and reach the same workflow decision.
+
+provider_neutrality:
+  required:
+    - Do not depend on one AI vendor, IDE, chat product, or local model runtime.
+    - Do not store provider-only instructions as the only source of truth.
+    - Treat adapters, plugins, MCP servers, CI, and CLIs as optional engines.
+    - Keep durable policy, routing, gates, and evidence requirements in `.ai`.
+  allowed:
+    - A provider-specific tool may speed up execution.
+    - A runner may enforce gates automatically.
+    - A local LLM may execute the same contract with a smaller context window.
+
+startup_contract:
+  read_first:
+    - AGENTS.md
+    - .ai/manifest.yml
+    - .ai/SKILLS.md
+    - .ai/project.yml
+    - .ai/runtime/state.yml
+  then_read:
+    - Files listed in `.ai/manifest.yml` load_order.
+    - The selected role module files listed in role_module_load_order.
+    - The selected role workspace overlay.
+  identify:
+    - repo_group
+    - repo
+    - work_item_id
+    - lane
+    - phase
+    - owner_role
+    - supporting_roles
+    - impacted_roles
+    - upstream_handoff
+    - gate_status
+
+execution_contract:
+  every_worker_must:
+    - Work only inside the assigned role, phase, lane, and work item unless the orchestrator expands scope.
+    - Keep decisions traceable to OKR, acceptance criteria, ticket, incident, or explicit user request.
+    - Create or update phase logs, impact reports, decisions, and handoffs when the rules require them.
+    - Use the routing matrix to decide which roles must be consulted or notified.
+    - Stop and report when a gate, dependency, security rule, legal rule, or locked contract blocks progress.
+    - Keep the real Git author account and record the agent callsign in commit metadata.
+
+output_contract:
+  final_response:
+    - Summarize completed work.
+    - Name the agent callsign and role that performed the work.
+    - Link evidence files or state that evidence could not be created.
+    - Name impacted roles, repos, gates, and follow-up owners.
+  runtime_evidence:
+    - phase_log
+    - handoff_note
+    - impact_report
+    - decision_log
+    - commit_trailers
+
+adapter_boundary:
+  adapter_is_optional: true
+  adapter_may:
+    - Dispatch work to a provider or local model.
+    - Watch the event queue.
+    - Validate schemas and gates.
+    - Notify external tools.
+  adapter_must_not:
+    - Override `.ai` policy without writing a decision log.
+    - Hide provider-specific behavior from evidence.
+    - Skip required reports, handoffs, gates, tests, reviews, or security checks.

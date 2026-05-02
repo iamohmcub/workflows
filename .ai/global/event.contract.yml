@@ -1,0 +1,110 @@
+version: 1
+scope: provider_neutral_event_contract
+
+principle: >
+  Events are the portable trigger language for the workflow. A human, AI chat
+  worker, CLI, plugin, GitHub Action, or local LLM runner can read the same
+  event fields and decide the same next action.
+
+event_location:
+  queue: .ai/runtime/queue
+  history: .ai/runtime/events
+  naming: "<timestamp>-<event-name>-<work-item-id>.yml"
+
+required_fields:
+  - event
+  - event_id
+  - created_at
+  - source_agent
+  - source_role
+  - repo_group_id
+  - repo_id
+  - phase
+  - work_item_id
+  - lane
+  - summary
+  - evidence
+
+optional_fields:
+  - target_roles
+  - impacted_roles
+  - impacted_repos
+  - severity
+  - gate
+  - upstream_handoff
+  - locked_contracts
+  - dependencies
+  - due_date
+  - payload
+
+event_types:
+  project.initialized:
+    maps_to_hook: on_project_init
+    owner: orchestrator
+    required_outputs:
+      - runtime_state
+      - project_config
+
+  phase.started:
+    maps_to_hook: on_phase_start
+    owner: phase_owner
+    required_outputs:
+      - phase_log
+
+  lane.started:
+    maps_to_hook: on_parallel_lane_start
+    owner: lane_owner
+    required_outputs:
+      - lane_phase_log
+      - dependency_links
+
+  handoff.created:
+    maps_to_hook: on_handoff_accepted
+    owner: downstream_owner
+    required_outputs:
+      - handoff_note
+      - acceptance_status
+
+  artifact.created:
+    maps_to_hook: on_artifact_created
+    owner: source_role
+    required_outputs:
+      - phase_log_update
+      - traceability_link
+
+  impact.detected:
+    maps_to_hook: on_impact_detected
+    owner: source_role
+    required_outputs:
+      - impact_report
+      - impacted_owner_acknowledgement
+    gate_effect: block_next_gate_until_acknowledged
+
+  bug.detected:
+    maps_to_hook: on_bug_detected
+    owner: qa-sdet
+    required_outputs:
+      - bug_impact_report
+      - regression_test_plan
+
+  agent.task_done:
+    maps_to_hook: on_agent_task_done
+    owner: source_agent
+    required_outputs:
+      - evidence_link
+      - agent_commit
+
+  incident.resolved:
+    maps_to_hook: on_incident_resolved
+    owner: devops-platform
+    required_outputs:
+      - incident_timeline
+      - post_mortem_decision
+
+processing_rules:
+  - Read `.ai/runtime/state.yml` before processing any event.
+  - Validate required fields before acting.
+  - Route target and impacted roles with `.ai/global/routing.matrix.yml`.
+  - Create required runtime evidence before marking an event complete.
+  - Move completed event records from queue to history if a runner is present.
+  - If no runner is present, the AI worker must still follow the same event contract manually.

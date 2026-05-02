@@ -29,7 +29,11 @@ Copy this into a project and the AI worker gets:
 - `.ai/workspace/`: shared company standards for stack, style, structure, tools, and QA.
 - `.ai/role/<role-id>/`: role modules with config, interface, playbook, checklist, and workspace overlay.
 - `.ai/global/agent.positions.yml`: 15 agent positions and commit authority.
+- `.ai/global/worker.contract.yml`: provider-neutral AI worker contract.
+- `.ai/global/event.contract.yml`: portable event trigger contract for humans, AI workers, CLIs, plugins, and local runners.
+- `.ai/global/routing.matrix.yml`: RACI-style routing for phase work and impact types.
 - `.ai/global/parallel.delivery.yml`: MVP/work item lanes so product, design, engineering, QA, release, and learning can move in parallel.
+- `.ai/runtime/state.yml`: project runtime context that can change per repo or sprint.
 - `scripts/ai-workflow.mjs`: local CLI for init, status, phase logs, impact reports, handoffs, agent commits, and validation.
 
 ## Quick Start
@@ -61,7 +65,7 @@ npm run ai:validate
 Give this to the worker before implementation:
 
 ```text
-Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/agent.positions.yml, .ai/global/parallel.delivery.yml, .ai/project.yml, and .ai/workspace/workspace.yml.
+Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/worker.contract.yml, .ai/global/event.contract.yml, .ai/global/routing.matrix.yml, .ai/global/agent.positions.yml, .ai/global/parallel.delivery.yml, .ai/project.yml, .ai/runtime/state.yml, and .ai/workspace/workspace.yml.
 Follow the manifest load order.
 Identify repo group, repo, current phase, MVP/work item, lane, owner role, supporting roles, impacted roles, and required evidence.
 Load the owner role module from .ai/role/<role-id>/.
@@ -69,6 +73,20 @@ Apply shared workspace standards before code, tests, or infra changes.
 Create a phase log before work and an impact report if another role or repo is affected.
 Commit completed work with the correct agent callsign when the assigned task is done.
 ```
+
+## Portable Runtime Model
+
+`.ai` is the source of truth. It does not require a specific AI vendor, IDE,
+adapter, or hosted model.
+
+```text
+.ai policy and runtime files
+  -> readable by any AI or human
+  -> optionally enforced by CLI, plugin, CI, MCP, or local LLM runner
+```
+
+No adapter is required for the workflow to make sense. An adapter only makes
+event processing, dispatch, validation, and notifications faster.
 
 ## File Type Rule
 

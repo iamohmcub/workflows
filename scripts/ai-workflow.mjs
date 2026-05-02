@@ -12,7 +12,11 @@ const PROJECT_FILE = path.join(AI_DIR, "project.yml");
 const PHASE_FILE = path.join(AI_DIR, "global", "sdlc.phases.yml");
 const AGENT_POSITIONS_FILE = path.join(AI_DIR, "global", "agent.positions.yml");
 const PARALLEL_DELIVERY_FILE = path.join(AI_DIR, "global", "parallel.delivery.yml");
+const WORKER_CONTRACT_FILE = path.join(AI_DIR, "global", "worker.contract.yml");
+const EVENT_CONTRACT_FILE = path.join(AI_DIR, "global", "event.contract.yml");
+const ROUTING_MATRIX_FILE = path.join(AI_DIR, "global", "routing.matrix.yml");
 const RUNTIME_DIR = path.join(AI_DIR, "runtime");
+const RUNTIME_STATE_FILE = path.join(RUNTIME_DIR, "state.yml");
 const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
 
 const REQUIRED_FILES = [
@@ -30,8 +34,12 @@ const REQUIRED_FILES = [
   ".ai/global/company.hooks.yml",
   ".ai/global/company.rules.yml",
   ".ai/global/agent.positions.yml",
+  ".ai/global/worker.contract.yml",
+  ".ai/global/event.contract.yml",
+  ".ai/global/routing.matrix.yml",
   ".ai/global/parallel.delivery.yml",
-  ".ai/global/sdlc.phases.yml"
+  ".ai/global/sdlc.phases.yml",
+  ".ai/runtime/state.yml"
 ];
 
 const EVENT_ALIASES = {
@@ -116,8 +124,8 @@ Usage:
   npm run ai:validate
 
 Core idea:
-  AGENTS.md + .ai define the rules.
-  This CLI creates the logs, reports, and handoffs that prove the rules were followed.
+  AGENTS.md + .ai define the provider-neutral rules.
+  This CLI creates the runtime evidence that proves the rules were followed.
 `);
 }
 
@@ -196,6 +204,8 @@ function init(argv) {
   console.log(`Project initialized
 
 Runtime folders:
+  .ai/runtime/queue
+  .ai/runtime/events
   .ai/runtime/logs
   .ai/runtime/reports
   .ai/runtime/decisions
@@ -754,6 +764,10 @@ function validate() {
   ensureFile(PROJECT_FILE, "Missing .ai/project.yml");
   ensureFile(PHASE_FILE, "Missing .ai/global/sdlc.phases.yml");
   ensureFile(PARALLEL_DELIVERY_FILE, "Missing .ai/global/parallel.delivery.yml");
+  ensureFile(WORKER_CONTRACT_FILE, "Missing .ai/global/worker.contract.yml");
+  ensureFile(EVENT_CONTRACT_FILE, "Missing .ai/global/event.contract.yml");
+  ensureFile(ROUTING_MATRIX_FILE, "Missing .ai/global/routing.matrix.yml");
+  ensureFile(RUNTIME_STATE_FILE, "Missing .ai/runtime/state.yml");
   ensureFile(WORKSPACE_FILE, "Missing .ai/workspace/workspace.yml");
 
   const project = readProject();
@@ -781,7 +795,7 @@ function validate() {
     }
   }
 
-  for (const dir of ["logs", "reports", "decisions", "handoffs"]) {
+  for (const dir of ["queue", "events", "logs", "reports", "decisions", "handoffs"]) {
     const full = path.join(RUNTIME_DIR, dir);
     if (!fs.existsSync(full)) errors.push(`Missing runtime folder: .ai/runtime/${dir}`);
   }
@@ -823,6 +837,21 @@ function validate() {
   const parallelText = fs.readFileSync(PARALLEL_DELIVERY_FILE, "utf8");
   for (const lane of ["business-discovery", "product-design", "engineering-delivery", "quality-release", "operations-learning"]) {
     if (!parallelText.includes(`${lane}:`)) errors.push(`Missing parallel delivery lane: ${lane}`);
+  }
+
+  const workerText = fs.readFileSync(WORKER_CONTRACT_FILE, "utf8");
+  for (const phrase of ["provider_neutrality:", "startup_contract:", "execution_contract:", "adapter_boundary:"]) {
+    if (!workerText.includes(phrase)) errors.push(`Missing worker contract section: ${phrase}`);
+  }
+
+  const eventText = fs.readFileSync(EVENT_CONTRACT_FILE, "utf8");
+  for (const eventName of ["impact.detected:", "agent.task_done:", "phase.started:", "lane.started:"]) {
+    if (!eventText.includes(eventName)) errors.push(`Missing event contract event type: ${eventName}`);
+  }
+
+  const routingText = fs.readFileSync(ROUTING_MATRIX_FILE, "utf8");
+  for (const phaseId of phases.map((item) => item.id)) {
+    if (!routingText.includes(`  ${phaseId}:`)) errors.push(`Missing routing matrix phase: ${phaseId}`);
   }
 
   if (errors.length) {
@@ -964,7 +993,7 @@ function updateCurrentPhase(phaseId) {
 }
 
 function ensureRuntimeDirs() {
-  for (const dir of ["logs", "reports", "decisions", "handoffs"]) {
+  for (const dir of ["queue", "events", "logs", "reports", "decisions", "handoffs"]) {
     fs.mkdirSync(path.join(RUNTIME_DIR, dir), { recursive: true });
   }
 }

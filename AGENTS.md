@@ -17,9 +17,10 @@ Before starting work:
 3. Read `.ai/workspace/workspace.yml` and the shared standards in `.ai/workspace`.
 4. Read the relevant files in `.ai/global`, `.ai/repo-group`, and the selected `.ai/role/<role-id>/` module.
 5. Read the selected role workspace overlay at `.ai/role/<role-id>/workspace.yml`.
-6. Confirm the previous phase gate is complete before beginning the next phase.
-7. Create a phase log from `.ai/templates/phase-log.md`.
-8. For parallel work, identify the MVP/work item, lane, upstream handoff, locked contracts, and dependencies from `.ai/global/parallel.delivery.yml`.
+6. Read `.ai/global/worker.contract.yml`, `.ai/global/event.contract.yml`, and `.ai/global/routing.matrix.yml`.
+7. Confirm the previous phase gate is complete before beginning the next phase.
+8. Create a phase log from `.ai/templates/phase-log.md`.
+9. For parallel work, identify the MVP/work item, lane, upstream handoff, locked contracts, and dependencies from `.ai/global/parallel.delivery.yml`.
 
 During work:
 
@@ -46,10 +47,27 @@ This workflow supports parallel work by MVP, slice, or work item.
 - Any change after handoff to locked scope, acceptance criteria, design, API, data, or release expectations requires an impact report.
 - Parallel phase logs must name the work item/MVP, lane, upstream handoff, downstream owner, dependencies, and evidence.
 
+## Provider-Neutral Runtime
+
+The `.ai` folder is the portable workflow standard. It must be understandable by any AI worker, human operator, hosted AI, local LLM, CLI, plugin, or future runner.
+
+Always follow:
+
+- `.ai/global/worker.contract.yml` for provider-neutral worker behavior.
+- `.ai/global/event.contract.yml` for trigger and event shape.
+- `.ai/global/routing.matrix.yml` for accountable, responsible, consulted, and informed roles.
+- `.ai/runtime/state.yml` for current runtime context.
+
+Adapters and plugins are optional engines. They may automate dispatch, queue processing, validation, notification, or gate enforcement, but they must not replace `.ai` as the source of truth.
+
+If no adapter or plugin is present, the AI worker still follows the same files manually.
+
 ## Hard Rules
 
 - Every phase must finish with a log.
 - Every cross-role or cross-repo impact must be reported.
+- Every `impact.detected` event blocks the next gate until the impacted owner acknowledges it or the orchestrator accepts the risk.
+- Phase ownership does not replace task routing. Use `.ai/global/routing.matrix.yml` to identify responsible, consulted, and informed roles.
 - Gates are checked item by item. No bulk approval.
 - Code flows DEV -> STAGING -> UAT -> PROD. Never reverse and never skip without emergency policy approval.
 - CI, peer review, and secret scanning are required for every code path, including hotfixes.

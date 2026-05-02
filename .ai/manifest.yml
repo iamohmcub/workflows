@@ -37,6 +37,9 @@ load_order:
   - .ai/global/company.hooks.yml
   - .ai/global/company.rules.yml
   - .ai/global/agent.positions.yml
+  - .ai/global/worker.contract.yml
+  - .ai/global/event.contract.yml
+  - .ai/global/routing.matrix.yml
   - .ai/global/parallel.delivery.yml
   - .ai/global/sdlc.phases.yml
   - .ai/workspace/workspace.yml
@@ -78,6 +81,9 @@ workspace_load_order:
   - .ai/workspace/qa-process.yml
 
 runtime:
+  state: .ai/runtime/state.yml
+  event_queue: .ai/runtime/queue
+  event_history: .ai/runtime/events
   phase_logs: .ai/runtime/logs
   impact_reports: .ai/runtime/reports
   decisions: .ai/runtime/decisions
@@ -93,3 +99,5 @@ hard_requirements:
   - New projects must configure `.ai/workspace/workspace.yml` before stack, style, tool, or QA decisions are made.
   - Every agent position can commit when its assigned task is done, using the agent commit format in `.ai/global/agent.positions.yml`.
   - Parallel delivery is allowed by MVP or work item when handoff evidence and locked contracts are recorded in `.ai/global/parallel.delivery.yml`.
+  - AI workers must stay provider-neutral and follow `.ai/global/worker.contract.yml`.
+  - Events must use `.ai/global/event.contract.yml` so humans, Codex, other hosted AI, or local LLM runners can understand the same workflow.

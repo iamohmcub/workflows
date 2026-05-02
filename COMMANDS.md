@@ -56,6 +56,8 @@ npm run ai:init -- \
 This updates `.ai/project.yml`, updates `.ai/workspace/workspace.yml`, and creates runtime folders:
 
 ```text
+.ai/runtime/queue
+.ai/runtime/events
 .ai/runtime/logs
 .ai/runtime/reports
 .ai/runtime/decisions
@@ -194,19 +196,23 @@ Check required files, runtime folders, and current phase config:
 npm run ai:validate
 ```
 
+Validation also checks the portable worker contract, event contract, routing
+matrix, parallel lanes, agent positions, and runtime state file.
+
 ## AI Worker Startup
 
 Give the AI worker this before asking it to implement:
 
 ```text
-Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/agent.positions.yml, and .ai/project.yml.
+Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/global/worker.contract.yml, .ai/global/event.contract.yml, .ai/global/routing.matrix.yml, .ai/global/agent.positions.yml, .ai/global/parallel.delivery.yml, .ai/runtime/state.yml, and .ai/project.yml.
 Follow the .ai load order.
 Run npm run ai:status.
 Run npm run ai:start -- <current-phase> if no phase log exists.
 Use the correct role module from `.ai/role/<role-id>/`.
 Read `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
 Apply shared standards from `.ai/workspace` before producing code, tests, or infra changes.
-Create an impact report if another role or repo is affected.
+Use `.ai/global/routing.matrix.yml` to find responsible, consulted, and informed roles.
+Create an impact report if another role, repo, lane, API, data contract, environment, security boundary, or customer commitment is affected.
 Create a handoff note before moving to the next phase.
 Commit completed work with `npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"`.
 ```
