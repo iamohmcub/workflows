@@ -48,12 +48,9 @@ The worker reads:
 
 ## Worker Action
 
-The worker creates:
+The worker creates real evidence in `.ai/runtime`.
 
-- `runtime/logs/2026-05-02-okr-checkout-service.md`
-- `runtime/reports/role-impact-2026-05-02-checkout-analytics.md`
-- `runtime/decisions/2026-05-02-checkout-okr-scope.md`
-- `runtime/handoffs/2026-05-02-pm-to-ux-checkout.md`
+See `.ai/examples/sample-evidence.md` for condensed sample content.
 
 Command equivalent:
 

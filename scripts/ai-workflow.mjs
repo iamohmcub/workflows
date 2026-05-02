@@ -11,6 +11,7 @@ const RUNTIME_DIR = path.join(AI_DIR, "runtime");
 const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
 
 const REQUIRED_FILES = [
+  "README.md",
   "AGENTS.md",
   ".ai/manifest.yml",
   ".ai/SKILLS.md",
@@ -574,6 +575,7 @@ Read:
   DEMO.md
   .ai/examples/demo-project.yml
   .ai/examples/demo-worker-run.md
+  .ai/examples/sample-evidence.md
 
 Try:
   npm run ai:status

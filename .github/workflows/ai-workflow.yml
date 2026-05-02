@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - AGENTS.md
+      - README.md
       - COMMANDS.md
       - DEMO.md
       - package.json
@@ -17,6 +18,7 @@ on:
       - main
     paths:
       - AGENTS.md
+      - README.md
       - COMMANDS.md
       - DEMO.md
       - package.json

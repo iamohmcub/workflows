@@ -1,85 +1,46 @@
-# AI Engineering Orchestration
+# .ai Folder Map
 
-This folder defines how a repo group, repo, and role-based AI team work together across the software development lifecycle.
+The `.ai` folder is the worker-readable rulebook.
 
-The model:
+Hierarchy:
 
 ```text
 repo group -> repo -> role
 ```
 
-- A repo group is a workspace that can contain many companies, repos, products, or services.
-- A repo is treated as a company or domain unit that follows the SDLC.
-- A role is a domain expert agent that owns part of the SDLC.
+Canonical load order lives in `.ai/manifest.yml`.
 
-Every role follows the same global rules, but each role has its own character, skills, responsibilities, hooks, and rules.
+## Folders
 
-## Load Order
+- `global/`: company-wide skills, hooks, rules, and SDLC phases.
+- `workspace/`: shared stack, code style, project structure, tools, and QA standards.
+- `repo-group/`: workspace/group policy and impact rules.
+- `role/`: role modules.
+- `templates/`: phase log, impact report, decision, handoff, and startup prompt templates.
+- `runtime/`: real execution evidence.
+- `examples/`: demo configs and sample evidence only.
 
-1. `.ai/SKILLS.md`
-2. `.ai/AUTOMATION.md`
-3. `.ai/project.yml`
-4. `.ai/global/company.skills.yml`
-5. `.ai/global/company.hooks.yml`
-6. `.ai/global/company.rules.yml`
-7. `.ai/global/sdlc.phases.yml`
-8. `.ai/workspace/workspace.yml`
-9. `.ai/workspace/stacks.yml`
-10. `.ai/workspace/code-style.yml`
-11. `.ai/workspace/project-structure.yml`
-12. `.ai/workspace/tools.yml`
-13. `.ai/workspace/qa-process.yml`
-14. `.ai/repo-group/workspace.yml`
-15. `.ai/repo-group/impact-policy.yml`
-16. `.ai/repo-group/repo.template.yml`
-17. `.ai/role/<role-id>/role.yml`
-18. `.ai/role/<role-id>/interface.yml`
-19. `.ai/role/<role-id>/playbook.md`
-20. `.ai/role/<role-id>/checklist.md`
-21. `.ai/role/<role-id>/workspace.yml`
+## Role Module
 
-## Required Outputs
+Each role folder has five files:
 
-Every phase creates a phase log in `.ai/runtime/logs`.
+```text
+role.yml       # compact identity and hooks
+interface.yml  # machine-readable execution contract
+playbook.md    # detailed worker behavior
+checklist.md   # DoD, impact, and handoff checks
+workspace.yml  # role-specific stack/tool/process overlay
+```
 
-Every cross-role or cross-repo impact creates an impact report in `.ai/runtime/reports`.
+## File Type Rule
 
-Every architectural or governance decision creates a decision log in `.ai/runtime/decisions`.
+Use `.yml` for structured config and contracts that tools should parse.
 
-## Visual Map
+Use `.md` for instructions, playbooks, checklists, templates, examples, and human/AI explanations.
 
-Open `ai-orchestration-map.html` in the repo root to see the orchestration layers, SDLC phases, role ownership, and impact reporting flow.
+## Required Runtime Evidence
 
-## New Project Setup
-
-For a new project, copy `AGENTS.md` and `.ai` into the repo, then edit `.ai/project.yml` and `.ai/workspace/workspace.yml`.
-
-Use `.ai/PROJECT_SETUP.md` as the checklist and `.ai/templates/worker-startup-prompt.md` as the first message for AI workers.
-
-Use `COMMANDS.md` for command usage.
-
-Use `.ai/AUTOMATION.md` for hook triggers and GitHub Actions behavior.
-
-## Demo
-
-Read `DEMO.md` from the repo root, then inspect `.ai/examples`.
-
-The demo shows a checkout-service project moving through the first OKR phase with a phase log, impact report, decision log, and handoff note.
-
-## Role Modules
-
-Roles are folders under `.ai/role`.
-
-Each role folder contains:
-
-- `role.yml`: compact identity, hooks, and hard rules.
-- `interface.yml`: machine-readable execution contract.
-- `playbook.md`: detailed AI worker behavior.
-- `checklist.md`: before-start, output, impact, and handoff checklist.
-- `workspace.yml`: role-specific extension of shared stack, style, tools, structure, and QA process.
-
-## Shared Workspace Standards
-
-Company-wide stack, code style, project structure, tools, and QA process live in `.ai/workspace`.
-
-Every repo in the same company or repo group should share these files unless the orchestrator approves a stricter repo-specific exception.
+- Phase logs: `.ai/runtime/logs`
+- Impact reports: `.ai/runtime/reports`
+- Decision logs: `.ai/runtime/decisions`
+- Handoff notes: `.ai/runtime/handoffs`

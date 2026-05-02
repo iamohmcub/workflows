@@ -88,12 +88,7 @@ npm run ai:validate
 
 ## 5. Demo Evidence
 
-These files show the expected output:
-
-- `.ai/examples/runtime/logs/2026-05-02-okr-checkout-service.md`
-- `.ai/examples/runtime/reports/role-impact-2026-05-02-checkout-analytics.md`
-- `.ai/examples/runtime/decisions/2026-05-02-checkout-okr-scope.md`
-- `.ai/examples/runtime/handoffs/2026-05-02-pm-to-ux-checkout.md`
+Read `.ai/examples/sample-evidence.md` for condensed examples of the expected phase log, impact report, decision log, and handoff note.
 
 ## 6. What This Proves
 
