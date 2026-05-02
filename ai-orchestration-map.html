@@ -779,21 +779,21 @@
         <div class="panel">
           <h3>Local Commands</h3>
           <ul class="rule-list">
-            <li>`npm run ai:status`</li>
-            <li>`npm run ai:start -- okr`</li>
-            <li>`npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery`</li>
-            <li>`npm run ai:trigger -- on_phase_start --phase okr`</li>
-            <li>`npm run ai:impact -- --title "API changed"`</li>
-            <li>`npm run ai:handoff -- --from product-manager --to ux-designer`</li>
-            <li>`npm run ai:commit -- --agent Berners --message "implement UI" --evidence "<link>"`</li>
-            <li>`npm run ai:commit-check`</li>
+            <li>`npx @iamohmcub/ai-orchestration status`</li>
+            <li>`npx @iamohmcub/ai-orchestration start okr`</li>
+            <li>`npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery`</li>
+            <li>`npx @iamohmcub/ai-orchestration trigger on_phase_start --phase okr`</li>
+            <li>`npx @iamohmcub/ai-orchestration impact --title "API changed"`</li>
+            <li>`npx @iamohmcub/ai-orchestration handoff --from product-manager --to ux-designer`</li>
+            <li>`npx @iamohmcub/ai-orchestration commit --agent Berners --message "implement UI" --evidence "<link>"`</li>
+            <li>`npx @iamohmcub/ai-orchestration commit-check`</li>
           </ul>
         </div>
         <div class="panel">
           <h3>Automation</h3>
           <ul class="rule-list">
-            <li>GitHub Actions runs `npm run ai:validate`.</li>
-            <li>GitHub Actions runs `npm run ai:commit-check`.</li>
+            <li>Central repo GitHub Actions runs `node scripts/ai-workflow.mjs validate`.</li>
+            <li>Central repo GitHub Actions runs `node scripts/ai-workflow.mjs commit-check`.</li>
             <li>Triggers on push to `main`.</li>
             <li>Triggers on pull request to `main`.</li>
             <li>Can be run manually with `workflow_dispatch`.</li>

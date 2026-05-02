@@ -11,9 +11,9 @@ source_control:
 
 automation:
   ci: GitHub Actions
-  ai_workflow_validation: npm run ai:validate
-  agent_commit_check: npm run ai:commit-check
-  local_cli: npm run ai -- help
+  ai_workflow_validation: npx @iamohmcub/ai-orchestration validate
+  agent_commit_check: npx @iamohmcub/ai-orchestration commit-check
+  local_cli: npx @iamohmcub/ai-orchestration help
 
 frontend:
   package_manager: npm or repo standard

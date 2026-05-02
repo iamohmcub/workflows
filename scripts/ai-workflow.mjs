@@ -53,6 +53,7 @@ const EVENT_ALIASES = {
 
 const ROLE_MODULE_FILES = ["role.yml", "interface.yml", "playbook.md", "checklist.md", "workspace.yml"];
 const LOCAL_SCRIPT_ENTRY = "node scripts/ai-workflow.mjs";
+const PACKAGE_COMMAND = "npx @iamohmcub/ai-orchestration";
 
 main(process.argv.slice(2));
 
@@ -96,7 +97,7 @@ function main(argv) {
         validate();
         break;
       default:
-        fail(`Unknown command: ${command}\nRun: npm run ai -- help`);
+        fail(`Unknown command: ${command}\nRun: ${PACKAGE_COMMAND} help`);
     }
   } catch (error) {
     fail(error.message);
@@ -108,20 +109,21 @@ function printHelp() {
 
 Usage:
   npx @iamohmcub/ai-orchestration init
-  npx @iamohmcub/ai-orchestration init -- --repo-id checkout-service --repo-name "Checkout Service" --phase okr
-  npm run ai -- help
-  npm run ai:status
-  npm run ai:init -- --repo-group-id acme --repo-group-name "Acme Platform" --repo-id checkout-service --repo-name "Checkout Service" --type product-service --phase okr --workspace-profile web-saas --frontend-stack nextjs-typescript --backend-stack node-api-typescript --infra-stack netlify-or-container --qa-profile playwright-vitest
-  npm run ai:start -- okr
-  npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-  npm run ai:trigger -- on_phase_start --phase prd
-  npm run ai:trigger -- on_parallel_lane_start --phase prd --mvp mvp-2 --lane business-discovery
-  npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
-  npm run ai:impact -- --title "API contract changed" --phase technical-design --severity P2
-  npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
-  npm run ai:commit -- --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
-  npm run ai:commit-check
-  npm run ai:validate
+  npx @iamohmcub/ai-orchestration init --repo-id checkout-service --repo-name "Checkout Service" --phase okr
+  npx @iamohmcub/ai-orchestration init --with-local-cli --with-package-scripts
+  npx @iamohmcub/ai-orchestration help
+  npx @iamohmcub/ai-orchestration status
+  npx @iamohmcub/ai-orchestration init --repo-group-id acme --repo-group-name "Acme Platform" --repo-id checkout-service --repo-name "Checkout Service" --type product-service --phase okr --workspace-profile web-saas --frontend-stack nextjs-typescript --backend-stack node-api-typescript --infra-stack netlify-or-container --qa-profile playwright-vitest
+  npx @iamohmcub/ai-orchestration start okr
+  npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
+  npx @iamohmcub/ai-orchestration trigger on_phase_start --phase prd
+  npx @iamohmcub/ai-orchestration trigger on_parallel_lane_start --phase prd --mvp mvp-2 --lane business-discovery
+  npx @iamohmcub/ai-orchestration trigger on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
+  npx @iamohmcub/ai-orchestration impact --title "API contract changed" --phase technical-design --severity P2
+  npx @iamohmcub/ai-orchestration handoff --from product-manager --to ux-designer --phase okr
+  npx @iamohmcub/ai-orchestration commit --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  npx @iamohmcub/ai-orchestration commit-check
+  npx @iamohmcub/ai-orchestration validate
 
 Core idea:
   AGENTS.md + .ai define the provider-neutral rules.
@@ -147,11 +149,11 @@ Owner:      ${phase?.owner || "unknown"}
 Gate:       ${phase?.gate || "unknown"}
 
 Next commands:
-  npm run ai:start -- ${project.currentPhase}
-  npm run ai:start -- ${project.currentPhase} --mvp <mvp-id> --lane ${defaultLaneForPhase(project.currentPhase)}
-  npm run ai:trigger -- on_phase_start --phase ${project.currentPhase}
-  npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
-  npm run ai:validate
+  ${PACKAGE_COMMAND} start ${project.currentPhase}
+  ${PACKAGE_COMMAND} start ${project.currentPhase} --mvp <mvp-id> --lane ${defaultLaneForPhase(project.currentPhase)}
+  ${PACKAGE_COMMAND} trigger on_phase_start --phase ${project.currentPhase}
+  ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
+  ${PACKAGE_COMMAND} validate
 `);
 }
 
@@ -216,8 +218,8 @@ Config:
   .ai/workspace/workspace.yml
 
 Next:
-  npm run ai:status
-  npm run ai:start -- ${options.phase || readProject().currentPhase}
+  ${PACKAGE_COMMAND} status
+  ${PACKAGE_COMMAND} start ${options.phase || readProject().currentPhase}
 `);
 }
 
@@ -232,26 +234,22 @@ function scaffoldProject(options) {
 
   const items = [
     [path.join(PACKAGE_ROOT, ".ai"), path.join(ROOT, ".ai")],
-    [path.join(PACKAGE_ROOT, "AGENTS.md"), path.join(ROOT, "AGENTS.md")],
-    [path.join(PACKAGE_ROOT, "COMMANDS.md"), path.join(ROOT, "COMMANDS.md")]
+    [path.join(PACKAGE_ROOT, "AGENTS.md"), path.join(ROOT, "AGENTS.md")]
   ];
 
   if (!options.minimal) {
-    items.push([path.join(PACKAGE_ROOT, "scripts", "ai-workflow.mjs"), path.join(ROOT, "scripts", "ai-workflow.mjs")]);
+    items.push([path.join(PACKAGE_ROOT, "COMMANDS.md"), path.join(ROOT, "COMMANDS.md")]);
   }
 
-  if (options["with-github-action"]) {
-    items.push([
-      path.join(PACKAGE_ROOT, ".github", "workflows", "ai-workflow.yml"),
-      path.join(ROOT, ".github", "workflows", "ai-workflow.yml")
-    ]);
+  if (options["with-local-cli"] || options["with-package-scripts"]) {
+    items.push([path.join(PACKAGE_ROOT, "scripts", "ai-workflow.mjs"), path.join(ROOT, "scripts", "ai-workflow.mjs")]);
   }
 
   for (const [source, target] of items) {
     copyTemplateItem(source, target, Boolean(options.force));
   }
 
-  if (!options.minimal) ensurePackageScripts(Boolean(options.force));
+  if (options["with-package-scripts"]) ensurePackageScripts(Boolean(options.force));
 }
 
 function startPhase(argv) {
@@ -416,8 +414,8 @@ Next:
   Read .ai/role/${phase.owner}/checklist.md
   Read .ai/role/${phase.owner}/workspace.yml
   Complete DoD item by item
-  Run npm run ai:impact -- --title "<title>" if another role or repo is affected
-  Run npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>" when the task is done
+  Run ${PACKAGE_COMMAND} impact --title "<title>" if another role or repo is affected
+  Run ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --message "<summary>" --evidence "<link>" when the task is done
   Keep upstream lanes moving when handoff contracts are locked and dependencies are clear
 `);
 }
@@ -428,26 +426,26 @@ function trigger(argv) {
   if (!hook || hook === "--list") {
     console.log(`Automation triggers
 
-  on_project_init      -> npm run ai:init
-  on_phase_start       -> npm run ai:start -- <phase>
-  on_parallel_lane_start -> npm run ai:start -- <phase> --mvp <mvp-id> --lane <lane>
-  on_impact_detected   -> npm run ai:impact -- --title "<title>"
-  on_bug_detected      -> npm run ai:impact -- --title "<bug title>" --severity P1
-  on_agent_task_done   -> npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
+  on_project_init      -> ${PACKAGE_COMMAND} init
+  on_phase_start       -> ${PACKAGE_COMMAND} start <phase>
+  on_parallel_lane_start -> ${PACKAGE_COMMAND} start <phase> --mvp <mvp-id> --lane <lane>
+  on_impact_detected   -> ${PACKAGE_COMMAND} impact --title "<title>"
+  on_bug_detected      -> ${PACKAGE_COMMAND} impact --title "<bug title>" --severity P1
+  on_agent_task_done   -> ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
 
 Usage patterns:
-  npm run ai:trigger -- on_project_init
-  npm run ai:trigger -- on_phase_start --phase okr
-  npm run ai:trigger -- on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-  npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
-  npm run ai:trigger -- on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  ${PACKAGE_COMMAND} trigger on_project_init
+  ${PACKAGE_COMMAND} trigger on_phase_start --phase okr
+  ${PACKAGE_COMMAND} trigger on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
+  ${PACKAGE_COMMAND} trigger on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
+  ${PACKAGE_COMMAND} trigger on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 `);
     return;
   }
 
   const command = EVENT_ALIASES[hook];
   if (!command) {
-    fail(`No command is mapped for hook: ${hook}\nRun: npm run ai:trigger -- --list`);
+    fail(`No command is mapped for hook: ${hook}\nRun: ${PACKAGE_COMMAND} trigger --list`);
   }
 
   const options = parseOptions(argv.slice(1));

@@ -1,6 +1,6 @@
 {
   "name": "@iamohmcub/ai-orchestration",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Provider-neutral AI engineering workflow scaffold with agents, phases, runtime events, logs, impact reports, handoffs, and commit metadata.",
   "type": "module",
   "bin": {
@@ -9,7 +9,6 @@
   },
   "files": [
     ".ai",
-    ".github/workflows/ai-workflow.yml",
     "AGENTS.md",
     "COMMANDS.md",
     "README.md",
@@ -26,18 +25,6 @@
   "homepage": "https://github.com/iamohmcub/workflows#readme",
   "bugs": {
     "url": "https://github.com/iamohmcub/workflows/issues"
-  },
-  "scripts": {
-    "ai": "node scripts/ai-workflow.mjs",
-    "ai:status": "node scripts/ai-workflow.mjs status",
-    "ai:init": "node scripts/ai-workflow.mjs init",
-    "ai:start": "node scripts/ai-workflow.mjs start-phase",
-    "ai:trigger": "node scripts/ai-workflow.mjs trigger",
-    "ai:impact": "node scripts/ai-workflow.mjs impact",
-    "ai:handoff": "node scripts/ai-workflow.mjs handoff",
-    "ai:commit": "node scripts/ai-workflow.mjs commit",
-    "ai:commit-check": "node scripts/ai-workflow.mjs commit-check",
-    "ai:validate": "node scripts/ai-workflow.mjs validate"
   },
   "keywords": [
     "ai",

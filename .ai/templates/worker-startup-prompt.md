@@ -36,7 +36,7 @@ Identify:
 Then:
 
 1. Load the correct role module from `.ai/role/<role-id>/`.
-2. Run `npm run ai:status`.
+2. Run `npx @iamohmcub/ai-orchestration status`.
 3. Read `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml` from that role folder.
 4. Apply shared workspace standards unless the orchestrator approved a stricter exception.
 5. Create or update the phase log in `.ai/runtime/logs`.

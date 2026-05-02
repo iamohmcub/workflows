@@ -15,15 +15,15 @@ npx @iamohmcub/ai-orchestration init
 For only the worker-readable rulebook:
 
 ```bash
-npx @iamohmcub/ai-orchestration init -- --minimal
+npx @iamohmcub/ai-orchestration init --minimal
 ```
 
-No runtime npm dependencies are required.
+No runtime npm dependencies or project `package.json` scripts are required.
 
 Run commands directly:
 
 ```bash
-npm run ai -- help
+npx @iamohmcub/ai-orchestration help
 ```
 
 Or link the local CLI:
@@ -33,12 +33,18 @@ npm link
 ai-workflow help
 ```
 
+If a project explicitly wants local files and npm scripts, opt in:
+
+```bash
+npx @iamohmcub/ai-orchestration init --with-local-cli --with-package-scripts
+```
+
 ## New Project Init
 
 Configure a new repo:
 
 ```bash
-npm run ai:init -- \
+npx @iamohmcub/ai-orchestration init \
   --repo-group-id acme-platform \
   --repo-group-name "Acme Platform" \
   --repo-id checkout-service \
@@ -69,7 +75,7 @@ This updates `.ai/project.yml`, updates `.ai/workspace/workspace.yml`, and creat
 Show current repo, phase, owner role, and next commands:
 
 ```bash
-npm run ai:status
+npx @iamohmcub/ai-orchestration status
 ```
 
 ## Start a Phase
@@ -77,13 +83,13 @@ npm run ai:status
 Create a phase log and set `.ai/project.yml` to the current phase:
 
 ```bash
-npm run ai:start -- okr
+npx @iamohmcub/ai-orchestration start okr
 ```
 
 Equivalent hook trigger:
 
 ```bash
-npm run ai:trigger -- on_phase_start --phase okr
+npx @iamohmcub/ai-orchestration trigger on_phase_start --phase okr
 ```
 
 ## Start Parallel MVP Work
@@ -91,7 +97,7 @@ npm run ai:trigger -- on_phase_start --phase okr
 Create a lane-specific phase log without changing the repo current phase:
 
 ```bash
-npm run ai:start -- technical-design \
+npx @iamohmcub/ai-orchestration start technical-design \
   --mvp mvp-1 \
   --lane engineering-delivery \
   --depends-on ".ai/runtime/handoffs/2026-05-02-mvp-1-designer-agent-to-tech-lead-agent-ux-design.md"
@@ -100,7 +106,7 @@ npm run ai:start -- technical-design \
 Equivalent hook trigger:
 
 ```bash
-npm run ai:trigger -- on_parallel_lane_start \
+npx @iamohmcub/ai-orchestration trigger on_parallel_lane_start \
   --phase prd \
   --mvp mvp-2 \
   --lane business-discovery
@@ -113,7 +119,7 @@ Use `--set-current` only when the orchestrator wants the repo-level current phas
 When another role or repo is affected:
 
 ```bash
-npm run ai:impact -- \
+npx @iamohmcub/ai-orchestration impact \
   --title "Analytics contract changed" \
   --phase okr \
   --mvp mvp-1 \
@@ -126,7 +132,7 @@ npm run ai:impact -- \
 Equivalent hook trigger:
 
 ```bash
-npm run ai:trigger -- on_impact_detected \
+npx @iamohmcub/ai-orchestration trigger on_impact_detected \
   --title "Analytics contract changed" \
   --phase okr \
   --affected-roles data-analyst
@@ -137,7 +143,7 @@ npm run ai:trigger -- on_impact_detected \
 Before moving work downstream:
 
 ```bash
-npm run ai:handoff -- \
+npx @iamohmcub/ai-orchestration handoff \
   --from product-manager \
   --to ux-designer \
   --phase okr \
@@ -151,7 +157,7 @@ npm run ai:handoff -- \
 Every agent position can commit when its assigned task is done:
 
 ```bash
-npm run ai:commit -- \
+npx @iamohmcub/ai-orchestration commit \
   --agent Berners \
   --message "implement checkout form" \
   --phase development \
@@ -185,7 +191,7 @@ The command accepts the callsign, short name, position, or stable id. It keeps t
 Check the latest commit:
 
 ```bash
-npm run ai:commit-check
+npx @iamohmcub/ai-orchestration commit-check
 ```
 
 ## Validate
@@ -193,7 +199,7 @@ npm run ai:commit-check
 Check required files, runtime folders, and current phase config:
 
 ```bash
-npm run ai:validate
+npx @iamohmcub/ai-orchestration validate
 ```
 
 Validation also checks the portable worker contract, event contract, routing

@@ -7,7 +7,7 @@ Reusable `.ai` workflow system for AI workers, repo groups, repos, roles, logs, 
 Use the npm scaffolding CLI from any project, including Node, Go, Python, mobile, infra, or documentation repos:
 
 ```bash
-npx @iamohmcub/ai-orchestration init -- \
+npx @iamohmcub/ai-orchestration init \
   --repo-group-id acme-platform \
   --repo-group-name "Acme Platform" \
   --repo-id checkout-service \
@@ -17,7 +17,9 @@ npx @iamohmcub/ai-orchestration init -- \
   --workspace-profile web-saas
 ```
 
-This creates or updates `.ai/`, `AGENTS.md`, `COMMANDS.md`, `scripts/ai-workflow.mjs`, and npm helper scripts. Use `--minimal` if you only want `.ai/`, `AGENTS.md`, and `COMMANDS.md`.
+This creates or updates `.ai/`, `AGENTS.md`, and `COMMANDS.md`. It does not add local scripts by default because the central package command is the runtime.
+
+Use `--minimal` when you only want `.ai/` and `AGENTS.md`.
 
 ## What This Repo Gives You
 
@@ -34,13 +36,12 @@ Copy this into a project and the AI worker gets:
 - `.ai/global/routing.matrix.yml`: RACI-style routing for phase work and impact types.
 - `.ai/global/parallel.delivery.yml`: MVP/work item lanes so product, design, engineering, QA, release, and learning can move in parallel.
 - `.ai/runtime/state.yml`: project runtime context that can change per repo or sprint.
-- `scripts/ai-workflow.mjs`: local CLI for init, status, phase logs, impact reports, handoffs, agent commits, and validation.
+- `npx @iamohmcub/ai-orchestration`: central CLI for init, status, phase logs, impact reports, handoffs, agent commits, and validation.
 
 ## Quick Start
 
 ```bash
-npx @iamohmcub/ai-orchestration init
-npm run ai:init -- \
+npx @iamohmcub/ai-orchestration init \
   --repo-group-id acme-platform \
   --repo-group-name "Acme Platform" \
   --repo-id checkout-service \
@@ -53,11 +54,11 @@ npm run ai:init -- \
   --infra-stack netlify-or-container \
   --qa-profile playwright-vitest
 
-npm run ai:status
-npm run ai:start -- okr
-npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npm run ai:commit -- --agent Conway --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
-npm run ai:validate
+npx @iamohmcub/ai-orchestration status
+npx @iamohmcub/ai-orchestration start okr
+npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
+npx @iamohmcub/ai-orchestration commit --agent Conway --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration validate
 ```
 
 ## AI Worker Startup

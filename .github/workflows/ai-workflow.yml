@@ -40,7 +40,7 @@ jobs:
           node-version: 24
 
       - name: Validate AI workflow
-        run: npm run ai:validate
+        run: node scripts/ai-workflow.mjs validate
 
       - name: Check agent commit identity
-        run: npm run ai:commit-check
+        run: node scripts/ai-workflow.mjs commit-check

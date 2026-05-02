@@ -132,13 +132,13 @@ Use `COMMANDS.md` for the local command reference.
 Common commands:
 
 ```bash
-npm run ai:status
-npm run ai:start -- okr
-npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npm run ai:trigger -- on_phase_start --phase okr
-npm run ai:impact -- --title "Analytics contract changed" --phase okr
-npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
-npm run ai:validate
+npx @iamohmcub/ai-orchestration status
+npx @iamohmcub/ai-orchestration start okr
+npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
+npx @iamohmcub/ai-orchestration trigger on_phase_start --phase okr
+npx @iamohmcub/ai-orchestration impact --title "Analytics contract changed" --phase okr
+npx @iamohmcub/ai-orchestration handoff --from product-manager --to ux-designer --phase okr
+npx @iamohmcub/ai-orchestration validate
 ```
 
 Automation trigger documentation lives in `.ai/AUTOMATION.md`.

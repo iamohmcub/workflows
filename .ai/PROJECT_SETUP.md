@@ -68,7 +68,7 @@ Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, 
 Useful command:
 
 ```bash
-npm run ai:status
+npx @iamohmcub/ai-orchestration status
 ```
 
 ## 6. Evidence Rules
@@ -103,10 +103,10 @@ Automation trigger reference:
 Most common first commands:
 
 ```bash
-npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr --workspace-profile web-saas
-npm run ai:status
-npm run ai:start -- okr
-npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npm run ai:commit -- --agent Conway --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
-npm run ai:validate
+npx @iamohmcub/ai-orchestration init --repo-id my-service --repo-name "My Service" --phase okr --workspace-profile web-saas
+npx @iamohmcub/ai-orchestration status
+npx @iamohmcub/ai-orchestration start okr
+npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
+npx @iamohmcub/ai-orchestration commit --agent Conway --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration validate
 ```

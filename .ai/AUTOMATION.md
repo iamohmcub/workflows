@@ -7,14 +7,14 @@ There are two trigger styles.
 Use these when an AI worker or human is operating in the repo.
 
 ```bash
-npm run ai:trigger -- on_project_init
-npm run ai:trigger -- on_phase_start --phase okr
-npm run ai:trigger -- on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npm run ai:trigger -- on_impact_detected --title "API contract changed" --phase technical-design
-npm run ai:trigger -- on_bug_detected --title "Checkout payment failure" --phase qa-testing --severity P1
-npm run ai:trigger -- on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
-npm run ai:commit -- --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
-npm run ai:commit-check
+npx @iamohmcub/ai-orchestration trigger on_project_init
+npx @iamohmcub/ai-orchestration trigger on_phase_start --phase okr
+npx @iamohmcub/ai-orchestration trigger on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
+npx @iamohmcub/ai-orchestration trigger on_impact_detected --title "API contract changed" --phase technical-design
+npx @iamohmcub/ai-orchestration trigger on_bug_detected --title "Checkout payment failure" --phase qa-testing --severity P1
+npx @iamohmcub/ai-orchestration trigger on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration commit --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration commit-check
 ```
 
 Hook mapping:
@@ -32,18 +32,18 @@ Agent commit commands:
 
 | Command | Behavior |
 | --- | --- |
-| `npm run ai:commit` | Creates a Git commit for a done task using one of the 15 agent callsigns. |
-| `npm run ai:commit-check` | Validates that the latest commit uses agent callsign, stable id, and required AI trailers. |
+| `npx @iamohmcub/ai-orchestration commit` | Creates a Git commit for a done task using one of the 15 agent callsigns. |
+| `npx @iamohmcub/ai-orchestration commit-check` | Validates that the latest commit uses agent callsign, stable id, and required AI trailers. |
 
 ## 2. GitHub Actions Trigger
 
-The repo includes `.github/workflows/ai-workflow.yml`.
+This central library repo includes `.github/workflows/ai-workflow.yml` for its own CI. It is not included in the npm package by default.
 
 It runs:
 
 ```bash
-npm run ai:validate
-npm run ai:commit-check
+node scripts/ai-workflow.mjs validate
+node scripts/ai-workflow.mjs commit-check
 ```
 
 Triggers:

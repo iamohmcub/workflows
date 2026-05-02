@@ -15,7 +15,7 @@ role_workspace:
       preview_source: PROD tag
     automation:
       ci_cd: GitHub Actions
-      validation: npm run ai:validate
+      validation: npx @iamohmcub/ai-orchestration validate
       secret_scan: required
     required_before_handoff:
       - Deployment path is documented.
