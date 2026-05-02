@@ -27,6 +27,7 @@ hierarchy:
       - responsibilities
       - hooks
       - rules
+      - workspace overlay
 
 load_order:
   - .ai/SKILLS.md
@@ -36,6 +37,12 @@ load_order:
   - .ai/global/company.hooks.yml
   - .ai/global/company.rules.yml
   - .ai/global/sdlc.phases.yml
+  - .ai/workspace/workspace.yml
+  - .ai/workspace/stacks.yml
+  - .ai/workspace/code-style.yml
+  - .ai/workspace/project-structure.yml
+  - .ai/workspace/tools.yml
+  - .ai/workspace/qa-process.yml
   - .ai/repo-group/workspace.yml
   - .ai/repo-group/impact-policy.yml
   - .ai/repo-group/repo.template.yml
@@ -57,6 +64,15 @@ role_module_load_order:
   - interface.yml
   - playbook.md
   - checklist.md
+  - workspace.yml
+
+workspace_load_order:
+  - .ai/workspace/workspace.yml
+  - .ai/workspace/stacks.yml
+  - .ai/workspace/code-style.yml
+  - .ai/workspace/project-structure.yml
+  - .ai/workspace/tools.yml
+  - .ai/workspace/qa-process.yml
 
 runtime:
   phase_logs: .ai/runtime/logs
@@ -71,3 +87,4 @@ hard_requirements:
   - Every cross-role or cross-repo impact must be reported before the next gate.
   - The orchestrator is the only role that can resolve unresolved role conflicts.
   - New projects must configure `.ai/project.yml` before AI workers begin delivery work.
+  - New projects must configure `.ai/workspace/workspace.yml` before stack, style, tool, or QA decisions are made.

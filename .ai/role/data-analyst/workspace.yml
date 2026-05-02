@@ -1,0 +1,16 @@
+version: 1
+role_workspace:
+  role: data-analyst
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/workspace/tools.yml
+    - .ai/role/data-analyst/interface.yml
+  specialization:
+    analytics:
+      event_schema_source: workspace-approved analytics source
+      dashboard_source: workspace-approved BI tool
+      metric_definition_required: true
+    required_before_handoff:
+      - Metric source is named.
+      - Baseline availability is stated.
+      - Data quality risks are reported.

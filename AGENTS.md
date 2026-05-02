@@ -14,9 +14,11 @@ Before starting work:
 
 1. Identify the repo group, repo, phase, owner role, and impacted roles.
 2. Read `.ai/project.yml` for this project's identity, lifecycle mode, and active roles.
-3. Read the relevant files in `.ai/global`, `.ai/repo-group`, and the selected `.ai/role/<role-id>/` module.
-4. Confirm the previous phase gate is complete before beginning the next phase.
-5. Create a phase log from `.ai/templates/phase-log.md`.
+3. Read `.ai/workspace/workspace.yml` and the shared standards in `.ai/workspace`.
+4. Read the relevant files in `.ai/global`, `.ai/repo-group`, and the selected `.ai/role/<role-id>/` module.
+5. Read the selected role workspace overlay at `.ai/role/<role-id>/workspace.yml`.
+6. Confirm the previous phase gate is complete before beginning the next phase.
+7. Create a phase log from `.ai/templates/phase-log.md`.
 
 During work:
 
@@ -46,10 +48,11 @@ Before handoff:
 When this `.ai` system is copied into a new project:
 
 1. Edit `.ai/project.yml`.
-2. Set the real repo group, repo id, repo name, product type, environments, and active roles.
-3. Keep `AGENTS.md` at the repo root.
-4. Start every AI worker with the prompt in `.ai/templates/worker-startup-prompt.md`.
-5. Use `.ai/PROJECT_SETUP.md` as the full checklist.
+2. Edit `.ai/workspace/workspace.yml`.
+3. Set the real repo group, repo id, repo name, product type, workspace profile, environments, and active roles.
+4. Keep `AGENTS.md` at the repo root.
+5. Start every AI worker with the prompt in `.ai/templates/worker-startup-prompt.md`.
+6. Use `.ai/PROJECT_SETUP.md` as the full checklist.
 
 ## Commands
 
@@ -77,7 +80,8 @@ Every role is a folder:
 |-- role.yml
 |-- interface.yml
 |-- playbook.md
-`-- checklist.md
+|-- checklist.md
+`-- workspace.yml
 ```
 
-Load all four files before acting as that role.
+Load all five files before acting as that role. The role `workspace.yml` extends the shared company standards in `.ai/workspace`.

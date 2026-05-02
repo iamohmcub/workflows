@@ -1,0 +1,28 @@
+version: 1
+role_workspace:
+  role: frontend-engineer
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/workspace/stacks.yml
+    - .ai/workspace/code-style.yml
+    - .ai/workspace/project-structure.yml
+    - .ai/workspace/tools.yml
+    - .ai/workspace/qa-process.yml
+    - .ai/role/frontend-engineer/interface.yml
+  stack_ref: profiles.web-saas.frontend.default
+  specialization:
+    required_states:
+      - loading
+      - empty
+      - error
+      - success
+      - permission_denied
+    automation:
+      unit: Vitest
+      component: Testing Library
+      e2e: Playwright
+      accessibility: axe
+    required_before_handoff:
+      - UI states implemented or explicitly marked not applicable.
+      - Tests match QA process.
+      - Shared component impact is reported.

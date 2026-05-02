@@ -8,12 +8,19 @@ const AI_DIR = path.join(ROOT, ".ai");
 const PROJECT_FILE = path.join(AI_DIR, "project.yml");
 const PHASE_FILE = path.join(AI_DIR, "global", "sdlc.phases.yml");
 const RUNTIME_DIR = path.join(AI_DIR, "runtime");
+const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
 
 const REQUIRED_FILES = [
   "AGENTS.md",
   ".ai/manifest.yml",
   ".ai/SKILLS.md",
   ".ai/project.yml",
+  ".ai/workspace/workspace.yml",
+  ".ai/workspace/stacks.yml",
+  ".ai/workspace/code-style.yml",
+  ".ai/workspace/project-structure.yml",
+  ".ai/workspace/tools.yml",
+  ".ai/workspace/qa-process.yml",
   ".ai/global/company.skills.yml",
   ".ai/global/company.hooks.yml",
   ".ai/global/company.rules.yml",
@@ -27,7 +34,7 @@ const EVENT_ALIASES = {
   on_bug_detected: "impact"
 };
 
-const ROLE_MODULE_FILES = ["role.yml", "interface.yml", "playbook.md", "checklist.md"];
+const ROLE_MODULE_FILES = ["role.yml", "interface.yml", "playbook.md", "checklist.md", "workspace.yml"];
 
 main(process.argv.slice(2));
 
@@ -81,7 +88,7 @@ function printHelp() {
 Usage:
   npm run ai -- help
   npm run ai:status
-  npm run ai:init -- --repo-group-id acme --repo-group-name "Acme Platform" --repo-id checkout-service --repo-name "Checkout Service" --type product-service --phase okr
+  npm run ai:init -- --repo-group-id acme --repo-group-name "Acme Platform" --repo-id checkout-service --repo-name "Checkout Service" --type product-service --phase okr --workspace-profile web-saas --frontend-stack nextjs-typescript --backend-stack node-api-typescript --infra-stack netlify-or-container --qa-profile playwright-vitest
   npm run ai:start -- okr
   npm run ai:trigger -- on_phase_start --phase prd
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
@@ -106,6 +113,9 @@ function status() {
 Repo group: ${project.repoGroupName} (${project.repoGroupId})
 Repo:       ${project.repoName} (${project.repoId})
 Type:       ${project.repoType}
+Workspace:  ${project.workspaceName} (${project.workspaceId})
+Profile:    ${project.workspaceProfile}
+Stacks:     frontend=${project.frontendStack}, backend=${project.backendStack}, infra=${project.infraStack}, qa=${project.qaProfile}
 Phase:      ${project.currentPhase}${phase ? ` - ${phase.name}` : ""}
 Owner:      ${phase?.owner || "unknown"}
 Gate:       ${phase?.gate || "unknown"}
@@ -143,6 +153,25 @@ function init(argv) {
     fs.writeFileSync(PROJECT_FILE, text);
   }
 
+  if (Object.keys(options).length > 0 && fs.existsSync(WORKSPACE_FILE)) {
+    let workspaceText = fs.readFileSync(WORKSPACE_FILE, "utf8");
+    const workspaceReplacements = [
+      [["workspace", "id"], options["workspace-id"] || options["repo-group-id"]],
+      [["workspace", "name"], options["workspace-name"] || options["repo-group-name"]],
+      [["workspace", "profile"], options["workspace-profile"]],
+      [["workspace", "selected_profiles", "frontend"], options["frontend-stack"]],
+      [["workspace", "selected_profiles", "backend"], options["backend-stack"]],
+      [["workspace", "selected_profiles", "infra"], options["infra-stack"]],
+      [["workspace", "selected_profiles", "qa"], options["qa-profile"]]
+    ];
+
+    for (const [yamlPath, value] of workspaceReplacements) {
+      if (value) workspaceText = setYamlScalar(workspaceText, yamlPath, value);
+    }
+
+    fs.writeFileSync(WORKSPACE_FILE, workspaceText);
+  }
+
   console.log(`Project initialized
 
 Runtime folders:
@@ -153,6 +182,7 @@ Runtime folders:
 
 Config:
   .ai/project.yml
+  .ai/workspace/workspace.yml
 
 Next:
   npm run ai:status
@@ -210,11 +240,13 @@ Gate: ${phase.gate}
 - [x] Read .ai/manifest.yml
 - [x] Read .ai/SKILLS.md
 - [x] Read .ai/project.yml
+- [x] Loaded shared workspace standards: .ai/workspace/
 - [x] Loaded role module: .ai/role/${phase.owner}/
 - [x] Loaded role config: .ai/role/${phase.owner}/role.yml
 - [x] Loaded role interface: .ai/role/${phase.owner}/interface.yml
 - [x] Loaded role playbook: .ai/role/${phase.owner}/playbook.md
 - [x] Loaded role checklist: .ai/role/${phase.owner}/checklist.md
+- [x] Loaded role workspace overlay: .ai/role/${phase.owner}/workspace.yml
 
 ## Work Completed
 
@@ -274,6 +306,7 @@ Next:
   Read .ai/role/${phase.owner}/interface.yml
   Read .ai/role/${phase.owner}/playbook.md
   Read .ai/role/${phase.owner}/checklist.md
+  Read .ai/role/${phase.owner}/workspace.yml
   Complete DoD item by item
   Run npm run ai:impact -- --title "<title>" if another role or repo is affected
 `);
@@ -482,6 +515,7 @@ function validate() {
 
   ensureFile(PROJECT_FILE, "Missing .ai/project.yml");
   ensureFile(PHASE_FILE, "Missing .ai/global/sdlc.phases.yml");
+  ensureFile(WORKSPACE_FILE, "Missing .ai/workspace/workspace.yml");
 
   const project = readProject();
   const phases = readPhases();
@@ -489,6 +523,12 @@ function validate() {
 
   if (!project.repoGroupId) errors.push("project.repo_group.id is empty");
   if (!project.repoId) errors.push("project.repo.id is empty");
+  if (!project.workspaceId) errors.push("workspace.id is empty");
+  if (!project.workspaceProfile) errors.push("workspace.profile is empty");
+  if (!project.frontendStack) errors.push("workspace.selected_profiles.frontend is empty");
+  if (!project.backendStack) errors.push("workspace.selected_profiles.backend is empty");
+  if (!project.infraStack) errors.push("workspace.selected_profiles.infra is empty");
+  if (!project.qaProfile) errors.push("workspace.selected_profiles.qa is empty");
   if (!project.currentPhase) errors.push("project.lifecycle.current_phase is empty");
   if (!phase) errors.push(`Current phase is not defined in sdlc.phases.yml: ${project.currentPhase}`);
 
@@ -522,6 +562,7 @@ Repo: ${project.repoId}
 Current phase: ${project.currentPhase}
 Owner role: ${phase.owner}
 Role module: .ai/role/${phase.owner}/
+Workspace: ${project.workspaceProfile}
 Known phases: ${phases.length}
 `);
 }
@@ -552,7 +593,33 @@ function readProject() {
     repoName: getYamlScalar(text, ["project", "repo", "name"]),
     repoType: getYamlScalar(text, ["project", "repo", "type"]),
     currentPhase: getYamlScalar(text, ["project", "lifecycle", "current_phase"]),
-    activeRoles: getYamlList(text, ["project", "roles", "active"])
+    activeRoles: getYamlList(text, ["project", "roles", "active"]),
+    ...readWorkspace()
+  };
+}
+
+function readWorkspace() {
+  if (!fs.existsSync(WORKSPACE_FILE)) {
+    return {
+      workspaceId: "",
+      workspaceName: "",
+      workspaceProfile: "",
+      frontendStack: "",
+      backendStack: "",
+      infraStack: "",
+      qaProfile: ""
+    };
+  }
+
+  const text = fs.readFileSync(WORKSPACE_FILE, "utf8");
+  return {
+    workspaceId: getYamlScalar(text, ["workspace", "id"]),
+    workspaceName: getYamlScalar(text, ["workspace", "name"]),
+    workspaceProfile: getYamlScalar(text, ["workspace", "profile"]),
+    frontendStack: getYamlScalar(text, ["workspace", "selected_profiles", "frontend"]),
+    backendStack: getYamlScalar(text, ["workspace", "selected_profiles", "backend"]),
+    infraStack: getYamlScalar(text, ["workspace", "selected_profiles", "infra"]),
+    qaProfile: getYamlScalar(text, ["workspace", "selected_profiles", "qa"])
   };
 }
 

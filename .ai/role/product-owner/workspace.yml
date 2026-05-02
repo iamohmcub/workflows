@@ -1,0 +1,17 @@
+version: 1
+role_workspace:
+  role: product-owner
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/role/product-owner/interface.yml
+  specialization:
+    backlog_rules:
+      story_style: user-story-or-job-story
+      acceptance_criteria_style: given-when-then
+      ready_requires:
+        - stack impact known
+        - testability known
+        - dependency owner known
+    required_before_handoff:
+      - Story references applicable workspace standards.
+      - Acceptance criteria are testable by QA process.

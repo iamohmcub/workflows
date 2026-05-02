@@ -1,0 +1,49 @@
+version: 1
+workspace_standard: qa_process
+
+strategy:
+  default: risk-based
+  test_case_style: given-when-then
+  bug_priority: P0-P3
+  regression_policy: every_fixed_bug_adds_test
+
+required_before_implementation_signoff:
+  - Acceptance criteria are testable.
+  - Critical paths are identified.
+  - Test data needs are known.
+  - Automation target is selected.
+
+required_test_categories:
+  frontend:
+    - happy path
+    - loading state
+    - empty state
+    - error state
+    - permission denied
+    - mobile viewport
+    - accessibility smoke
+  backend:
+    - happy path
+    - validation failure
+    - authorization failure
+    - idempotency or retry when relevant
+    - migration behavior when relevant
+    - observability signal when critical
+  infrastructure:
+    - deployment smoke
+    - rollback path
+    - environment config
+    - secret handling
+
+automation_rules:
+  - Run automated tests on pull request when feasible.
+  - P0 and P1 paths need automated coverage or documented exception.
+  - Every bug fix needs permanent regression coverage.
+  - QA cannot sign off without linked evidence.
+
+release_signoff:
+  required:
+    - Test plan linked.
+    - P0 and P1 bugs closed.
+    - Regression evidence linked.
+    - Risk acceptance documented where coverage is incomplete.

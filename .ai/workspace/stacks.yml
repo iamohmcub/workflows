@@ -1,0 +1,84 @@
+version: 1
+workspace_standard: stacks
+
+profiles:
+  web-saas:
+    frontend:
+      default: nextjs-typescript
+      allowed:
+        - nextjs-typescript
+        - react-vite-typescript
+    backend:
+      default: node-api-typescript
+      allowed:
+        - node-api-typescript
+        - go-api
+        - python-fastapi
+    infra:
+      default: netlify-or-container
+      allowed:
+        - netlify-or-container
+        - kubernetes
+        - serverless
+    data:
+      default: postgres
+      allowed:
+        - postgres
+        - mysql
+        - bigquery
+    qa:
+      default: playwright-vitest
+      allowed:
+        - playwright-vitest
+        - cypress-jest
+
+stack_definitions:
+  nextjs-typescript:
+    language: TypeScript
+    framework: Next.js
+    ui: React
+    styling: Tailwind CSS or project design system
+    validation: Zod
+    testing: Vitest, Testing Library, Playwright
+  react-vite-typescript:
+    language: TypeScript
+    framework: Vite
+    ui: React
+    styling: Tailwind CSS or project design system
+    validation: Zod
+    testing: Vitest, Testing Library, Playwright
+  node-api-typescript:
+    language: TypeScript
+    runtime: Node.js
+    api: REST or GraphQL by technical design
+    validation: Zod or equivalent schema validation
+    testing: Vitest or Jest
+  go-api:
+    language: Go
+    api: REST or gRPC by technical design
+    validation: Explicit request validation
+    testing: go test
+  python-fastapi:
+    language: Python
+    framework: FastAPI
+    validation: Pydantic
+    testing: pytest
+  netlify-or-container:
+    deployment: Netlify or container platform by repo need
+    environments: DEV, STAGING, UAT, PROD
+  kubernetes:
+    deployment: Kubernetes
+    config: Helm or Kustomize
+    environments: DEV, STAGING, UAT, PROD
+  serverless:
+    deployment: Serverless functions
+    environments: DEV, STAGING, UAT, PROD
+  playwright-vitest:
+    unit: Vitest
+    component: Testing Library
+    e2e: Playwright
+    accessibility: axe
+  cypress-jest:
+    unit: Jest
+    e2e: Cypress
+    accessibility: axe

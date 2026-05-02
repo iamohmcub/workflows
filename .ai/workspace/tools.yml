@@ -1,0 +1,43 @@
+version: 1
+workspace_standard: tools
+
+source_control:
+  provider: GitHub
+  required:
+    - pull_request_review
+    - status_checks
+    - branch_protection_for_main
+
+automation:
+  ci: GitHub Actions
+  ai_workflow_validation: npm run ai:validate
+  local_cli: npm run ai -- help
+
+frontend:
+  package_manager: npm or repo standard
+  formatter: Prettier or repo formatter
+  linter: ESLint or repo linter
+  unit_test: Vitest
+  component_test: Testing Library
+  e2e_test: Playwright
+  accessibility: axe
+
+backend:
+  formatter: language standard formatter
+  linter: language standard linter
+  unit_test: language standard test runner
+  api_test: contract or integration tests
+  migration_check: required when schema changes
+
+infrastructure:
+  ci_cd: GitHub Actions
+  secret_scan: required
+  deployment: repo-specific
+  observability: logs, metrics, traces when supported
+
+qa:
+  test_management: markdown test plan or company tool
+  e2e: Playwright
+  api: contract tests or Postman/Newman
+  load: k6 when performance risk exists
+  visual: Playwright screenshots when UI regression risk exists

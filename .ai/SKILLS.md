@@ -12,10 +12,11 @@ When a worker starts:
 2. Read `.ai/manifest.yml`.
 3. Read this file.
 4. Read `.ai/project.yml`.
-5. Follow the manifest `load_order`.
-6. Select the correct role module from `.ai/role/<role-id>/`.
-7. Read the role module in this order: `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`.
-8. Create or update the current phase log.
+5. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
+6. Follow the manifest `load_order`.
+7. Select the correct role module from `.ai/role/<role-id>/`.
+8. Read the role module in this order: `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, `workspace.yml`.
+9. Create or update the current phase log.
 
 If the worker cannot identify the repo group, repo, phase, or owner role, it must stop and ask for that missing information.
 
@@ -31,6 +32,7 @@ Every task must be mapped to:
 - Impacted roles
 - Impacted repos
 - Required evidence
+- Shared stack, style, tools, project structure, and QA standards
 
 The worker should make the smallest useful change that completes the current phase goal and preserves downstream handoff quality.
 

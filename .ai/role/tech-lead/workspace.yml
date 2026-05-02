@@ -1,0 +1,18 @@
+version: 1
+role_workspace:
+  role: tech-lead
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/role/tech-lead/interface.yml
+  specialization:
+    architecture_rules:
+      adr_required_for:
+        - new stack
+        - cross-repo contract
+        - data model change
+        - deployment topology change
+      exception_owner: orchestrator
+    required_before_handoff:
+      - Selected stack profile is named.
+      - Project structure deviations are documented.
+      - Tooling and QA implications are listed.

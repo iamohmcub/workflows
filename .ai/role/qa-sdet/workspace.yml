@@ -1,0 +1,21 @@
+version: 1
+role_workspace:
+  role: qa-sdet
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/workspace/tools.yml
+    - .ai/workspace/qa-process.yml
+    - .ai/role/qa-sdet/interface.yml
+  qa_profile: profiles.web-saas.qa.default
+  specialization:
+    test_case_style: given-when-then
+    automation_tools:
+      e2e: Playwright
+      unit: project standard
+      api: contract tests or Postman/Newman
+      accessibility: axe
+      load: k6 when performance risk exists
+    required_before_handoff:
+      - Test plan maps to acceptance criteria.
+      - Regression evidence is linked.
+      - P0 and P1 bugs are closed or release is blocked.

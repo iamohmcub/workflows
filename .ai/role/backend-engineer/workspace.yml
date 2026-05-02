@@ -1,0 +1,25 @@
+version: 1
+role_workspace:
+  role: backend-engineer
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/workspace/stacks.yml
+    - .ai/workspace/code-style.yml
+    - .ai/workspace/project-structure.yml
+    - .ai/workspace/tools.yml
+    - .ai/workspace/qa-process.yml
+    - .ai/role/backend-engineer/interface.yml
+  stack_ref: profiles.web-saas.backend.default
+  specialization:
+    api_contract:
+      compatibility: backward-compatible by default
+      validation: required at trust boundaries
+      error_policy: no raw database errors
+    automation:
+      unit: language standard test runner
+      integration: required for critical API flows
+      migration_check: required for schema changes
+    required_before_handoff:
+      - API contract examples are linked.
+      - Migration and rollback notes are linked.
+      - Observability notes are linked for critical flows.

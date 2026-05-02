@@ -1,0 +1,15 @@
+version: 1
+role_workspace:
+  role: legal-compliance
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/role/legal-compliance/interface.yml
+  specialization:
+    policy_sources:
+      privacy: company privacy policy
+      retention: company retention policy
+      accessibility: WCAG 2.1 AA
+    required_before_handoff:
+      - Compliance requirements are translated to engineering language.
+      - New vendor or data handling changes are reported.
+      - Legal exceptions are linked to a decision log.

@@ -1,0 +1,16 @@
+version: 1
+role_workspace:
+  role: security-engineer
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/workspace/tools.yml
+    - .ai/role/security-engineer/interface.yml
+  specialization:
+    required_scans:
+      - secret scan
+      - dependency vulnerability review
+      - auth and authorization review when trust boundary changes
+    required_before_handoff:
+      - Security exceptions are documented.
+      - Critical findings are blocked or accepted by orchestrator.
+      - Secret handling is confirmed.

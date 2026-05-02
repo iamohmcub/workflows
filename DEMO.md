@@ -5,6 +5,7 @@ This demo shows how a new project uses `AGENTS.md` and `.ai`.
 Example project:
 
 - Repo group: `acme-platform`
+- Workspace profile: `web-saas`
 - Repo: `checkout-service`
 - Current phase: `okr`
 - Owner role: `product-manager`
@@ -22,10 +23,12 @@ Copy these files into the new project root:
 Start from:
 
 - `.ai/project.yml`
+- `.ai/workspace/workspace.yml`
 
 Example filled config:
 
 - `.ai/examples/demo-project.yml`
+- `.ai/examples/demo-workspace.yml`
 
 The important fields are:
 
@@ -37,6 +40,8 @@ project:
     id: checkout-service
   lifecycle:
     current_phase: okr
+workspace:
+  profile: web-saas
 ```
 
 ## 3. Start the AI Worker
@@ -50,7 +55,7 @@ npm run ai:status
 Give the worker this prompt:
 
 ```text
-Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
+Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, .ai/project.yml, and .ai/workspace/workspace.yml.
 Follow the .ai load order.
 Identify the repo group, repo, current phase, owner role, supporting roles, and impacted roles.
 Create a phase log.

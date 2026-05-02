@@ -1,0 +1,50 @@
+version: 1
+workspace_standard: code_style
+
+global:
+  formatting:
+    required: true
+    rule: Use the repository formatter before handoff.
+  linting:
+    required: true
+    rule: Lint must pass before review.
+  naming:
+    clarity_over_cleverness: true
+    avoid_abbreviations: true
+  comments:
+    rule: Comments explain why, risk, or non-obvious constraints.
+  errors:
+    rule: Errors must be actionable and must not leak secrets or raw database details.
+
+frontend:
+  components: PascalCase
+  hooks: useCamelCase
+  files: kebab-case
+  rules:
+    - Keep UI components focused on presentation and interaction.
+    - Put API access in shared client or feature service modules.
+    - Implement loading, empty, error, success, and permission states.
+    - Do not hard-code user-facing strings when copy or localization ownership exists.
+
+backend:
+  services: clear domain names
+  database: migration files must be explicit and reviewable
+  rules:
+    - Validate all input at trust boundaries.
+    - Keep migrations backward compatible by default.
+    - Never return raw database errors to clients.
+    - Add observability for critical flows.
+
+infrastructure:
+  config: infrastructure as code
+  rules:
+    - No manual environment changes without incident record.
+    - Secrets are referenced, never printed.
+    - Rollback path must be documented before production deploy.
+
+tests:
+  naming: behavior-oriented
+  rules:
+    - Test names describe behavior, not implementation.
+    - Every bug fix adds a regression test.
+    - P0 and P1 paths require automated coverage when feasible.

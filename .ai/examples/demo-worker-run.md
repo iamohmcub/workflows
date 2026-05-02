@@ -17,20 +17,28 @@ The worker reads:
 2. `.ai/manifest.yml`
 3. `.ai/SKILLS.md`
 4. `.ai/project.yml`
-5. `.ai/global/company.skills.yml`
-6. `.ai/global/company.hooks.yml`
-7. `.ai/global/company.rules.yml`
-8. `.ai/global/sdlc.phases.yml`
-9. `.ai/repo-group/workspace.yml`
-10. `.ai/repo-group/impact-policy.yml`
-11. `.ai/role/product-manager/role.yml`
-12. `.ai/role/product-manager/interface.yml`
-13. `.ai/role/product-manager/playbook.md`
-14. `.ai/role/product-manager/checklist.md`
+5. `.ai/workspace/workspace.yml`
+6. `.ai/workspace/stacks.yml`
+7. `.ai/workspace/code-style.yml`
+8. `.ai/workspace/project-structure.yml`
+9. `.ai/workspace/tools.yml`
+10. `.ai/workspace/qa-process.yml`
+11. `.ai/global/company.skills.yml`
+12. `.ai/global/company.hooks.yml`
+13. `.ai/global/company.rules.yml`
+14. `.ai/global/sdlc.phases.yml`
+15. `.ai/repo-group/workspace.yml`
+16. `.ai/repo-group/impact-policy.yml`
+17. `.ai/role/product-manager/role.yml`
+18. `.ai/role/product-manager/interface.yml`
+19. `.ai/role/product-manager/playbook.md`
+20. `.ai/role/product-manager/checklist.md`
+21. `.ai/role/product-manager/workspace.yml`
 
 ## Worker Identifies Context
 
 - Repo group: `acme-platform`
+- Workspace profile: `web-saas`
 - Repo: `checkout-service`
 - Phase: `okr`
 - Owner role: `product-manager`

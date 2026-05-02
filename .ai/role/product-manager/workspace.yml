@@ -1,0 +1,15 @@
+version: 1
+role_workspace:
+  role: product-manager
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/role/product-manager/interface.yml
+  specialization:
+    tools:
+      planning: PRD markdown or company product tool
+      prioritization: RICE or MoSCoW
+      metrics: workspace-approved analytics source
+    required_before_handoff:
+      - Product scope names affected stacks or systems.
+      - Success metrics use workspace-approved data sources.
+      - Exceptions to workspace standards are escalated.

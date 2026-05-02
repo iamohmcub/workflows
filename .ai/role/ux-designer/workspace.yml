@@ -1,0 +1,14 @@
+version: 1
+role_workspace:
+  role: ux-designer
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/role/ux-designer/interface.yml
+  specialization:
+    design_system:
+      source: company or repo design system
+      accessibility: WCAG 2.1 AA
+    required_before_handoff:
+      - UI states match frontend workspace requirements.
+      - Accessibility expectations are explicit.
+      - Analytics or tracking needs are flagged.

@@ -1,0 +1,61 @@
+version: 1
+workspace_standard: project_structure
+
+common:
+  required_root_files:
+    - AGENTS.md
+    - .ai/manifest.yml
+    - .ai/project.yml
+  recommended_root_files:
+    - README.md
+    - COMMANDS.md
+    - package.json
+  runtime_evidence:
+    logs: .ai/runtime/logs
+    reports: .ai/runtime/reports
+    decisions: .ai/runtime/decisions
+    handoffs: .ai/runtime/handoffs
+
+frontend:
+  source_root: src
+  folders:
+    components: src/components
+    features: src/features
+    hooks: src/hooks
+    lib: src/lib
+    tests: src/__tests__
+  rules:
+    - Feature code should be grouped by user workflow when the app grows.
+    - Shared components must be documented or easy to discover.
+
+backend:
+  source_root: src
+  folders:
+    api: src/api
+    domain: src/domain
+    services: src/services
+    data: src/data
+    tests: tests
+    migrations: migrations
+  rules:
+    - Domain logic should not depend directly on transport layer details.
+    - Migrations must be reviewable and reversible or explicitly marked irreversible.
+
+infrastructure:
+  folders:
+    ci: .github/workflows
+    deployment: deploy
+    infrastructure: infra
+    scripts: scripts
+  rules:
+    - Environment config must be documented.
+    - Deployment scripts must be repeatable.
+
+qa:
+  folders:
+    e2e: tests/e2e
+    fixtures: tests/fixtures
+    reports: test-results
+  rules:
+    - Test fixtures should avoid production personal data.
+    - Reports must link back to acceptance criteria when possible.

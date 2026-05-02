@@ -482,7 +482,7 @@
     <section id="startup">
       <div class="section-title">
         <h2>Worker Startup</h2>
-        <p>Markdown gives the worker behavior. YAML gives the worker configuration. A new project edits `.ai/project.yml` first.</p>
+        <p>Markdown gives behavior. YAML gives configuration. A new project edits `.ai/project.yml` and `.ai/workspace/workspace.yml` first.</p>
       </div>
       <div class="panel flow">
         <div class="flow-step">
@@ -502,8 +502,12 @@
           <span>Project identity: repo group, repo, current phase, active roles, environments.</span>
         </div>
         <div class="flow-step">
+          <strong>workspace</strong>
+          <span>Shared stack, code style, project structure, tools, QA, and automation standards.</span>
+        </div>
+        <div class="flow-step">
           <strong>role modules</strong>
-          <span>Each role has role.yml, interface.yml, playbook.md, and checklist.md.</span>
+          <span>Each role has role.yml, interface.yml, playbook.md, checklist.md, and workspace.yml.</span>
         </div>
       </div>
     </section>
@@ -518,6 +522,7 @@
           <h3>Input</h3>
           <ul class="rule-list">
             <li>Repo group: `acme-platform`</li>
+            <li>Workspace profile: `web-saas`</li>
             <li>Repo: `checkout-service`</li>
             <li>Phase: `okr`</li>
             <li>Owner: `product-manager`</li>
@@ -608,7 +613,7 @@
     <section id="roles">
       <div class="section-title">
         <h2>Expert Roles</h2>
-        <p>Role modules live in `.ai/role`. Each folder contains config, execution contract, playbook, and checklist.</p>
+        <p>Role modules live in `.ai/role`. Each folder contains config, execution contract, playbook, checklist, and workspace overlay.</p>
       </div>
       <div class="role-grid">
         <article class="role-card">

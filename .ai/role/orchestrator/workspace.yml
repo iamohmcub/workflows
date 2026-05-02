@@ -1,0 +1,16 @@
+version: 1
+role_workspace:
+  role: orchestrator
+  extends:
+    - .ai/workspace/workspace.yml
+    - .ai/role/orchestrator/interface.yml
+  specialization:
+    owns_workspace_conflicts: true
+    approves_standard_exceptions: true
+    required_context:
+      - workspace profile
+      - active role overlays
+      - standards affected by the request
+  report_when:
+    - A repo wants to weaken shared workspace standards.
+    - A role overlay conflicts with core role rules.

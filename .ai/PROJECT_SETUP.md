@@ -15,6 +15,8 @@ Keep `AGENTS.md` at the repository root so AI coding tools can find it automatic
 
 Edit `.ai/project.yml`.
 
+Then edit `.ai/workspace/workspace.yml` for company or repo-group standards.
+
 Minimum fields to change:
 
 - `project.repo_group.id`
@@ -26,6 +28,9 @@ Minimum fields to change:
 - `project.lifecycle.current_phase`
 - `project.roles.active`
 - `project.environments.enabled`
+- `workspace.id`
+- `workspace.name`
+- `workspace.profile`
 
 ## 3. Choose Active Roles
 
@@ -63,11 +68,13 @@ The worker should then:
 2. Read `.ai/manifest.yml`.
 3. Read `.ai/SKILLS.md`.
 4. Read `.ai/project.yml`.
-5. Load global rules, hooks, phases, repo group policy, and the selected role module.
-6. Create a phase log.
-7. Work only inside the current phase unless the orchestrator changes phase.
+5. Read `.ai/workspace/workspace.yml` and the shared workspace standards.
+6. Load global rules, hooks, phases, repo group policy, and the selected role module.
+7. Load the selected role workspace overlay.
+8. Create a phase log.
+9. Work only inside the current phase unless the orchestrator changes phase.
 
-Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, and `checklist.md`.
+Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
 
 Useful command:
 
@@ -90,6 +97,7 @@ The phase is not complete until the log and evidence exist.
 
 ```text
 Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
+Read .ai/workspace/workspace.yml and the shared workspace standards.
 Follow the .ai load order.
 Identify the repo group, repo, current phase, owner role, supporting roles, and impacted roles.
 Create a phase log.
@@ -118,7 +126,7 @@ Automation trigger reference:
 Most common first commands:
 
 ```bash
-npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr
+npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr --workspace-profile web-saas
 npm run ai:status
 npm run ai:start -- okr
 npm run ai:validate

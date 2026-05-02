@@ -21,6 +21,16 @@ project:
     require_handoff_note: true
     require_impact_report: true
 
+  workspace:
+    shared_config: .ai/workspace/workspace.yml
+    profile: web-saas
+    stack_profile: web-saas
+    role_overlay_pattern: .ai/role/<role-id>/workspace.yml
+    inheritance:
+      company_rules: cannot_override
+      role_core: cannot_override
+      workspace_overlay: can_add_or_specialize
+
   roles:
     orchestrator: orchestrator
     active:
@@ -61,3 +71,4 @@ project:
       - .ai/SKILLS.md
       - .ai/AUTOMATION.md
       - .ai/project.yml
+      - .ai/workspace/workspace.yml

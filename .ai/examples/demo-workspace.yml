@@ -1,0 +1,26 @@
+version: 1
+workspace:
+  id: acme-platform
+  name: Acme Platform
+  profile: web-saas
+  description: Shared standards for all Acme platform repos.
+
+  standards:
+    stacks: .ai/workspace/stacks.yml
+    code_style: .ai/workspace/code-style.yml
+    project_structure: .ai/workspace/project-structure.yml
+    tools: .ai/workspace/tools.yml
+    qa_process: .ai/workspace/qa-process.yml
+
+  selected_profiles:
+    frontend: nextjs-typescript
+    backend: node-api-typescript
+    infra: netlify-or-container
+    qa: playwright-vitest
+
+  inheritance:
+    global_company_rules: cannot_override
+    role_core_rules: cannot_override
+    workspace_rules: can_add_or_specialize
+    repo_rules: can_add_when_stricter
+    conflict_owner: orchestrator

@@ -33,10 +33,15 @@ npm run ai:init -- \
   --repo-name "Checkout Service" \
   --type product-service \
   --description "Checkout flow and payment confirmation service" \
-  --phase okr
+  --phase okr \
+  --workspace-profile web-saas \
+  --frontend-stack nextjs-typescript \
+  --backend-stack node-api-typescript \
+  --infra-stack netlify-or-container \
+  --qa-profile playwright-vitest
 ```
 
-This updates `.ai/project.yml` and creates runtime folders:
+This updates `.ai/project.yml`, updates `.ai/workspace/workspace.yml`, and creates runtime folders:
 
 ```text
 .ai/runtime/logs
@@ -126,7 +131,8 @@ Follow the .ai load order.
 Run npm run ai:status.
 Run npm run ai:start -- <current-phase> if no phase log exists.
 Use the correct role module from `.ai/role/<role-id>/`.
-Read `role.yml`, `interface.yml`, `playbook.md`, and `checklist.md`.
+Read `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
+Apply shared standards from `.ai/workspace` before producing code, tests, or infra changes.
 Create an impact report if another role or repo is affected.
 Create a handoff note before moving to the next phase.
 ```

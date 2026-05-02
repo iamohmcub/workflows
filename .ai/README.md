@@ -23,13 +23,20 @@ Every role follows the same global rules, but each role has its own character, s
 5. `.ai/global/company.hooks.yml`
 6. `.ai/global/company.rules.yml`
 7. `.ai/global/sdlc.phases.yml`
-8. `.ai/repo-group/workspace.yml`
-9. `.ai/repo-group/impact-policy.yml`
-10. `.ai/repo-group/repo.template.yml`
-11. `.ai/role/<role-id>/role.yml`
-12. `.ai/role/<role-id>/interface.yml`
-13. `.ai/role/<role-id>/playbook.md`
-14. `.ai/role/<role-id>/checklist.md`
+8. `.ai/workspace/workspace.yml`
+9. `.ai/workspace/stacks.yml`
+10. `.ai/workspace/code-style.yml`
+11. `.ai/workspace/project-structure.yml`
+12. `.ai/workspace/tools.yml`
+13. `.ai/workspace/qa-process.yml`
+14. `.ai/repo-group/workspace.yml`
+15. `.ai/repo-group/impact-policy.yml`
+16. `.ai/repo-group/repo.template.yml`
+17. `.ai/role/<role-id>/role.yml`
+18. `.ai/role/<role-id>/interface.yml`
+19. `.ai/role/<role-id>/playbook.md`
+20. `.ai/role/<role-id>/checklist.md`
+21. `.ai/role/<role-id>/workspace.yml`
 
 ## Required Outputs
 
@@ -45,7 +52,7 @@ Open `ai-orchestration-map.html` in the repo root to see the orchestration layer
 
 ## New Project Setup
 
-For a new project, copy `AGENTS.md` and `.ai` into the repo, then edit `.ai/project.yml`.
+For a new project, copy `AGENTS.md` and `.ai` into the repo, then edit `.ai/project.yml` and `.ai/workspace/workspace.yml`.
 
 Use `.ai/PROJECT_SETUP.md` as the checklist and `.ai/templates/worker-startup-prompt.md` as the first message for AI workers.
 
@@ -69,3 +76,10 @@ Each role folder contains:
 - `interface.yml`: machine-readable execution contract.
 - `playbook.md`: detailed AI worker behavior.
 - `checklist.md`: before-start, output, impact, and handoff checklist.
+- `workspace.yml`: role-specific extension of shared stack, style, tools, structure, and QA process.
+
+## Shared Workspace Standards
+
+Company-wide stack, code style, project structure, tools, and QA process live in `.ai/workspace`.
+
+Every repo in the same company or repo group should share these files unless the orchestrator approves a stricter repo-specific exception.

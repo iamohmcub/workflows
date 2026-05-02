@@ -9,7 +9,9 @@ Before making changes:
 3. Read `.ai/SKILLS.md`.
 4. Read `.ai/AUTOMATION.md`.
 5. Read `.ai/project.yml`.
-6. Follow the manifest `load_order`.
+6. Read `.ai/workspace/workspace.yml`.
+7. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
+8. Follow the manifest `load_order`.
 
 Identify:
 
@@ -26,12 +28,13 @@ Then:
 
 1. Load the correct role module from `.ai/role/<role-id>/`.
 2. Run `npm run ai:status`.
-3. Read `role.yml`, `interface.yml`, `playbook.md`, and `checklist.md` from that role folder.
-4. Create or update the phase log in `.ai/runtime/logs`.
-5. Work only inside the current phase unless the orchestrator changes phase.
-6. Create an impact report if another role or repo is affected.
-7. Create a handoff note before moving downstream.
-8. Complete DoD item by item before handoff.
+3. Read `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml` from that role folder.
+4. Apply shared workspace standards unless the orchestrator approved a stricter exception.
+5. Create or update the phase log in `.ai/runtime/logs`.
+6. Work only inside the current phase unless the orchestrator changes phase.
+7. Create an impact report if another role or repo is affected.
+8. Create a handoff note before moving downstream.
+9. Complete DoD item by item before handoff.
 
 Hard rules:
 
