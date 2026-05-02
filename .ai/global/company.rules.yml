@@ -39,7 +39,7 @@ source_control:
   COMMIT-001: "Every agent position can commit when its assigned task is done."
   COMMIT-002: "Commit subject must start with the agent callsign, for example `Agent Berners: implement checkout form`."
   COMMIT-003: "Commit body must include AI-Agent-Name, AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers."
-  COMMIT-004: "Use the agent callsign as the Git author. The committer and pusher remain the authenticated account that executes Git."
+  COMMIT-004: "Keep the real Git author account. Put agent callsign and stable id in commit metadata."
   COMMIT-005: "Do not commit unfinished work as done. If work is partial, write a handoff or impact report instead."
 
 incident:

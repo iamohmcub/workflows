@@ -108,7 +108,7 @@ Every agent position can commit when its assigned task is done.
 The worker must:
 
 1. Use one of the 15 agent callsigns in `.ai/global/agent.positions.yml`.
-2. Use the agent callsign as the Git author.
+2. Keep the real Git author account.
 3. Prefix the commit subject with the agent callsign, such as `Agent Berners`.
 4. Include `AI-Agent-Name`, `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, and `AI-Evidence` trailers.
 5. Set `AI-Task-Done: yes` only when the assigned task is complete.

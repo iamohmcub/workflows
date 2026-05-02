@@ -669,7 +669,6 @@ ${agents.map((item) => `  ${item.name} (${item.id})`).join("\n")}
   const lane = options.lane || defaultLaneForPhase(phase);
   const summary = stripAgentPrefix(message, agent);
   const subject = `${agent.name}: ${summary}`;
-  const author = agentAuthor(agent);
   const body = [
     `AI-Agent-Name: ${agent.name}`,
     `AI-Agent: ${agent.id}`,
@@ -682,24 +681,21 @@ ${agents.map((item) => `  ${item.name} (${item.id})`).join("\n")}
   ].filter(Boolean).join("\n");
 
   if (options["dry-run"]) {
-    console.log(`Author: ${author}
-Subject: ${subject}
+    console.log(`${subject}
 
 ${body}
 `);
     return;
   }
 
-  execFileSync("git", ["commit", "--author", author, "-m", subject, "-m", body], { cwd: ROOT, stdio: "inherit" });
+  execFileSync("git", ["commit", "-m", subject, "-m", body], { cwd: ROOT, stdio: "inherit" });
 }
 
 function commitCheck(argv) {
   const options = parseOptions(argv);
   const agents = readAgentPositions();
-  const isSynthetic = Boolean(options.subject || options.body);
   const subject = options.subject || gitOutput(["log", "-1", "--pretty=%s"]);
   const body = options.body || gitOutput(["log", "-1", "--pretty=%b"]);
-  const author = options.author || (isSynthetic ? "" : gitOutput(["log", "-1", "--pretty=%an <%ae>"]));
   const subjectAgent = subject.split(":")[0].trim();
   const agent = resolveAgent(agents, subjectAgent);
   const errors = [];
@@ -723,13 +719,6 @@ function commitCheck(argv) {
     errors.push(`AI-Agent-Name trailer must match the subject agent callsign. Subject=${agent.name}, trailer=${trailers["AI-Agent-Name"]}`);
   }
 
-  if (agent && author) {
-    const expectedAuthor = agentAuthor(agent);
-    if (author !== expectedAuthor) {
-      errors.push(`Git author must be the agent author. Expected=${expectedAuthor}, actual=${author}`);
-    }
-  }
-
   if (trailers["AI-Task-Done"] && trailers["AI-Task-Done"].toLowerCase() !== "yes") {
     errors.push('AI-Task-Done must be "yes" for agent done commits.');
   }
@@ -750,7 +739,6 @@ ${errors.map((item) => `- ${item}`).join("\n")}
   console.log(`Agent commit check passed
 
 Agent: ${agent.name} (${agent.id})
-Author: ${author || agentAuthor(agent)}
 Role:  ${trailers["AI-Role"]}
 Phase: ${trailers["AI-Phase"]}
 `);
@@ -830,7 +818,6 @@ function validate() {
     if (!agent.name?.startsWith("Agent ")) errors.push(`Agent position is missing callsign name: ${agent.id}`);
     if (!agent.shortName) errors.push(`Agent position is missing short_name: ${agent.id}`);
     if (!agent.position) errors.push(`Agent position is missing position: ${agent.id}`);
-    if (!agent.authorEmail) errors.push(`Agent position is missing git_author_email: ${agent.id}`);
   }
 
   const parallelText = fs.readFileSync(PARALLEL_DELIVERY_FILE, "utf8");
@@ -881,7 +868,6 @@ function readAgentPositions() {
     if (key === "id") current.id = value;
     if (key === "name") current.name = value;
     if (key === "short_name") current.shortName = value;
-    if (key === "git_author_email") current.authorEmail = value;
     if (key === "position") current.position = value;
     if (key === "maps_to_role") current.mapsToRole = value;
   }
@@ -1244,10 +1230,6 @@ function normalizeAgentKey(value) {
     .replace(/^agent\s+/, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}
-
-function agentAuthor(agent) {
-  return `${agent.name} <${agent.authorEmail || `${slug(agent.id)}@ai.local`}>`;
 }
 
 function gitOutput(args) {
