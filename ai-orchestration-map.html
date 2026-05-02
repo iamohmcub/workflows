@@ -429,8 +429,10 @@
       </div>
       <nav aria-label="Page sections">
         <a href="#hierarchy">Hierarchy</a>
+        <a href="#install">Install</a>
         <a href="#startup">Startup</a>
         <a href="#runtime">Runtime</a>
+        <a href="#triggers">Triggers</a>
         <a href="#cycle">SDLC</a>
         <a href="#parallel">Parallel</a>
         <a href="#roles">Roles</a>
@@ -481,6 +483,33 @@
       </div>
     </section>
 
+    <section id="install">
+      <div class="section-title">
+        <h2>New Project Install</h2>
+        <p>Default install is minimal and chat-first. Commands and local scripts are optional helpers, not the required user experience.</p>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Default: Minimal</h3>
+          <ul class="rule-list">
+            <li>`npx @iamohmcub/ai-orchestration init` copies `.ai/` and `AGENTS.md`.</li>
+            <li>Works for Node, Go, Python, mobile, infra, documentation, or mixed repos.</li>
+            <li>The AI worker reads files directly and maps natural chat to workflow events.</li>
+            <li>Project-specific reality lives in `.ai/project.yml`, `.ai/workspace`, and `.ai/runtime`.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Optional: Commands</h3>
+          <ul class="rule-list">
+            <li>`--commands` also copies `COMMANDS.md`.</li>
+            <li>`--with-local-cli --with-package-scripts` adds local scripts for teams that want repo-local commands.</li>
+            <li>Central library repo keeps `.github` validation; installed projects do not need it by default.</li>
+            <li>The same `.ai` files remain the source of truth with or without an adapter.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section id="startup">
       <div class="section-title">
         <h2>Worker Startup</h2>
@@ -506,6 +535,10 @@
         <div class="flow-step">
           <strong>event.contract.yml</strong>
           <span>Portable event language for triggers such as `impact.detected`, `phase.started`, and `agent.task_done`.</span>
+        </div>
+        <div class="flow-step">
+          <strong>trigger.words.yml</strong>
+          <span>Maps English, Thai, and mixed chat phrases to workflow events without requiring CLI syntax.</span>
         </div>
         <div class="flow-step">
           <strong>routing.matrix.yml</strong>
@@ -549,6 +582,39 @@
             <li>`runtime/queue` holds pending provider-neutral events.</li>
             <li>`runtime/events` holds completed or archived events.</li>
           </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="triggers">
+      <div class="section-title">
+        <h2>Chat-First Trigger Words</h2>
+        <p>The user can speak naturally. The worker maps intent to the highest-risk matching workflow event, creates evidence, and only asks when context is missing.</p>
+      </div>
+      <div class="panel flow">
+        <div class="flow-step">
+          <strong>เริ่ม okr</strong>
+          <span>Maps to `phase.started`, loads Product Manager routing, and creates or updates the phase log.</span>
+        </div>
+        <div class="flow-step">
+          <strong>แยก frontend backend</strong>
+          <span>Maps to `lane.started`, starts parallel work item lanes, and records dependencies.</span>
+        </div>
+        <div class="flow-step">
+          <strong>API เปลี่ยนกระทบ frontend</strong>
+          <span>Maps to `impact.detected`, creates an impact report, and blocks the next gate until acknowledged.</span>
+        </div>
+        <div class="flow-step">
+          <strong>ส่งให้ QA</strong>
+          <span>Maps to `handoff.created`, writes the handoff note, and links done/not-done evidence.</span>
+        </div>
+        <div class="flow-step">
+          <strong>งานเสร็จ commit</strong>
+          <span>Maps to `agent.task_done`, checks evidence, and uses agent callsign metadata.</span>
+        </div>
+        <div class="flow-step">
+          <strong>Agent Berners รองรับ iPad ไหม</strong>
+          <span>Routes the question to the frontend role module and answers with frontend evidence expectations.</span>
         </div>
       </div>
     </section>
@@ -651,73 +717,83 @@
 
     <section id="roles">
       <div class="section-title">
-        <h2>Expert Roles</h2>
-        <p>Role modules live in `.ai/role`. Each folder contains config, execution contract, playbook, checklist, and workspace overlay.</p>
+        <h2>Agent Callsigns and Roles</h2>
+        <p>Each position has a short agent callsign for prompts, reports, and commit metadata. Role modules still live in `.ai/role/<role-id>/`.</p>
       </div>
       <div class="role-grid">
         <article class="role-card">
           <span class="tag engineering">Governance</span>
-          <h3>Orchestrator</h3>
+          <h3>Agent Jobs</h3>
+          <p>Prompter. Frames ideas, acceptance intent, sponsor decisions, and launch clarity.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag engineering">Governance</span>
+          <h3>Agent Conway</h3>
           <p>Governs workflow, gates, conflicts, and cross-repo impact.</p>
         </article>
         <article class="role-card">
           <span class="tag strategy">Strategy</span>
-          <h3>Product Manager</h3>
+          <h3>Agent Drucker</h3>
           <p>Owns OKR, PRD, scope, non-goals, and launch outcomes.</p>
         </article>
         <article class="role-card">
           <span class="tag strategy">Strategy</span>
-          <h3>Product Owner</h3>
-          <p>Owns backlog clarity and acceptance decisions.</p>
+          <h3>Agent Nightingale</h3>
+          <p>Owns metrics, instrumentation, data quality, and learning loop.</p>
         </article>
         <article class="role-card">
           <span class="tag design">Design</span>
-          <h3>UX Designer</h3>
+          <h3>Agent Rams</h3>
           <p>Owns research, flows, states, usability, and accessibility.</p>
         </article>
         <article class="role-card">
+          <span class="tag strategy">Strategy</span>
+          <h3>Agent Kano</h3>
+          <p>Owns backlog clarity, acceptance decisions, and product signoff.</p>
+        </article>
+        <article class="role-card">
           <span class="tag engineering">Engineering</span>
-          <h3>Tech Lead</h3>
+          <h3>Agent Turing</h3>
           <p>Owns architecture, contracts, decomposition, and ADRs.</p>
         </article>
         <article class="role-card">
           <span class="tag engineering">Engineering</span>
-          <h3>Frontend Engineer</h3>
+          <h3>Agent Berners</h3>
           <p>Owns user-facing UI, interactions, states, and frontend tests.</p>
         </article>
         <article class="role-card">
           <span class="tag engineering">Engineering</span>
-          <h3>Backend Engineer</h3>
+          <h3>Agent Hopper</h3>
           <p>Owns APIs, data contracts, migrations, and observability.</p>
         </article>
         <article class="role-card">
+          <span class="tag infrastructure">Security</span>
+          <h3>Agent Mitnick</h3>
+          <p>Owns threat model, secret hygiene, dependency risk, and release security.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag insight">Compliance</span>
+          <h3>Agent Brandeis</h3>
+          <p>Owns privacy, accessibility, vendors, licenses, and regulated risk.</p>
+        </article>
+        <article class="role-card">
           <span class="tag quality">Quality</span>
-          <h3>QA/SDET</h3>
+          <h3>Agent Deming</h3>
           <p>Owns test strategy, bug classification, and regression proof.</p>
         </article>
         <article class="role-card">
           <span class="tag infrastructure">Infrastructure</span>
-          <h3>DevOps Platform</h3>
+          <h3>Agent Gene</h3>
           <p>Owns environments, deployment, rollback, SLOs, and canary.</p>
         </article>
         <article class="role-card">
           <span class="tag infrastructure">Infrastructure</span>
-          <h3>Security Engineer</h3>
-          <p>Owns threat model, secret hygiene, dependency risk, release security.</p>
-        </article>
-        <article class="role-card">
-          <span class="tag insight">Insight</span>
-          <h3>Data Analyst</h3>
-          <p>Owns metrics, instrumentation, data quality, and learning loop.</p>
-        </article>
-        <article class="role-card">
-          <span class="tag insight">Insight</span>
-          <h3>Legal Compliance</h3>
-          <p>Owns privacy, accessibility, vendors, licenses, and regulated risk.</p>
+          <h3>Agent Shewhart</h3>
+          <p>Owns dashboards, alerts, SLOs, incident signals, and production evidence.</p>
         </article>
         <article class="role-card">
           <span class="tag quality">Audit</span>
-          <h3>Process Auditor</h3>
+          <h3>Agent Holmes</h3>
           <p>Owns evidence review, gate audit, commit identity, and process findings.</p>
         </article>
       </div>
@@ -773,11 +849,21 @@
     <section id="commands">
       <div class="section-title">
         <h2>Commands and Triggers</h2>
-        <p>The CLI turns hooks into repeatable local commands, while GitHub Actions validates the `.ai` system on push and pull request.</p>
+        <p>Natural-language chat is the primary interface. CLI commands are deterministic helpers for local automation, CI, adapters, plugins, or teams that prefer explicit commands.</p>
       </div>
       <div class="two-col">
         <div class="panel">
-          <h3>Local Commands</h3>
+          <h3>Chat Triggers</h3>
+          <ul class="rule-list">
+            <li>`เริ่ม okr` starts a phase and creates the phase log.</li>
+            <li>`ทำ mvp-1 ขนานกับ frontend backend` starts a parallel lane.</li>
+            <li>`API เปลี่ยน กระทบ QA` creates an impact report and routes acknowledgement.</li>
+            <li>`ส่งให้ QA` creates a handoff note.</li>
+            <li>`Agent Berners ตรวจ iPad landscape` routes directly to the frontend role.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Optional CLI</h3>
           <ul class="rule-list">
             <li>`npx @iamohmcub/ai-orchestration status`</li>
             <li>`npx @iamohmcub/ai-orchestration start okr`</li>
@@ -789,14 +875,25 @@
             <li>`npx @iamohmcub/ai-orchestration commit-check`</li>
           </ul>
         </div>
+      </div>
+      <div class="two-col" style="margin-top: 14px;">
         <div class="panel">
-          <h3>Automation</h3>
+          <h3>Central Library Automation</h3>
           <ul class="rule-list">
             <li>Central repo GitHub Actions runs `node scripts/ai-workflow.mjs validate`.</li>
             <li>Central repo GitHub Actions runs `node scripts/ai-workflow.mjs commit-check`.</li>
             <li>Triggers on push to `main`.</li>
             <li>Triggers on pull request to `main`.</li>
             <li>Can be run manually with `workflow_dispatch`.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Installed Project Reality</h3>
+          <ul class="rule-list">
+            <li>Default installed projects get `.ai/` and `AGENTS.md` only.</li>
+            <li>No package scripts are required for AI workers to understand the workflow.</li>
+            <li>Adapters can be added later for dispatch, validation, queue processing, or notifications.</li>
+            <li>Local LLMs, hosted AIs, humans, and future plugins read the same source files.</li>
           </ul>
         </div>
       </div>
