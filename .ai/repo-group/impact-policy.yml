@@ -4,7 +4,7 @@ scope: repo_group
 impact_levels:
   role:
     meaning: Affects another role inside the same repo.
-    examples:
+    common_cases:
       - Acceptance criteria changed after design started.
       - API contract changed after frontend implementation started.
       - QA must add or change regression tests.
@@ -12,7 +12,7 @@ impact_levels:
 
   repo:
     meaning: Affects the owning repo beyond one role.
-    examples:
+    common_cases:
       - Database migration changes rollback plan.
       - Release requires feature flag or canary.
       - Security review blocks release.
@@ -20,7 +20,7 @@ impact_levels:
 
   group:
     meaning: Affects another repo in the same repo group.
-    examples:
+    common_cases:
       - Shared API contract changes.
       - Shared design system component changes.
       - Auth, billing, analytics, or deployment dependency changes.
@@ -51,4 +51,3 @@ acknowledgement:
   required_before_next_gate: true
   timeout: 1 business day
   unresolved_owner: orchestrator
-

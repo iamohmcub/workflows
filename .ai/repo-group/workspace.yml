@@ -12,8 +12,8 @@ governance:
   phase_source: .ai/global/sdlc.phases.yml
 
 repos:
-  - id: example-company
-    name: Example Company Repo
+  - id: replace-with-repo-id
+    name: Replace With Repo Name
     description: Replace with a real company, product, service, or domain repo.
     config_template: .ai/repo-group/repo.template.yml
     primary_roles:
@@ -34,4 +34,3 @@ cross_repo_policy:
   report_template: .ai/templates/impact-report.md
   acknowledgement_required_before_next_gate: true
   unresolved_conflict_owner: orchestrator
-

@@ -72,9 +72,6 @@ function main(argv) {
       case "validate":
         validate();
         break;
-      case "demo":
-        demo();
-        break;
       default:
         fail(`Unknown command: ${command}\nRun: npm run ai -- help`);
     }
@@ -96,7 +93,6 @@ Usage:
   npm run ai:impact -- --title "API contract changed" --phase technical-design --severity P2
   npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
   npm run ai:validate
-  npm run ai:demo
 
 Core idea:
   AGENTS.md + .ai define the rules.
@@ -324,7 +320,7 @@ function trigger(argv) {
   on_impact_detected   -> npm run ai:impact -- --title "<title>"
   on_bug_detected      -> npm run ai:impact -- --title "<bug title>" --severity P1
 
-Examples:
+Usage patterns:
   npm run ai:trigger -- on_project_init
   npm run ai:trigger -- on_phase_start --phase okr
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
@@ -565,23 +561,6 @@ Owner role: ${phase.owner}
 Role module: .ai/role/${phase.owner}/
 Workspace: ${project.workspaceProfile}
 Known phases: ${phases.length}
-`);
-}
-
-function demo() {
-  console.log(`Demo path
-
-Read:
-  DEMO.md
-  .ai/examples/demo-project.yml
-  .ai/examples/demo-worker-run.md
-  .ai/examples/sample-evidence.md
-
-Try:
-  npm run ai:status
-  npm run ai:start -- okr
-  npm run ai:impact -- --title "Analytics contract changed" --phase okr --affected-roles data-analyst
-  npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
 `);
 }
 

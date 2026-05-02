@@ -51,9 +51,9 @@ Create a phase log before work and an impact report if another role or repo is a
 
 Use YAML for structured config that tools should parse.
 
-Use Markdown for behavior, explanation, templates, playbooks, examples, and human/AI reading.
+Use Markdown for behavior, explanation, templates, playbooks, and human/AI reading.
 
-Examples:
+File mapping:
 
 - `.yml`: `manifest.yml`, `project.yml`, `workspace.yml`, `interface.yml`, `role.yml`
 - `.md`: `AGENTS.md`, `SKILLS.md`, `playbook.md`, `checklist.md`, `COMMANDS.md`
@@ -62,6 +62,6 @@ Examples:
 
 - [AGENTS.md](AGENTS.md): root worker protocol.
 - [COMMANDS.md](COMMANDS.md): command reference.
-- [DEMO.md](DEMO.md): demo flow.
+- [ai-orchestration-map.html](ai-orchestration-map.html): single presentation/overview.
 - [.ai/README.md](.ai/README.md): `.ai` folder map.
 - [.ai/PROJECT_SETUP.md](.ai/PROJECT_SETUP.md): new project checklist.

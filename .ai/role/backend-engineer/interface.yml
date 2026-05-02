@@ -39,7 +39,7 @@ handoff_to:
   frontend-engineer:
     required_evidence:
     - Endpoint contract
-    - Request and response examples
+    - Request and response payload references
     - Error states
     - Feature flag behavior
   qa-sdet:

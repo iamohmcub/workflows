@@ -113,14 +113,6 @@ Check required files, runtime folders, and current phase config:
 npm run ai:validate
 ```
 
-## Demo
-
-Show demo files and suggested commands:
-
-```bash
-npm run ai:demo
-```
-
 ## AI Worker Startup
 
 Give the AI worker this before asking it to implement:

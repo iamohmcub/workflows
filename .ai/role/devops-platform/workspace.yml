@@ -12,7 +12,7 @@ role_workspace:
   specialization:
     environments:
       flow: DEV -> STAGING -> UAT -> PROD
-      demo_source: PROD tag
+      preview_source: PROD tag
     automation:
       ci_cd: GitHub Actions
       validation: npm run ai:validate

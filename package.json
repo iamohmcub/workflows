@@ -14,8 +14,7 @@
     "ai:trigger": "node scripts/ai-workflow.mjs trigger",
     "ai:impact": "node scripts/ai-workflow.mjs impact",
     "ai:handoff": "node scripts/ai-workflow.mjs handoff",
-    "ai:validate": "node scripts/ai-workflow.mjs validate",
-    "ai:demo": "node scripts/ai-workflow.mjs demo"
+    "ai:validate": "node scripts/ai-workflow.mjs validate"
   },
   "keywords": [
     "ai",

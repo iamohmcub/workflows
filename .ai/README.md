@@ -18,7 +18,6 @@ Canonical load order lives in `.ai/manifest.yml`.
 - `role/`: role modules.
 - `templates/`: phase log, impact report, decision, handoff, and startup prompt templates.
 - `runtime/`: real execution evidence.
-- `examples/`: demo configs and sample evidence only.
 
 ## Role Module
 
@@ -36,7 +35,7 @@ workspace.yml  # role-specific stack/tool/process overlay
 
 Use `.yml` for structured config and contracts that tools should parse.
 
-Use `.md` for instructions, playbooks, checklists, templates, examples, and human/AI explanations.
+Use `.md` for instructions, playbooks, checklists, templates, and human/AI explanations.
 
 ## Required Runtime Evidence
 

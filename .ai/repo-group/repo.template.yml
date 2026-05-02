@@ -31,7 +31,7 @@ runtime:
 
 environments:
   flow: DEV -> STAGING -> UAT -> PROD
-  demo_source: PROD tag
+  preview_source: PROD tag
   rules:
     - Never patch directly in UAT or PROD.
     - Never reverse flow from a higher environment to a lower environment.
@@ -47,4 +47,3 @@ impact_reporting:
   role_impact: Required when another role must change work, sign off, retest, or accept risk.
   repo_impact: Required when API, data, dependency, environment, deployment, customer, SLA, security, or compliance surface changes.
   group_impact: Required when another repo in the repo group is affected.
-

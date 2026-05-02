@@ -20,6 +20,6 @@ role_workspace:
       integration: required for critical API flows
       migration_check: required for schema changes
     required_before_handoff:
-      - API contract examples are linked.
+      - API contract payload references are linked.
       - Migration and rollback notes are linked.
       - Observability notes are linked for critical flows.
