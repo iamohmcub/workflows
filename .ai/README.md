@@ -16,14 +16,16 @@ Every role follows the same global rules, but each role has its own character, s
 
 ## Load Order
 
-1. `.ai/global/company.skills.yml`
-2. `.ai/global/company.hooks.yml`
-3. `.ai/global/company.rules.yml`
-4. `.ai/global/sdlc.phases.yml`
-5. `.ai/repo-group/workspace.yml`
-6. `.ai/repo-group/impact-policy.yml`
-7. `.ai/repo-group/repo.template.yml`
-8. `.ai/role/*.yml`
+1. `.ai/SKILLS.md`
+2. `.ai/project.yml`
+3. `.ai/global/company.skills.yml`
+4. `.ai/global/company.hooks.yml`
+5. `.ai/global/company.rules.yml`
+6. `.ai/global/sdlc.phases.yml`
+7. `.ai/repo-group/workspace.yml`
+8. `.ai/repo-group/impact-policy.yml`
+9. `.ai/repo-group/repo.template.yml`
+10. `.ai/role/*.yml`
 
 ## Required Outputs
 
@@ -37,3 +39,8 @@ Every architectural or governance decision creates a decision log in `.ai/runtim
 
 Open `ai-orchestration-map.html` in the repo root to see the orchestration layers, SDLC phases, role ownership, and impact reporting flow.
 
+## New Project Setup
+
+For a new project, copy `AGENTS.md` and `.ai` into the repo, then edit `.ai/project.yml`.
+
+Use `.ai/PROJECT_SETUP.md` as the checklist and `.ai/templates/worker-startup-prompt.md` as the first message for AI workers.

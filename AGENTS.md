@@ -2,7 +2,7 @@
 
 This workspace is orchestrated by the `.ai` folder.
 
-Load `.ai/manifest.yml` first, then follow its load order. The hierarchy is:
+Load `.ai/manifest.yml` first, read `.ai/SKILLS.md`, then follow the manifest load order. The hierarchy is:
 
 1. Repo group: a workspace that can contain many repos or companies.
 2. Repo: a company, product, service, or domain that runs the SDLC.
@@ -13,9 +13,10 @@ Load `.ai/manifest.yml` first, then follow its load order. The hierarchy is:
 Before starting work:
 
 1. Identify the repo group, repo, phase, owner role, and impacted roles.
-2. Read the relevant files in `.ai/global`, `.ai/repo-group`, and `.ai/role`.
-3. Confirm the previous phase gate is complete before beginning the next phase.
-4. Create a phase log from `.ai/templates/phase-log.md`.
+2. Read `.ai/project.yml` for this project's identity, lifecycle mode, and active roles.
+3. Read the relevant files in `.ai/global`, `.ai/repo-group`, and `.ai/role`.
+4. Confirm the previous phase gate is complete before beginning the next phase.
+5. Create a phase log from `.ai/templates/phase-log.md`.
 
 During work:
 
@@ -40,3 +41,12 @@ Before handoff:
 - CI, peer review, and secret scanning are required for every code path, including hotfixes.
 - P0 and P1 incidents require a post-mortem within 24 hours.
 
+## New Project Setup
+
+When this `.ai` system is copied into a new project:
+
+1. Edit `.ai/project.yml`.
+2. Set the real repo group, repo id, repo name, product type, environments, and active roles.
+3. Keep `AGENTS.md` at the repo root.
+4. Start every AI worker with the prompt in `.ai/templates/worker-startup-prompt.md`.
+5. Use `.ai/PROJECT_SETUP.md` as the full checklist.

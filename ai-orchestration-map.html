@@ -429,6 +429,7 @@
       </div>
       <nav aria-label="Page sections">
         <a href="#hierarchy">Hierarchy</a>
+        <a href="#startup">Startup</a>
         <a href="#cycle">SDLC</a>
         <a href="#roles">Roles</a>
         <a href="#reports">Reports</a>
@@ -473,6 +474,35 @@
             <li>Reports impact outside scope</li>
           </ul>
         </article>
+      </div>
+    </section>
+
+    <section id="startup">
+      <div class="section-title">
+        <h2>Worker Startup</h2>
+        <p>Markdown gives the worker behavior. YAML gives the worker configuration. A new project edits `.ai/project.yml` first.</p>
+      </div>
+      <div class="panel flow">
+        <div class="flow-step">
+          <strong>AGENTS.md</strong>
+          <span>Root entrypoint. Tells every AI worker that `.ai` controls the workflow.</span>
+        </div>
+        <div class="flow-step">
+          <strong>manifest.yml</strong>
+          <span>Declares hierarchy, load order, runtime folders, and hard requirements.</span>
+        </div>
+        <div class="flow-step">
+          <strong>SKILLS.md</strong>
+          <span>Human-readable worker behavior: logging, gates, handoffs, impact reports.</span>
+        </div>
+        <div class="flow-step">
+          <strong>project.yml</strong>
+          <span>Project identity: repo group, repo, current phase, active roles, environments.</span>
+        </div>
+        <div class="flow-step">
+          <strong>role/*.yml</strong>
+          <span>Specialist instructions for orchestrator, product, design, engineering, QA, and ops.</span>
+        </div>
       </div>
     </section>
 

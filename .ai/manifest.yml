@@ -29,6 +29,8 @@ hierarchy:
       - rules
 
 load_order:
+  - .ai/SKILLS.md
+  - .ai/project.yml
   - .ai/global/company.skills.yml
   - .ai/global/company.hooks.yml
   - .ai/global/company.rules.yml
@@ -60,4 +62,4 @@ hard_requirements:
   - Every handoff must include done, not done, risks, evidence, and DoD status.
   - Every cross-role or cross-repo impact must be reported before the next gate.
   - The orchestrator is the only role that can resolve unresolved role conflicts.
-
+  - New projects must configure `.ai/project.yml` before AI workers begin delivery work.
