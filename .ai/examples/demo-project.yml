@@ -1,0 +1,60 @@
+version: 1
+project:
+  repo_group:
+    id: acme-platform
+    name: Acme Platform
+    description: Example repo group containing checkout, billing, identity, and analytics repos.
+
+  repo:
+    id: checkout-service
+    name: Checkout Service
+    type: product-service
+    description: Owns checkout flow, payment intent creation, order confirmation, and checkout analytics events.
+    parent_repo: null
+    child_repos: []
+
+  lifecycle:
+    current_phase: okr
+    default_start_phase: okr
+    phase_source: .ai/global/sdlc.phases.yml
+    require_phase_log: true
+    require_handoff_note: true
+    require_impact_report: true
+
+  roles:
+    orchestrator: orchestrator
+    active:
+      - orchestrator
+      - product-manager
+      - ux-designer
+      - tech-lead
+      - frontend-engineer
+      - backend-engineer
+      - qa-sdet
+      - devops-platform
+      - security-engineer
+      - data-analyst
+
+  environments:
+    enabled:
+      - DEV
+      - STAGING
+      - UAT
+      - PROD
+    optional:
+      - DEMO
+    flow: DEV -> STAGING -> UAT -> PROD
+
+  evidence:
+    logs: .ai/runtime/logs
+    reports: .ai/runtime/reports
+    decisions: .ai/runtime/decisions
+
+  startup:
+    worker_prompt_template: .ai/templates/worker-startup-prompt.md
+    must_read:
+      - AGENTS.md
+      - .ai/manifest.yml
+      - .ai/SKILLS.md
+      - .ai/project.yml
+

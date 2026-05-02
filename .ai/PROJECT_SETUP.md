@@ -87,3 +87,12 @@ Create a phase log.
 Then continue the current phase using the correct role definition.
 ```
 
+## 8. Demo
+
+To see the full shape before using it in a real repo, read:
+
+- `DEMO.md`
+- `.ai/examples/demo-project.yml`
+- `.ai/examples/demo-worker-run.md`
+- `.ai/examples/runtime/logs/2026-05-02-okr-checkout-service.md`
+

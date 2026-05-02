@@ -44,3 +44,9 @@ Open `ai-orchestration-map.html` in the repo root to see the orchestration layer
 For a new project, copy `AGENTS.md` and `.ai` into the repo, then edit `.ai/project.yml`.
 
 Use `.ai/PROJECT_SETUP.md` as the checklist and `.ai/templates/worker-startup-prompt.md` as the first message for AI workers.
+
+## Demo
+
+Read `DEMO.md` from the repo root, then inspect `.ai/examples`.
+
+The demo shows a checkout-service project moving through the first OKR phase with a phase log, impact report, decision log, and handoff note.
