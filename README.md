@@ -34,7 +34,7 @@ npm run ai:init -- \
 npm run ai:status
 npm run ai:start -- okr
 npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npm run ai:commit -- --agent orchestrator-agent --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
+npm run ai:commit -- --agent Conway --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npm run ai:validate
 ```
 
@@ -49,7 +49,7 @@ Identify repo group, repo, current phase, MVP/work item, lane, owner role, suppo
 Load the owner role module from .ai/role/<role-id>/.
 Apply shared workspace standards before code, tests, or infra changes.
 Create a phase log before work and an impact report if another role or repo is affected.
-Commit completed work with the correct agent id when the assigned task is done.
+Commit completed work with the correct agent callsign when the assigned task is done.
 ```
 
 ## File Type Rule

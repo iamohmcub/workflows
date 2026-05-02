@@ -107,7 +107,7 @@ Usage:
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
   npm run ai:impact -- --title "API contract changed" --phase technical-design --severity P2
   npm run ai:handoff -- --from product-manager --to ux-designer --phase okr
-  npm run ai:commit -- --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  npm run ai:commit -- --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
   npm run ai:commit-check
   npm run ai:validate
 
@@ -138,7 +138,7 @@ Next commands:
   npm run ai:start -- ${project.currentPhase}
   npm run ai:start -- ${project.currentPhase} --mvp <mvp-id> --lane ${defaultLaneForPhase(project.currentPhase)}
   npm run ai:trigger -- on_phase_start --phase ${project.currentPhase}
-  npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"
+  npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
   npm run ai:validate
 `);
 }
@@ -330,6 +330,7 @@ Answer:
 
 ## Agent Commit
 
+- Agent name:
 - Agent id:
 - Commit:
 - Evidence linked:
@@ -368,7 +369,7 @@ Next:
   Read .ai/role/${phase.owner}/workspace.yml
   Complete DoD item by item
   Run npm run ai:impact -- --title "<title>" if another role or repo is affected
-  Run npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>" when the task is done
+  Run npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>" when the task is done
   Keep upstream lanes moving when handoff contracts are locked and dependencies are clear
 `);
 }
@@ -384,14 +385,14 @@ function trigger(argv) {
   on_parallel_lane_start -> npm run ai:start -- <phase> --mvp <mvp-id> --lane <lane>
   on_impact_detected   -> npm run ai:impact -- --title "<title>"
   on_bug_detected      -> npm run ai:impact -- --title "<bug title>" --severity P1
-  on_agent_task_done   -> npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"
+  on_agent_task_done   -> npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
 
 Usage patterns:
   npm run ai:trigger -- on_project_init
   npm run ai:trigger -- on_phase_start --phase okr
   npm run ai:trigger -- on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
   npm run ai:trigger -- on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
-  npm run ai:trigger -- on_agent_task_done --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  npm run ai:trigger -- on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 `);
     return;
   }
@@ -603,20 +604,20 @@ function commitAsAgent(argv) {
   const options = parseOptions(argv);
   const project = readProject();
   const agents = readAgentPositions();
-  const agentId = options.agent || options["agent-id"];
+  const agentInput = options.agent || options["agent-id"];
   const message = options.message;
   const evidence = options.evidence;
 
-  if (!agentId) fail("Missing --agent <agent-id>");
+  if (!agentInput) fail('Missing --agent <callsign, short name, position, or stable id>');
   if (!message) fail('Missing --message "completed task summary"');
   if (!evidence) fail("Missing --evidence <phase log, report, handoff, test, or review link>");
 
-  const agent = agents.find((item) => item.id === agentId);
+  const agent = resolveAgent(agents, agentInput);
   if (!agent) {
-    fail(`Unknown agent: ${agentId}
+    fail(`Unknown agent: ${agentInput}
 
 Known agents:
-${agents.map((item) => `  ${item.id}`).join("\n")}
+${agents.map((item) => `  ${item.name} (${item.id})`).join("\n")}
 `);
   }
 
@@ -628,9 +629,10 @@ ${agents.map((item) => `  ${item.id}`).join("\n")}
   const role = options.role || agent.mapsToRole;
   const workItem = options.mvp || options["mvp-id"] || options["work-item"] || options["work-item-id"];
   const lane = options.lane || defaultLaneForPhase(phase);
-  const summary = message.startsWith(`${agent.id}:`) ? message.slice(agent.id.length + 1).trim() : message;
-  const subject = `${agent.id}: ${summary}`;
+  const summary = stripAgentPrefix(message, agent);
+  const subject = `${agent.name}: ${summary}`;
   const body = [
+    `AI-Agent-Name: ${agent.name}`,
     `AI-Agent: ${agent.id}`,
     `AI-Role: ${role}`,
     `AI-Phase: ${phase}`,
@@ -656,23 +658,27 @@ function commitCheck(argv) {
   const agents = readAgentPositions();
   const subject = options.subject || gitOutput(["log", "-1", "--pretty=%s"]);
   const body = options.body || gitOutput(["log", "-1", "--pretty=%b"]);
-  const agentId = subject.split(":")[0].trim();
-  const agent = agents.find((item) => item.id === agentId);
+  const subjectAgent = subject.split(":")[0].trim();
+  const agent = resolveAgent(agents, subjectAgent);
   const errors = [];
 
   if (!agent) {
-    errors.push(`Commit subject must start with a known agent id, like "frontend-agent: ...". Found: ${subject}`);
+    errors.push(`Commit subject must start with a known agent callsign, like "Agent Berners: ...". Found: ${subject}`);
   }
 
   const trailers = parseTrailers(body);
-  const required = ["AI-Agent", "AI-Role", "AI-Phase", "AI-Task-Done", "AI-Evidence"];
+  const required = ["AI-Agent-Name", "AI-Agent", "AI-Role", "AI-Phase", "AI-Task-Done", "AI-Evidence"];
 
   for (const key of required) {
     if (!trailers[key]) errors.push(`Missing commit trailer: ${key}`);
   }
 
-  if (trailers["AI-Agent"] && trailers["AI-Agent"] !== agentId) {
-    errors.push(`AI-Agent trailer must match subject agent id. Subject=${agentId}, trailer=${trailers["AI-Agent"]}`);
+  if (agent && trailers["AI-Agent"] && trailers["AI-Agent"] !== agent.id) {
+    errors.push(`AI-Agent trailer must match the subject agent stable id. Subject=${agent.name}, expected=${agent.id}, trailer=${trailers["AI-Agent"]}`);
+  }
+
+  if (agent && trailers["AI-Agent-Name"] && trailers["AI-Agent-Name"] !== agent.name) {
+    errors.push(`AI-Agent-Name trailer must match the subject agent callsign. Subject=${agent.name}, trailer=${trailers["AI-Agent-Name"]}`);
   }
 
   if (trailers["AI-Task-Done"] && trailers["AI-Task-Done"].toLowerCase() !== "yes") {
@@ -694,7 +700,7 @@ ${errors.map((item) => `- ${item}`).join("\n")}
 
   console.log(`Agent commit check passed
 
-Agent: ${agent.id}
+Agent: ${agent.name} (${agent.id})
 Role:  ${trailers["AI-Role"]}
 Phase: ${trailers["AI-Phase"]}
 `);
@@ -771,6 +777,9 @@ function validate() {
 
   for (const agent of agents) {
     if (!agent.mapsToRole) errors.push(`Agent position is missing maps_to_role: ${agent.id}`);
+    if (!agent.name?.startsWith("Agent ")) errors.push(`Agent position is missing callsign name: ${agent.id}`);
+    if (!agent.shortName) errors.push(`Agent position is missing short_name: ${agent.id}`);
+    if (!agent.position) errors.push(`Agent position is missing position: ${agent.id}`);
   }
 
   const parallelText = fs.readFileSync(PARALLEL_DELIVERY_FILE, "utf8");
@@ -820,6 +829,8 @@ function readAgentPositions() {
     const value = clean(field[2]);
     if (key === "id") current.id = value;
     if (key === "name") current.name = value;
+    if (key === "short_name") current.shortName = value;
+    if (key === "position") current.position = value;
     if (key === "maps_to_role") current.mapsToRole = value;
   }
 
@@ -1091,6 +1102,35 @@ function defaultLaneForPhase(phaseId) {
     "measure-iterate": "operations-learning"
   };
   return lanes[phaseId] || "business-discovery";
+}
+
+function resolveAgent(agents, value) {
+  const normalized = normalizeAgentKey(value);
+  return agents.find((agent) => {
+    const keys = [agent.id, agent.name, agent.shortName, agent.position].filter(Boolean);
+    return keys.some((key) => normalizeAgentKey(key) === normalized);
+  });
+}
+
+function stripAgentPrefix(message, agent) {
+  let summary = String(message || "").trim();
+  for (const prefix of [agent.name, agent.id, agent.shortName].filter(Boolean)) {
+    const token = `${prefix}:`;
+    if (summary.toLowerCase().startsWith(token.toLowerCase())) {
+      summary = summary.slice(token.length).trim();
+      break;
+    }
+  }
+  return summary;
+}
+
+function normalizeAgentKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/^agent\s+/, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function gitOutput(args) {

@@ -69,6 +69,7 @@ Gate:
 
 ## Agent Commit
 
+- Agent name:
 - Agent id:
 - Commit:
 - Evidence linked:

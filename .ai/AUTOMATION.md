@@ -12,8 +12,8 @@ npm run ai:trigger -- on_phase_start --phase okr
 npm run ai:trigger -- on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
 npm run ai:trigger -- on_impact_detected --title "API contract changed" --phase technical-design
 npm run ai:trigger -- on_bug_detected --title "Checkout payment failure" --phase qa-testing --severity P1
-npm run ai:trigger -- on_agent_task_done --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
-npm run ai:commit -- --agent frontend-agent --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npm run ai:trigger -- on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npm run ai:commit -- --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 npm run ai:commit-check
 ```
 
@@ -32,8 +32,8 @@ Agent commit commands:
 
 | Command | Behavior |
 | --- | --- |
-| `npm run ai:commit` | Creates a Git commit for a done task using one of the 15 agent ids. |
-| `npm run ai:commit-check` | Validates that the latest commit uses agent identity and required AI trailers. |
+| `npm run ai:commit` | Creates a Git commit for a done task using one of the 15 agent callsigns. |
+| `npm run ai:commit-check` | Validates that the latest commit uses agent callsign, stable id, and required AI trailers. |
 
 ## 2. GitHub Actions Trigger
 

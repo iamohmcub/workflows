@@ -77,7 +77,7 @@ The worker should then:
 10. Create a phase log.
 11. Work only inside the current phase unless the orchestrator changes phase.
 12. For parallel MVP work, keep lane-specific phase logs and do not move repo current phase unless orchestrator sets it.
-13. Commit completed work with the correct agent id when the assigned task is done.
+13. Commit completed work with the correct agent callsign when the assigned task is done.
 
 Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.yml`.
 
@@ -128,6 +128,6 @@ npm run ai:init -- --repo-id my-service --repo-name "My Service" --phase okr --w
 npm run ai:status
 npm run ai:start -- okr
 npm run ai:start -- technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npm run ai:commit -- --agent orchestrator-agent --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
+npm run ai:commit -- --agent Conway --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npm run ai:validate
 ```

@@ -41,7 +41,7 @@ Then:
 8. Create an impact report if another role or repo is affected.
 9. Create a handoff note before moving downstream.
 10. Complete DoD item by item before handoff.
-11. Commit completed work with the correct agent id from `.ai/global/agent.positions.yml`.
+11. Commit completed work with the correct agent callsign from `.ai/global/agent.positions.yml`.
 
 Hard rules:
 
@@ -49,5 +49,5 @@ Hard rules:
 - No impact report means cross-role or cross-repo impact is not accepted.
 - No gate may pass by bulk approval.
 - CI, review, and secret scanning are required for code changes.
-- Agent commits must use `<agent-id>: <completed task summary>` and include required AI commit trailers.
+- Agent commits must use `<agent-callsign>: <completed task summary>` and include required AI commit trailers.
 - Parallel work must name MVP/work item, lane, upstream handoff, locked contracts, and dependencies.

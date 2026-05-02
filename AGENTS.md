@@ -70,31 +70,32 @@ When this `.ai` system is copied into a new project:
 
 Every agent position can commit when its assigned task is done:
 
-1. `prompter-agent`
-2. `orchestrator-agent`
-3. `product-manager-agent`
-4. `data-analyst-agent`
-5. `designer-agent`
-6. `product-owner-agent`
-7. `tech-lead-agent`
-8. `frontend-agent`
-9. `backend-agent`
-10. `security-agent`
-11. `legal-agent`
-12. `qa-agent`
-13. `devops-agent`
-14. `monitoring-agent`
-15. `auditor-agent`
+1. Agent Jobs (`prompter-agent`)
+2. Agent Conway (`orchestrator-agent`)
+3. Agent Drucker (`product-manager-agent`)
+4. Agent Nightingale (`data-analyst-agent`)
+5. Agent Rams (`designer-agent`)
+6. Agent Kano (`product-owner-agent`)
+7. Agent Turing (`tech-lead-agent`)
+8. Agent Berners (`frontend-agent`)
+9. Agent Hopper (`backend-agent`)
+10. Agent Mitnick (`security-agent`)
+11. Agent Brandeis (`legal-agent`)
+12. Agent Deming (`qa-agent`)
+13. Agent Gene (`devops-agent`)
+14. Agent Shewhart (`monitoring-agent`)
+15. Agent Holmes (`auditor-agent`)
 
 Commit subject format:
 
 ```text
-<agent-id>: <completed task summary>
+<agent-callsign>: <completed task summary>
 ```
 
 Required commit trailers:
 
 ```text
+AI-Agent-Name: <agent-callsign>
 AI-Agent: <agent-id>
 AI-Role: <role-id>
 AI-Phase: <phase-id>
@@ -104,7 +105,7 @@ AI-Evidence: <phase log, report, handoff, test, or review link>
 
 For parallel MVP/work item commits, also include `AI-Work-Item` and `AI-Lane`.
 
-Keep the real Git author account. Put the agent identity in the commit subject and trailers.
+Keep the real Git author account. Put the agent callsign and stable id in the commit subject and trailers.
 
 ## Commands
 

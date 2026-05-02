@@ -17,4 +17,4 @@ role_workspace:
       - Phase log has current evidence.
       - DoD is checked item by item.
       - Required impact reports are linked and acknowledged.
-      - Commit identity uses a valid agent id.
+      - Commit identity uses a valid agent callsign and stable id.

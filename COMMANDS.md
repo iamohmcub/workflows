@@ -138,7 +138,7 @@ Every agent position can commit when its assigned task is done:
 
 ```bash
 npm run ai:commit -- \
-  --agent frontend-agent \
+  --agent Berners \
   --message "implement checkout form" \
   --phase development \
   --mvp mvp-1 \
@@ -146,27 +146,27 @@ npm run ai:commit -- \
   --evidence ".ai/runtime/logs/2026-05-02-development-checkout-service.md"
 ```
 
-Valid agent ids:
+Valid agent names:
 
 ```text
-prompter-agent
-orchestrator-agent
-product-manager-agent
-data-analyst-agent
-designer-agent
-product-owner-agent
-tech-lead-agent
-frontend-agent
-backend-agent
-security-agent
-legal-agent
-qa-agent
-devops-agent
-monitoring-agent
-auditor-agent
+Agent Jobs        prompter-agent
+Agent Conway      orchestrator-agent
+Agent Drucker     product-manager-agent
+Agent Nightingale data-analyst-agent
+Agent Rams        designer-agent
+Agent Kano        product-owner-agent
+Agent Turing      tech-lead-agent
+Agent Berners     frontend-agent
+Agent Hopper      backend-agent
+Agent Mitnick     security-agent
+Agent Brandeis    legal-agent
+Agent Deming      qa-agent
+Agent Gene        devops-agent
+Agent Shewhart    monitoring-agent
+Agent Holmes      auditor-agent
 ```
 
-The command keeps the real Git author and writes the agent identity into the commit subject and trailers.
+The command accepts the callsign, short name, position, or stable id. It keeps the real Git author and writes the agent callsign plus stable id into the commit subject and trailers.
 
 Check the latest commit:
 
@@ -196,5 +196,5 @@ Read `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`, and `workspace.
 Apply shared standards from `.ai/workspace` before producing code, tests, or infra changes.
 Create an impact report if another role or repo is affected.
 Create a handoff note before moving to the next phase.
-Commit completed work with `npm run ai:commit -- --agent <agent-id> --message "<summary>" --evidence "<link>"`.
+Commit completed work with `npm run ai:commit -- --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"`.
 ```

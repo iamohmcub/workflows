@@ -44,8 +44,8 @@ hooks:
     actions:
       - Confirm phase log and evidence are updated.
       - Confirm impact report and handoff note exist when required.
-      - Commit with `<agent-id>: <completed task summary>`.
-      - Include AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers.
+      - Commit with `<agent-callsign>: <completed task summary>`.
+      - Include AI-Agent-Name, AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers.
 
   on_artifact_rejected:
     trigger: Artifact fails DoD or reviewer acceptance.
