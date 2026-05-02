@@ -8,8 +8,9 @@ common:
     - .ai/project.yml
   recommended_root_files:
     - README.md
-    - COMMANDS.md
     - package.json
+  optional_root_files:
+    - COMMANDS.md
   runtime_evidence:
     logs: .ai/runtime/logs
     reports: .ai/runtime/reports

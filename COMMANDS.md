@@ -12,10 +12,16 @@ Install the workflow into any repo:
 npx @iamohmcub/ai-orchestration init
 ```
 
-For only the worker-readable rulebook:
+Default init installs only the worker-readable rulebook:
 
 ```bash
-npx @iamohmcub/ai-orchestration init --minimal
+npx @iamohmcub/ai-orchestration init
+```
+
+To also install this command reference in the target repo:
+
+```bash
+npx @iamohmcub/ai-orchestration init --commands
 ```
 
 No runtime npm dependencies or project `package.json` scripts are required.

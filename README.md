@@ -17,9 +17,9 @@ npx @iamohmcub/ai-orchestration init \
   --workspace-profile web-saas
 ```
 
-This creates or updates `.ai/`, `AGENTS.md`, and `COMMANDS.md`. It does not add local scripts by default because the central package command is the runtime.
+This creates or updates `.ai/` and `AGENTS.md`. It does not add command docs or local scripts by default because the main UX is natural-language AI chat.
 
-Use `--minimal` when you only want `.ai/` and `AGENTS.md`.
+Use `--commands` when you also want `COMMANDS.md`.
 
 ## What This Repo Gives You
 
@@ -59,6 +59,12 @@ npx @iamohmcub/ai-orchestration start okr
 npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
 npx @iamohmcub/ai-orchestration commit --agent Conway --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npx @iamohmcub/ai-orchestration validate
+```
+
+Optional command docs:
+
+```bash
+npx @iamohmcub/ai-orchestration init --commands
 ```
 
 ## AI Worker Startup

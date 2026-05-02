@@ -110,6 +110,7 @@ function printHelp() {
 Usage:
   npx @iamohmcub/ai-orchestration init
   npx @iamohmcub/ai-orchestration init --repo-id checkout-service --repo-name "Checkout Service" --phase okr
+  npx @iamohmcub/ai-orchestration init --commands
   npx @iamohmcub/ai-orchestration init --with-local-cli --with-package-scripts
   npx @iamohmcub/ai-orchestration help
   npx @iamohmcub/ai-orchestration status
@@ -237,7 +238,7 @@ function scaffoldProject(options) {
     [path.join(PACKAGE_ROOT, "AGENTS.md"), path.join(ROOT, "AGENTS.md")]
   ];
 
-  if (!options.minimal) {
+  if (options.commands || options.full || options["with-commands"]) {
     items.push([path.join(PACKAGE_ROOT, "COMMANDS.md"), path.join(ROOT, "COMMANDS.md")]);
   }
 

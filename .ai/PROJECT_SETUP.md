@@ -92,9 +92,9 @@ Use .ai/templates/worker-startup-prompt.md, then continue the current phase usin
 
 ## 8. Commands and Automation
 
-Command reference:
+Optional command reference:
 
-- `COMMANDS.md`
+- `COMMANDS.md` when installed with `--commands`
 
 Automation trigger reference:
 
