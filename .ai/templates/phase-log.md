@@ -43,6 +43,8 @@ Gate:
 
 ## Evidence
 
+- Branch:
+- PR / MR:
 - Tests:
 - Review:
 - Security:
@@ -71,6 +73,7 @@ Gate:
 
 - Agent name:
 - Agent id:
+- Feature:
 - Commit:
 - Evidence linked:
 

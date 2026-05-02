@@ -45,7 +45,43 @@ hooks:
       - Confirm phase log and evidence are updated.
       - Confirm impact report and handoff note exist when required.
       - Commit with `<agent-callsign>: <completed task summary>`.
-      - Include AI-Agent-Name, AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers.
+      - Include AI-Agent-Name, AI-Agent, AI-Role, AI-Phase, AI-Feature, AI-Task-Done, and AI-Evidence trailers.
+
+  on_branch_created:
+    trigger: A feature, fix, hotfix, chore, docs, test, refactor, or workflow branch is created.
+    actions:
+      - Confirm base branch, feature or work item, owner role, and lane.
+      - Link branch name in the phase log when work starts.
+      - Keep branch metadata aligned with commit trailers.
+
+  on_change_request_opened:
+    trigger: A pull request or merge request is opened.
+    actions:
+      - Link phase log, tests, impact reports, handoffs, and decisions.
+      - Route reviewers with the routing matrix.
+      - Mark draft PR/MR as not mergeable until evidence is complete.
+
+  on_change_request_reviewed:
+    trigger: A reviewer approves, comments, requests changes, or blocks a PR/MR.
+    actions:
+      - Record reviewer role and decision.
+      - Return requested changes to the owner with itemized feedback.
+      - Block approval when required evidence, checks, or impact acknowledgement is missing.
+
+  on_change_request_merged:
+    trigger: A PR/MR is merged.
+    actions:
+      - Confirm approvals, CI, tests, secret scan, and impact acknowledgements.
+      - Update phase log with PR/MR link and merge result.
+      - Start downstream handoff when merge unlocks another role or lane.
+
+  on_merge_conflict_detected:
+    trigger: A branch, PR, MR, rebase, or merge has conflicts.
+    actions:
+      - Identify changed files, file owners, domain owners, branch owners, and impacted contracts.
+      - Route domain decisions to the owning role and unresolved process conflict to orchestrator.
+      - Record conflict decision and rerun impacted tests.
+      - Create or update impact report when contract behavior changes.
 
   on_artifact_rejected:
     trigger: Artifact fails DoD or reviewer acceptance.

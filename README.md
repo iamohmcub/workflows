@@ -35,6 +35,7 @@ Copy this into a project and the AI worker gets:
 - `.ai/global/event.contract.yml`: portable event trigger contract for humans, AI workers, CLIs, plugins, and local runners.
 - `.ai/global/trigger.words.yml`: natural-language trigger guide for mapping chat requests to workflow events.
 - `.ai/global/routing.matrix.yml`: RACI-style routing for phase work and impact types.
+- `.ai/global/git.collaboration.yml`: provider-neutral branch, PR/MR, review, approval, merge, and conflict workflow.
 - `.ai/global/parallel.delivery.yml`: MVP/work item lanes so product, design, engineering, QA, release, and learning can move in parallel.
 - `.ai/runtime/state.yml`: project runtime context that can change per repo or sprint.
 - `npx @iamohmcub/ai-orchestration`: central CLI for init, status, phase logs, impact reports, handoffs, agent commits, and validation.
@@ -58,7 +59,7 @@ npx @iamohmcub/ai-orchestration init \
 npx @iamohmcub/ai-orchestration status
 npx @iamohmcub/ai-orchestration start okr
 npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npx @iamohmcub/ai-orchestration commit --agent Conway --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration commit --agent Conway --feature checkout --message "route checkout idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npx @iamohmcub/ai-orchestration validate
 ```
 
@@ -73,7 +74,20 @@ npx @iamohmcub/ai-orchestration init --commands
 Use [.ai/templates/worker-startup-prompt.md](.ai/templates/worker-startup-prompt.md)
 as the single startup prompt. It points workers to the manifest, runtime state,
 provider-neutral worker contract, event contract, trigger words, routing matrix,
-role modules, workspace standards, logs, reports, handoffs, and commit rule.
+Git collaboration policy, role modules, workspace standards, logs, reports,
+handoffs, and commit rule.
+
+## Git Collaboration
+
+The workflow understands parallel Git work across GitHub pull requests, GitLab
+merge requests, or equivalent change requests:
+
+- Create a dedicated branch for feature, fix, hotfix, chore, docs, test, refactor, or workflow work.
+- Open a PR/MR with phase log, evidence, tests, impact reports, handoffs, and decisions linked.
+- Route reviewers from `.ai/global/routing.matrix.yml`.
+- Do not self-approve as the only reviewer.
+- Merge only after approval, CI, tests, lint, secret scan, and impact acknowledgement pass.
+- Resolve conflicts by routing file/domain decisions to owners, recording evidence, and rerunning impacted tests.
 
 ## Portable Runtime Model
 

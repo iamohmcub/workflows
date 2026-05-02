@@ -11,16 +11,21 @@ rules:
   - Support English, Thai, and mixed Thai-English prompts.
   - Prefer creating required runtime evidence over asking the user to run a command.
   - Ask a short clarifying question only when the phase, role, work item, or target owner cannot be inferred.
-  - If multiple triggers match, choose the highest-risk workflow first: incident, secret, impact, bug, gate, handoff, phase, status.
+  - If multiple triggers match, choose the highest-risk workflow first: incident, secret, impact, conflict, bug, review, merge, gate, handoff, branch, phase, status.
   - Never skip gates, reports, handoffs, tests, reviews, or security checks because the user used casual wording.
 
 priority_order:
   - secret.detected
   - incident.detected
   - impact.detected
+  - merge_conflict.detected
   - bug.detected
+  - change_request.reviewed
+  - change_request.merged
+  - change_request.opened
   - gate.review
   - handoff.created
+  - branch.created
   - phase.started
   - lane.started
   - agent.task_done
@@ -175,6 +180,148 @@ triggers:
       - Create a handoff note.
       - Include done, not done, risks, evidence, and DoD status.
 
+  branch.created:
+    intent: Create or switch to a dedicated branch for feature, fix, hotfix, chore, docs, test, refactor, or workflow work.
+    maps_to_event: branch.created
+    maps_to_hook: on_branch_created
+    words:
+      en:
+        - create branch
+        - new branch
+        - checkout branch
+        - branch for feature
+        - split branch
+        - work in parallel branch
+      th:
+        - แตก branch
+        - สร้าง branch
+        - เปิด branch
+        - branch ฟีเจอร์
+        - แยก branch
+        - ทำ branch ขนาน
+    required_context:
+      - feature_or_work_item
+      - base_branch
+    expected_action:
+      - Create or switch to a dedicated working branch.
+      - Link branch name in the phase log.
+      - Follow `.ai/global/git.collaboration.yml`.
+
+  change_request.opened:
+    intent: Open a pull request or merge request for review.
+    maps_to_event: change_request.opened
+    maps_to_hook: on_change_request_opened
+    words:
+      en:
+        - open pr
+        - create pr
+        - open pull request
+        - create pull request
+        - open mr
+        - create mr
+        - open merge request
+        - ready for code review
+      th:
+        - เปิด pr
+        - สร้าง pr
+        - เปิด pull request
+        - เปิด mr
+        - สร้าง mr
+        - เปิด merge request
+        - ส่ง code review
+    required_context:
+      - branch
+      - base_branch
+      - evidence
+    expected_action:
+      - Link phase log, tests, impact reports, handoffs, and decisions.
+      - Route reviewers with `.ai/global/routing.matrix.yml`.
+      - Mark draft PR/MR as not mergeable until evidence is complete.
+
+  change_request.reviewed:
+    intent: Review, approve, request changes, or block a pull request or merge request.
+    maps_to_event: change_request.reviewed
+    maps_to_hook: on_change_request_reviewed
+    words:
+      en:
+        - review pr
+        - approve pr
+        - request changes
+        - review mr
+        - approve mr
+        - block merge
+        - code review
+      th:
+        - review pr
+        - approve pr
+        - ขอแก้
+        - review mr
+        - approve mr
+        - block merge
+        - ตรวจ code
+    required_context:
+      - change_request_url
+      - reviewer_role
+      - review_decision
+    expected_action:
+      - Check role-specific evidence and required checks.
+      - Do not self-approve as the only reviewer.
+      - Record approval, comments, requested changes, or block reason.
+
+  change_request.merged:
+    intent: Merge an approved pull request or merge request.
+    maps_to_event: change_request.merged
+    maps_to_hook: on_change_request_merged
+    words:
+      en:
+        - merge pr
+        - merge pull request
+        - merge mr
+        - merge merge request
+        - squash merge
+        - ready to merge
+      th:
+        - merge pr
+        - รวม pr
+        - merge mr
+        - รวม mr
+        - squash merge
+        - พร้อม merge
+    required_context:
+      - change_request_url
+      - approvals
+      - checks
+    expected_action:
+      - Confirm approvals, CI, tests, lint, secret scan, and impact acknowledgements.
+      - Merge only when `.ai/global/git.collaboration.yml` merge policy passes.
+      - Update phase log and downstream handoff when needed.
+
+  merge_conflict.detected:
+    intent: Resolve a branch, pull request, merge request, rebase, or merge conflict.
+    maps_to_event: merge_conflict.detected
+    maps_to_hook: on_merge_conflict_detected
+    words:
+      en:
+        - conflict
+        - merge conflict
+        - rebase conflict
+        - resolve conflict
+        - fix conflict
+      th:
+        - conflict
+        - merge conflict
+        - ชนกัน
+        - แก้ conflict
+        - rebase conflict
+    required_context:
+      - branch
+      - base_branch
+      - conflicted_files
+    expected_action:
+      - Identify file owners, domain owners, branch owners, and impacted contracts.
+      - Route domain decisions to owning roles and unresolved process conflict to orchestrator.
+      - Rerun impacted tests and update impact reports when contracts change.
+
   bug.detected:
     intent: Report a defect, failed test, regression, or broken behavior.
     maps_to_event: bug.detected
@@ -282,10 +429,12 @@ triggers:
         - พร้อม commit
     required_context:
       - agent
+      - feature
       - summary
       - evidence
     expected_action:
       - Verify evidence exists.
+      - Name the feature, capability, bug, incident, or workflow area.
       - Commit with real Git author and agent trailers when requested.
 
   status.requested:

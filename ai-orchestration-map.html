@@ -437,6 +437,7 @@
         <a href="#parallel">Parallel</a>
         <a href="#roles">Roles</a>
         <a href="#commits">Commits</a>
+        <a href="#git-collab">Git</a>
         <a href="#reports">Reports</a>
         <a href="#commands">Commands</a>
       </nav>
@@ -811,8 +812,45 @@
           <li>`Agent Kano`, `Agent Turing`, `Agent Berners`, `Agent Hopper`, `Agent Mitnick`</li>
           <li>`Agent Brandeis`, `Agent Deming`, `Agent Gene`, `Agent Shewhart`, `Agent Holmes`</li>
           <li>Subject format: `<agent-callsign>: <completed task summary>`</li>
-          <li>Required trailers: `AI-Agent-Name`, `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, `AI-Evidence`</li>
+          <li>Required trailers: `AI-Agent-Name`, `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Feature`, `AI-Task-Done`, `AI-Evidence`</li>
+          <li>`AI-Feature` names the feature, capability, bug, incident, or workflow area being completed.</li>
           <li>Git author remains the real account. Agent identity lives in the subject and trailers.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="git-collab">
+      <div class="section-title">
+        <h2>Branch, PR/MR, Review, Merge</h2>
+        <p>Parallel work is isolated by branch and integrated through provider-neutral change requests: GitHub PR, GitLab MR, or equivalent.</p>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Branch and PR/MR</h3>
+          <ul class="rule-list">
+            <li>Create a dedicated branch for feature, fix, hotfix, chore, docs, test, refactor, or workflow work.</li>
+            <li>Branch names include the feature or work item when known.</li>
+            <li>Open a PR/MR when ready for review or early feedback.</li>
+            <li>PR/MR links phase log, evidence, tests, impact reports, handoffs, and decisions.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Review and Merge</h3>
+          <ul class="rule-list">
+            <li>Reviewers come from `.ai/global/routing.matrix.yml`.</li>
+            <li>No self-approval as the only reviewer.</li>
+            <li>Merge requires approval, green CI, tests, lint, secret scan, and impact acknowledgement.</li>
+            <li>After merge, update the phase log and trigger downstream handoff when another lane is unlocked.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel" style="margin-top: 14px;">
+        <h3>Conflict Handling</h3>
+        <ul class="rule-list">
+          <li>Identify conflicted files, file owners, domain owners, branch owners, feature/work item, and impacted contracts.</li>
+          <li>The role owning the conflicted code decides domain behavior; orchestrator resolves process conflict.</li>
+          <li>Do not choose one side silently. Record the decision and preserve both intents when possible.</li>
+          <li>Rerun impacted tests and create or update an impact report when API, data, UI, infra, security, release, or customer expectations change.</li>
         </ul>
       </div>
     </section>
@@ -860,6 +898,7 @@
             <li>`API เปลี่ยน กระทบ QA` creates an impact report and routes acknowledgement.</li>
             <li>`ส่งให้ QA` creates a handoff note.</li>
             <li>`Agent Berners ตรวจ iPad landscape` routes directly to the frontend role.</li>
+            <li>`เปิด PR`, `approve PR`, `merge MR`, or `แก้ conflict` follows the Git collaboration policy.</li>
           </ul>
         </div>
         <div class="panel">
@@ -871,7 +910,7 @@
             <li>`npx @iamohmcub/ai-orchestration trigger on_phase_start --phase okr`</li>
             <li>`npx @iamohmcub/ai-orchestration impact --title "API changed"`</li>
             <li>`npx @iamohmcub/ai-orchestration handoff --from product-manager --to ux-designer`</li>
-            <li>`npx @iamohmcub/ai-orchestration commit --agent Berners --message "implement UI" --evidence "<link>"`</li>
+            <li>`npx @iamohmcub/ai-orchestration commit --agent Berners --feature checkout --message "implement UI" --evidence "<link>"`</li>
             <li>`npx @iamohmcub/ai-orchestration commit-check`</li>
           </ul>
         </div>
@@ -920,6 +959,7 @@
             <li>Cross-role impact requires a report.</li>
             <li>Cross-repo impact requires a group report.</li>
             <li>Orchestrator resolves unresolved conflicts.</li>
+            <li>PR/MR approval and merge require reviewer, check, and evidence gates.</li>
             <li>P0 and P1 incidents require post-mortems within 24 hours.</li>
           </ul>
         </div>

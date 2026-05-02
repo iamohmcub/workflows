@@ -48,6 +48,7 @@ execution_contract:
     - Keep decisions traceable to OKR, acceptance criteria, ticket, incident, or explicit user request.
     - Create or update phase logs, impact reports, decisions, and handoffs when the rules require them.
     - Use the routing matrix to decide which roles must be consulted or notified.
+    - Use Git collaboration policy for branch, PR/MR, review, approval, merge, and conflict work.
     - Stop and report when a gate, dependency, security rule, legal rule, or locked contract blocks progress.
     - Keep the real Git author account and record the agent callsign in commit metadata.
 
@@ -62,6 +63,8 @@ output_contract:
     - handoff_note
     - impact_report
     - decision_log
+    - change_request_link
+    - review_or_merge_evidence
     - commit_trailers
 
 adapter_boundary:

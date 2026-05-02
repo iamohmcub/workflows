@@ -1,0 +1,143 @@
+version: 1
+scope: provider_neutral_git_collaboration
+
+principle: >
+  Parallel delivery needs isolated branches, reviewable pull/merge requests,
+  explicit approval, clean merge evidence, and conflict handling that preserves
+  role ownership.
+
+terms:
+  pull_request: GitHub pull request, Bitbucket pull request, or equivalent.
+  merge_request: GitLab merge request or equivalent.
+  change_request: Pull request or merge request.
+  base_branch: The protected target branch, normally main, develop, release/*, or hotfix/*.
+  working_branch: The feature, fix, hotfix, chore, docs, or workflow branch where work happens.
+
+branch_policy:
+  default_base_branch: main
+  branch_name_format: "<type>/<feature-or-work-item>-<short-summary>"
+  allowed_types:
+    - feature
+    - fix
+    - hotfix
+    - chore
+    - docs
+    - test
+    - refactor
+    - workflow
+  rules:
+    - Create a dedicated branch before code or workflow changes when work can run in parallel.
+    - Use one branch per feature, bug, incident, workflow change, or work item unless the orchestrator approves a bundle.
+    - Do not commit directly to protected branches except documented emergency policy.
+    - Branch names should include the feature or work item when known.
+    - For parallel MVP or lane work, branch metadata must match `AI-Feature`, `AI-Work-Item`, and `AI-Lane` commit trailers where possible.
+
+change_request_policy:
+  required_before_merge:
+    - phase_log
+    - linked_evidence
+    - passing_ci
+    - peer_review
+    - secret_scan
+    - impact_reports_acknowledged_or_risk_accepted
+    - conflicts_resolved
+  description_must_include:
+    - summary
+    - feature_or_work_item
+    - phase
+    - owner_agent_or_role
+    - test_evidence
+    - impact_check
+    - rollout_or_rollback_note_when_relevant
+  rules:
+    - Open a PR/MR when a branch is ready for review or when early feedback is needed.
+    - Draft PR/MR is allowed for work in progress, but it cannot merge.
+    - Link phase logs, impact reports, handoffs, tests, reviews, and decisions from the PR/MR.
+    - If the PR/MR changes API, data, security, deployment, legal, or customer contracts, route reviewers with `.ai/global/routing.matrix.yml`.
+    - No self-approval. The implementer cannot be the only approver.
+
+review_policy:
+  reviewer_selection:
+    - Use `.ai/global/routing.matrix.yml` to find responsible, consulted, and informed roles.
+    - Tech Lead reviews architecture-sensitive changes.
+    - Frontend reviews UI/client changes.
+    - Backend reviews API/data/auth changes.
+    - QA reviews test coverage and regression risk.
+    - Security reviews trust boundary, auth, secret, dependency, and production-risk changes.
+    - DevOps reviews CI/CD, environment, release, rollback, or infra changes.
+    - Legal Compliance reviews privacy, license, regulated, consent, or customer commitment changes.
+  approval_rules:
+    - Approval means the reviewer checked the role-relevant checklist and evidence.
+    - Approval must not happen while required CI, tests, secret scan, or impact acknowledgement is missing.
+    - Requested changes return work to the owner role with itemized feedback.
+    - The process auditor may verify evidence and block gates but should not approve specialist implementation as the only reviewer.
+
+merge_policy:
+  allowed_merge_methods:
+    - squash
+    - merge_commit
+    - rebase_merge
+  preferred_method: squash
+  merge_allowed_when:
+    - PR/MR is approved by required reviewers.
+    - CI, tests, lint, and secret scanning pass.
+    - Required impact reports are acknowledged or orchestrator accepts the risk.
+    - Release, rollback, and monitoring evidence exists when the change reaches deployable code.
+    - Branch is up to date with the protected base branch or conflicts are resolved.
+  after_merge_required:
+    - Update phase log with PR/MR link and merge result.
+    - Move completed event records to history when a runner exists.
+    - Delete working branch unless the repo policy keeps release or long-lived branches.
+    - Start or update downstream handoff when the merge unlocks another role or lane.
+
+conflict_policy:
+  owner: orchestrator
+  rules:
+    - Conflict resolution starts by identifying changed files, owning roles, branch owners, feature/work item, and impacted contracts.
+    - The role owning the conflicted code decides domain behavior.
+    - The orchestrator resolves process or ownership conflict when roles disagree.
+    - Do not choose one side silently. Preserve both intents when possible and record the decision.
+    - Re-run impacted tests after conflict resolution.
+    - If conflict changes API, data, UI state, infra, or release expectation, create or update an impact report.
+  required_evidence:
+    - conflict_summary
+    - files_resolved
+    - owner_decision
+    - tests_rerun
+    - impact_report_or_no_impact_note
+
+events:
+  branch.created:
+    hook: on_branch_created
+    required_outputs:
+      - branch_name
+      - base_branch
+      - feature_or_work_item
+
+  change_request.opened:
+    hook: on_change_request_opened
+    required_outputs:
+      - pr_or_mr_link
+      - reviewers
+      - evidence_links
+
+  change_request.reviewed:
+    hook: on_change_request_reviewed
+    required_outputs:
+      - review_decision
+      - reviewer_role
+      - findings_or_approval_note
+
+  change_request.merged:
+    hook: on_change_request_merged
+    required_outputs:
+      - merge_link
+      - merge_method
+      - phase_log_update
+
+  merge_conflict.detected:
+    hook: on_merge_conflict_detected
+    required_outputs:
+      - conflict_summary
+      - owner_route
+      - resolution_evidence

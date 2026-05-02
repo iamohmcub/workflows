@@ -15,12 +15,14 @@ commit_policy:
     - AI-Agent
     - AI-Role
     - AI-Phase
+    - AI-Feature
     - AI-Task-Done
     - AI-Evidence
   optional_parallel_trailers:
     - AI-Work-Item
     - AI-Lane
   task_done_value: "yes"
+  feature_rule: Every done commit must name the feature, capability, bug, incident, or workflow area it belongs to.
   author_rule: Keep the real Git author account. Put agent callsign and stable id in the commit subject and trailers.
 
 positions:

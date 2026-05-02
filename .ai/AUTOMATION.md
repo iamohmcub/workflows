@@ -12,8 +12,8 @@ npx @iamohmcub/ai-orchestration trigger on_phase_start --phase okr
 npx @iamohmcub/ai-orchestration trigger on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
 npx @iamohmcub/ai-orchestration trigger on_impact_detected --title "API contract changed" --phase technical-design
 npx @iamohmcub/ai-orchestration trigger on_bug_detected --title "Checkout payment failure" --phase qa-testing --severity P1
-npx @iamohmcub/ai-orchestration trigger on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
-npx @iamohmcub/ai-orchestration commit --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration trigger on_agent_task_done --agent Berners --feature checkout --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration commit --agent Berners --feature checkout --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 npx @iamohmcub/ai-orchestration commit-check
 ```
 
@@ -32,8 +32,8 @@ Agent commit commands:
 
 | Command | Behavior |
 | --- | --- |
-| `npx @iamohmcub/ai-orchestration commit` | Creates a Git commit for a done task using one of the 15 agent callsigns. |
-| `npx @iamohmcub/ai-orchestration commit-check` | Validates that the latest commit uses agent callsign, stable id, and required AI trailers. |
+| `npx @iamohmcub/ai-orchestration commit` | Creates a Git commit for a done task using one of the 15 agent callsigns and a required feature name. |
+| `npx @iamohmcub/ai-orchestration commit-check` | Validates that the latest commit uses agent callsign, stable id, feature, and required AI trailers. |
 
 ## 2. GitHub Actions Trigger
 

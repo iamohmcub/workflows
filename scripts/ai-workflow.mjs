@@ -16,6 +16,7 @@ const WORKER_CONTRACT_FILE = path.join(AI_DIR, "global", "worker.contract.yml");
 const EVENT_CONTRACT_FILE = path.join(AI_DIR, "global", "event.contract.yml");
 const TRIGGER_WORDS_FILE = path.join(AI_DIR, "global", "trigger.words.yml");
 const ROUTING_MATRIX_FILE = path.join(AI_DIR, "global", "routing.matrix.yml");
+const GIT_COLLABORATION_FILE = path.join(AI_DIR, "global", "git.collaboration.yml");
 const RUNTIME_DIR = path.join(AI_DIR, "runtime");
 const RUNTIME_STATE_FILE = path.join(RUNTIME_DIR, "state.yml");
 const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
@@ -39,6 +40,7 @@ const REQUIRED_FILES = [
   ".ai/global/event.contract.yml",
   ".ai/global/trigger.words.yml",
   ".ai/global/routing.matrix.yml",
+  ".ai/global/git.collaboration.yml",
   ".ai/global/parallel.delivery.yml",
   ".ai/global/sdlc.phases.yml",
   ".ai/runtime/state.yml"
@@ -124,7 +126,7 @@ Usage:
   npx @iamohmcub/ai-orchestration trigger on_impact_detected --title "Analytics contract changed" --phase prd --affected-roles data-analyst,backend-engineer
   npx @iamohmcub/ai-orchestration impact --title "API contract changed" --phase technical-design --severity P2
   npx @iamohmcub/ai-orchestration handoff --from product-manager --to ux-designer --phase okr
-  npx @iamohmcub/ai-orchestration commit --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  npx @iamohmcub/ai-orchestration commit --agent Berners --feature checkout --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
   npx @iamohmcub/ai-orchestration commit-check
   npx @iamohmcub/ai-orchestration validate
 
@@ -155,7 +157,7 @@ Next commands:
   ${PACKAGE_COMMAND} start ${project.currentPhase}
   ${PACKAGE_COMMAND} start ${project.currentPhase} --mvp <mvp-id> --lane ${defaultLaneForPhase(project.currentPhase)}
   ${PACKAGE_COMMAND} trigger on_phase_start --phase ${project.currentPhase}
-  ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
+  ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --feature <feature-name> --message "<summary>" --evidence "<link>"
   ${PACKAGE_COMMAND} validate
 `);
 }
@@ -381,6 +383,7 @@ Answer:
 
 - Agent name:
 - Agent id:
+- Feature:
 - Commit:
 - Evidence linked:
 
@@ -418,7 +421,7 @@ Next:
   Read .ai/role/${phase.owner}/workspace.yml
   Complete DoD item by item
   Run ${PACKAGE_COMMAND} impact --title "<title>" if another role or repo is affected
-  Run ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --message "<summary>" --evidence "<link>" when the task is done
+  Run ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --feature <feature-name> --message "<summary>" --evidence "<link>" when the task is done
   Keep upstream lanes moving when handoff contracts are locked and dependencies are clear
 `);
 }
@@ -434,14 +437,14 @@ function trigger(argv) {
   on_parallel_lane_start -> ${PACKAGE_COMMAND} start <phase> --mvp <mvp-id> --lane <lane>
   on_impact_detected   -> ${PACKAGE_COMMAND} impact --title "<title>"
   on_bug_detected      -> ${PACKAGE_COMMAND} impact --title "<bug title>" --severity P1
-  on_agent_task_done   -> ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --message "<summary>" --evidence "<link>"
+  on_agent_task_done   -> ${PACKAGE_COMMAND} commit --agent <agent-name-or-id> --feature <feature-name> --message "<summary>" --evidence "<link>"
 
 Usage patterns:
   ${PACKAGE_COMMAND} trigger on_project_init
   ${PACKAGE_COMMAND} trigger on_phase_start --phase okr
   ${PACKAGE_COMMAND} trigger on_parallel_lane_start --phase technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
   ${PACKAGE_COMMAND} trigger on_impact_detected --title "Analytics contract changed" --phase okr --affected-roles data-analyst
-  ${PACKAGE_COMMAND} trigger on_agent_task_done --agent Berners --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
+  ${PACKAGE_COMMAND} trigger on_agent_task_done --agent Berners --feature checkout --message "implement checkout form" --evidence ".ai/runtime/logs/<phase-log>.md"
 `);
     return;
   }
@@ -656,8 +659,10 @@ function commitAsAgent(argv) {
   const agentInput = options.agent || options["agent-id"];
   const message = options.message;
   const evidence = options.evidence;
+  const feature = options.feature || options.capability || options.area;
 
   if (!agentInput) fail('Missing --agent <callsign, short name, position, or stable id>');
+  if (!feature) fail("Missing --feature <feature, capability, bug, incident, or workflow area>");
   if (!message) fail('Missing --message "completed task summary"');
   if (!evidence) fail("Missing --evidence <phase log, report, handoff, test, or review link>");
 
@@ -685,6 +690,7 @@ ${agents.map((item) => `  ${item.name} (${item.id})`).join("\n")}
     `AI-Agent: ${agent.id}`,
     `AI-Role: ${role}`,
     `AI-Phase: ${phase}`,
+    `AI-Feature: ${feature}`,
     workItem ? `AI-Work-Item: ${workItem}` : "",
     lane ? `AI-Lane: ${lane}` : "",
     "AI-Task-Done: yes",
@@ -716,7 +722,7 @@ function commitCheck(argv) {
   }
 
   const trailers = parseTrailers(body);
-  const required = ["AI-Agent-Name", "AI-Agent", "AI-Role", "AI-Phase", "AI-Task-Done", "AI-Evidence"];
+  const required = ["AI-Agent-Name", "AI-Agent", "AI-Role", "AI-Phase", "AI-Feature", "AI-Task-Done", "AI-Evidence"];
 
   for (const key of required) {
     if (!trailers[key]) errors.push(`Missing commit trailer: ${key}`);
@@ -732,6 +738,10 @@ function commitCheck(argv) {
 
   if (trailers["AI-Task-Done"] && trailers["AI-Task-Done"].toLowerCase() !== "yes") {
     errors.push('AI-Task-Done must be "yes" for agent done commits.');
+  }
+
+  if (["", "tbd", "todo", "none", "n/a"].includes(String(trailers["AI-Feature"] || "").toLowerCase())) {
+    errors.push("AI-Feature must name the feature, capability, bug, incident, or workflow area, not a placeholder.");
   }
 
   if (["tbd", "todo", "none", "n/a"].includes(String(trailers["AI-Evidence"] || "").toLowerCase())) {
@@ -752,6 +762,7 @@ ${errors.map((item) => `- ${item}`).join("\n")}
 Agent: ${agent.name} (${agent.id})
 Role:  ${trailers["AI-Role"]}
 Phase: ${trailers["AI-Phase"]}
+Feature: ${trailers["AI-Feature"]}
 `);
 }
 

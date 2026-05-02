@@ -165,6 +165,7 @@ Every agent position can commit when its assigned task is done:
 ```bash
 npx @iamohmcub/ai-orchestration commit \
   --agent Berners \
+  --feature checkout \
   --message "implement checkout form" \
   --phase development \
   --mvp mvp-1 \
@@ -192,13 +193,38 @@ Agent Shewhart    monitoring-agent
 Agent Holmes      auditor-agent
 ```
 
-The command accepts the callsign, short name, position, or stable id. It keeps the real Git author and writes the agent callsign plus stable id into the commit subject and trailers.
+The command accepts the callsign, short name, position, or stable id. It keeps the real Git author and writes the agent callsign, stable id, feature, phase, and evidence into the commit subject and trailers.
 
 Check the latest commit:
 
 ```bash
 npx @iamohmcub/ai-orchestration commit-check
 ```
+
+## Branch, PR/MR, Review, and Merge
+
+These are primarily chat/provider actions, not local CLI-only commands. The AI
+worker follows `.ai/global/git.collaboration.yml`.
+
+Natural-language examples:
+
+```text
+แตก branch สำหรับ checkout mvp-1
+เปิด PR จาก feature/checkout-form ไป main
+review PR นี้ในฐานะ frontend
+approve PR ถ้า evidence ครบ
+merge PR นี้ถ้า checks ผ่าน
+แก้ merge conflict ระหว่าง feature/checkout กับ main
+```
+
+Expected behavior:
+
+- Branch names include the feature or work item when known.
+- PR/MR descriptions link phase logs, tests, impact reports, handoffs, and decisions.
+- Reviewers are selected from `.ai/global/routing.matrix.yml`.
+- Approval requires role-specific evidence and cannot be self-approval only.
+- Merge requires approval, green checks, secret scan, impact acknowledgement, and no unresolved conflict.
+- Conflict resolution records owner decision, files resolved, tests rerun, and impact report when contracts change.
 
 ## Validate
 

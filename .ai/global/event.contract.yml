@@ -34,6 +34,13 @@ optional_fields:
   - upstream_handoff
   - locked_contracts
   - dependencies
+  - branch
+  - base_branch
+  - change_request_url
+  - reviewers
+  - review_decision
+  - merge_method
+  - conflicted_files
   - due_date
   - payload
 
@@ -94,6 +101,46 @@ event_types:
       - evidence_link
       - agent_commit
 
+  branch.created:
+    maps_to_hook: on_branch_created
+    owner: source_role
+    required_outputs:
+      - branch_name
+      - base_branch
+      - feature_or_work_item
+
+  change_request.opened:
+    maps_to_hook: on_change_request_opened
+    owner: source_role
+    required_outputs:
+      - pr_or_mr_link
+      - reviewer_route
+      - evidence_links
+
+  change_request.reviewed:
+    maps_to_hook: on_change_request_reviewed
+    owner: reviewer_role
+    required_outputs:
+      - review_decision
+      - findings_or_approval_note
+
+  change_request.merged:
+    maps_to_hook: on_change_request_merged
+    owner: merger_role
+    required_outputs:
+      - merge_link
+      - merge_method
+      - phase_log_update
+
+  merge_conflict.detected:
+    maps_to_hook: on_merge_conflict_detected
+    owner: orchestrator
+    required_outputs:
+      - conflict_summary
+      - owner_route
+      - tests_rerun
+      - resolution_evidence
+
   incident.resolved:
     maps_to_hook: on_incident_resolved
     owner: devops-platform
@@ -106,6 +153,7 @@ processing_rules:
   - Use `.ai/global/trigger.words.yml` to map natural-language chat requests into event types.
   - Validate required fields before acting.
   - Route target and impacted roles with `.ai/global/routing.matrix.yml`.
+  - Use `.ai/global/git.collaboration.yml` for branch, PR/MR, review, merge, and conflict events.
   - Create required runtime evidence before marking an event complete.
   - Move completed event records from queue to history if a runner is present.
   - If no runner is present, the AI worker must still follow the same event contract manually.

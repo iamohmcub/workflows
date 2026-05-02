@@ -38,9 +38,17 @@ communication:
 source_control:
   COMMIT-001: "Every agent position can commit when its assigned task is done."
   COMMIT-002: "Commit subject must start with the agent callsign, for example `Agent Berners: implement checkout form`."
-  COMMIT-003: "Commit body must include AI-Agent-Name, AI-Agent, AI-Role, AI-Phase, AI-Task-Done, and AI-Evidence trailers."
+  COMMIT-003: "Commit body must include AI-Agent-Name, AI-Agent, AI-Role, AI-Phase, AI-Feature, AI-Task-Done, and AI-Evidence trailers."
   COMMIT-004: "Keep the real Git author account. Put agent callsign and stable id in commit metadata."
   COMMIT-005: "Do not commit unfinished work as done. If work is partial, write a handoff or impact report instead."
+  COMMIT-006: "Every done commit must name the feature, capability, bug, incident, or workflow area in AI-Feature."
+  BRANCH-001: "Use a dedicated branch for parallel feature, fix, hotfix, chore, docs, test, refactor, or workflow work."
+  BRANCH-002: "Branch names should include the feature or work item when known."
+  PRMR-001: "Open a PR/MR before merge and link phase log, evidence, tests, impact reports, and handoffs when relevant."
+  PRMR-002: "No self-approval. Required reviewers must match ownership and impact."
+  PRMR-003: "Do not merge until CI, tests, lint, secret scan, review, and required impact acknowledgements are complete."
+  MERGE-001: "Merge conflicts must be routed to file and domain owners, resolved with evidence, and retested."
+  MERGE-002: "If conflict resolution changes API, data, UI state, infra, security, release, or customer expectations, update or create an impact report."
 
 incident:
   INC-001: P0 and P1 incidents require post-mortems within 24 hours.

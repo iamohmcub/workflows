@@ -16,9 +16,10 @@ Before making changes:
 10. Read `.ai/global/routing.matrix.yml`.
 11. Read `.ai/global/agent.positions.yml`.
 12. Read `.ai/global/parallel.delivery.yml`.
-13. Read `.ai/workspace/workspace.yml`.
-14. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
-15. Follow the manifest `load_order`.
+13. Read `.ai/global/git.collaboration.yml`.
+14. Read `.ai/workspace/workspace.yml`.
+15. Read `.ai/workspace/stacks.yml`, `.ai/workspace/code-style.yml`, `.ai/workspace/project-structure.yml`, `.ai/workspace/tools.yml`, and `.ai/workspace/qa-process.yml`.
+16. Follow the manifest `load_order`.
 
 Identify:
 
@@ -45,10 +46,11 @@ Then:
 7. Work only inside the current phase unless the orchestrator changes phase.
 8. For parallel MVP work, keep a lane-specific phase log and do not move repo current phase unless the orchestrator sets it.
 9. Use `.ai/global/routing.matrix.yml` to identify responsible, consulted, and informed roles.
-10. Create an impact report if another role, repo, lane, API, data contract, environment, security boundary, or customer commitment is affected.
-11. Create a handoff note before moving downstream.
-12. Complete DoD item by item before handoff.
-13. Commit completed work with the correct agent callsign from `.ai/global/agent.positions.yml`.
+10. Use `.ai/global/git.collaboration.yml` for branch, PR/MR, review, approval, merge, and conflict work.
+11. Create an impact report if another role, repo, lane, API, data contract, environment, security boundary, or customer commitment is affected.
+12. Create a handoff note before moving downstream.
+13. Complete DoD item by item before handoff.
+14. Commit completed work with the correct agent callsign from `.ai/global/agent.positions.yml`.
 
 Hard rules:
 
@@ -56,7 +58,8 @@ Hard rules:
 - No impact report means cross-role or cross-repo impact is not accepted.
 - No gate may pass by bulk approval.
 - CI, review, and secret scanning are required for code changes.
-- Agent commits must use `<agent-callsign>: <completed task summary>` and include required AI commit trailers.
+- Dedicated branches, PR/MR review, approval, merge, and conflict handling follow `.ai/global/git.collaboration.yml`.
+- Agent commits must use `<agent-callsign>: <completed task summary>` and include required AI commit trailers, including `AI-Feature`.
 - Parallel work must name MVP/work item, lane, upstream handoff, locked contracts, and dependencies.
 - Natural-language trigger words are enough. Commands are internal tools and fallback, not the main user experience.
 - `.ai` is provider-neutral. Adapters and plugins are optional engines, not the source of truth.

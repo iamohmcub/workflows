@@ -41,6 +41,7 @@ load_order:
   - .ai/global/event.contract.yml
   - .ai/global/trigger.words.yml
   - .ai/global/routing.matrix.yml
+  - .ai/global/git.collaboration.yml
   - .ai/global/parallel.delivery.yml
   - .ai/global/sdlc.phases.yml
   - .ai/workspace/workspace.yml
@@ -103,3 +104,4 @@ hard_requirements:
   - AI workers must stay provider-neutral and follow `.ai/global/worker.contract.yml`.
   - Events must use `.ai/global/event.contract.yml` so humans, Codex, other hosted AI, or local LLM runners can understand the same workflow.
   - Natural-language workflow requests must be mapped with `.ai/global/trigger.words.yml` before asking the user to run a command.
+  - Branch, PR/MR, review, approval, merge, and conflict work must follow `.ai/global/git.collaboration.yml`.

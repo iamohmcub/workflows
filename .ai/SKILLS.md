@@ -14,6 +14,7 @@ When a worker starts:
 4. Read `.ai/runtime/state.yml` before acting.
 5. Use `.ai/global/routing.matrix.yml` to identify responsible, consulted, and informed roles.
 6. For parallel work, read `.ai/global/parallel.delivery.yml` and name the work item, lane, upstream handoff, locked contracts, and dependencies.
+7. For branch, PR/MR, review, merge, or conflict work, read `.ai/global/git.collaboration.yml`.
 
 If the worker cannot identify the repo group, repo, phase, or owner role, it must stop and ask for that missing information.
 
@@ -106,12 +107,32 @@ The worker must:
 1. Use one of the 15 agent callsigns in `.ai/global/agent.positions.yml`.
 2. Keep the real Git author account.
 3. Prefix the commit subject with the agent callsign, such as `Agent Berners`.
-4. Include `AI-Agent-Name`, `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Task-Done`, and `AI-Evidence` trailers.
+4. Include `AI-Agent-Name`, `AI-Agent`, `AI-Role`, `AI-Phase`, `AI-Feature`, `AI-Task-Done`, and `AI-Evidence` trailers.
 5. Set `AI-Task-Done: yes` only when the assigned task is complete.
 6. Link evidence from the phase log, impact report, handoff note, tests, review, or deployment output.
-7. Add `AI-Work-Item` and `AI-Lane` trailers when the commit belongs to parallel MVP/work item delivery.
+7. Name the feature, capability, bug, incident, or workflow area in `AI-Feature`.
+8. Add `AI-Work-Item` and `AI-Lane` trailers when the commit belongs to parallel MVP/work item delivery.
 
 If the task is not done, do not create a done commit. Create or update a handoff, impact report, or blocker note instead.
+
+## Git Collaboration Skill
+
+Use `.ai/global/git.collaboration.yml` when work involves branches, pull requests, merge requests, code review, approval, merge, or conflicts.
+
+The worker must:
+
+1. Create or use a dedicated branch for parallel work.
+2. Name the feature or work item in the branch, PR/MR, commits, and phase log.
+3. Open a PR/MR when work is ready for review or early feedback.
+4. Route reviewers with `.ai/global/routing.matrix.yml`.
+5. Require green CI, tests, lint, secret scanning, peer review, and impact acknowledgement before merge.
+6. Never self-approve as the only reviewer.
+7. Approve only when role-specific checklist evidence is present.
+8. Merge only when required approvals and evidence are complete.
+9. Resolve conflicts by identifying file owners, role owners, branch owners, and impacted contracts.
+10. Record conflict decisions, rerun impacted tests, and update impact reports when contracts change.
+
+For GitHub, call the change request a pull request. For GitLab, call it a merge request. The workflow treats both as a provider-neutral change request.
 
 ## Gatekeeping Skill
 

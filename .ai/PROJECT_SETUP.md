@@ -107,6 +107,6 @@ npx @iamohmcub/ai-orchestration init --repo-id my-service --repo-name "My Servic
 npx @iamohmcub/ai-orchestration status
 npx @iamohmcub/ai-orchestration start okr
 npx @iamohmcub/ai-orchestration start technical-design --mvp mvp-1 --lane engineering-delivery --depends-on ".ai/runtime/handoffs/<handoff>.md"
-npx @iamohmcub/ai-orchestration commit --agent Conway --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
+npx @iamohmcub/ai-orchestration commit --agent Conway --feature initial-idea --message "route initial idea" --evidence ".ai/runtime/logs/<phase-log>.md"
 npx @iamohmcub/ai-orchestration validate
 ```

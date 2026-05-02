@@ -17,7 +17,7 @@ Before starting work:
 3. Read `.ai/workspace/workspace.yml` and the shared standards in `.ai/workspace`.
 4. Read the relevant files in `.ai/global`, `.ai/repo-group`, and the selected `.ai/role/<role-id>/` module.
 5. Read the selected role workspace overlay at `.ai/role/<role-id>/workspace.yml`.
-6. Read `.ai/global/worker.contract.yml`, `.ai/global/event.contract.yml`, `.ai/global/trigger.words.yml`, and `.ai/global/routing.matrix.yml`.
+6. Read `.ai/global/worker.contract.yml`, `.ai/global/event.contract.yml`, `.ai/global/trigger.words.yml`, `.ai/global/routing.matrix.yml`, and `.ai/global/git.collaboration.yml`.
 7. Confirm the previous phase gate is complete before beginning the next phase.
 8. Create a phase log from `.ai/templates/phase-log.md`.
 9. For parallel work, identify the MVP/work item, lane, upstream handoff, locked contracts, and dependencies from `.ai/global/parallel.delivery.yml`.
@@ -28,6 +28,7 @@ During work:
 2. If the change impacts another role in the same repo, create an impact report.
 3. If the change impacts another repo in the same repo group, create a group impact report.
 4. Escalate conflicts to the orchestrator role. No role silently overrides another role.
+5. For parallel Git work, create or use a dedicated branch, keep PR/MR evidence linked, and route reviewers by ownership.
 
 Before handoff:
 
@@ -71,6 +72,9 @@ Users do not need to type CLI commands. If the user says "เริ่ม okr", 
 - Every cross-role or cross-repo impact must be reported.
 - Every `impact.detected` event blocks the next gate until the impacted owner acknowledges it or the orchestrator accepts the risk.
 - Phase ownership does not replace task routing. Use `.ai/global/routing.matrix.yml` to identify responsible, consulted, and informed roles.
+- Branch, PR/MR, review, approval, merge, and conflict work must follow `.ai/global/git.collaboration.yml`.
+- No self-approval. PR/MR approval requires evidence, green checks, and the required role reviewers.
+- Merge conflicts must be resolved with owner routing, test evidence, and an impact report when contracts change.
 - Gates are checked item by item. No bulk approval.
 - Code flows DEV -> STAGING -> UAT -> PROD. Never reverse and never skip without emergency policy approval.
 - CI, peer review, and secret scanning are required for every code path, including hotfixes.
@@ -120,11 +124,12 @@ AI-Agent-Name: <agent-callsign>
 AI-Agent: <agent-id>
 AI-Role: <role-id>
 AI-Phase: <phase-id>
+AI-Feature: <feature, capability, bug, incident, or workflow area>
 AI-Task-Done: yes
 AI-Evidence: <phase log, report, handoff, test, or review link>
 ```
 
-For parallel MVP/work item commits, also include `AI-Work-Item` and `AI-Lane`.
+Every done commit must name the feature or capability being changed with `AI-Feature`. For bug fixes, incidents, or workflow work, use the bug id, incident id, or workflow area. For parallel MVP/work item commits, also include `AI-Work-Item` and `AI-Lane`.
 
 Keep the real Git author account. Put the agent callsign and stable id in the commit subject and trailers.
 
