@@ -14,7 +14,7 @@ Before starting work:
 
 1. Identify the repo group, repo, phase, owner role, and impacted roles.
 2. Read `.ai/project.yml` for this project's identity, lifecycle mode, and active roles.
-3. Read the relevant files in `.ai/global`, `.ai/repo-group`, and `.ai/role`.
+3. Read the relevant files in `.ai/global`, `.ai/repo-group`, and the selected `.ai/role/<role-id>/` module.
 4. Confirm the previous phase gate is complete before beginning the next phase.
 5. Create a phase log from `.ai/templates/phase-log.md`.
 
@@ -67,3 +67,17 @@ npm run ai:validate
 ```
 
 Automation trigger documentation lives in `.ai/AUTOMATION.md`.
+
+## Role Module Layout
+
+Every role is a folder:
+
+```text
+.ai/role/<role-id>/
+|-- role.yml
+|-- interface.yml
+|-- playbook.md
+`-- checklist.md
+```
+
+Load all four files before acting as that role.

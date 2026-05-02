@@ -63,9 +63,11 @@ The worker should then:
 2. Read `.ai/manifest.yml`.
 3. Read `.ai/SKILLS.md`.
 4. Read `.ai/project.yml`.
-5. Load global rules, hooks, phases, repo group policy, and role files.
+5. Load global rules, hooks, phases, repo group policy, and the selected role module.
 6. Create a phase log.
 7. Work only inside the current phase unless the orchestrator changes phase.
+
+Role modules live at `.ai/role/<role-id>/` and each module contains `role.yml`, `interface.yml`, `playbook.md`, and `checklist.md`.
 
 Useful command:
 

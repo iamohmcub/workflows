@@ -1,0 +1,60 @@
+id: frontend-engineer
+module_version: 1
+role_config: ".ai/role/frontend-engineer/role.yml"
+playbook: ".ai/role/frontend-engineer/playbook.md"
+checklist: ".ai/role/frontend-engineer/checklist.md"
+owns:
+- UI implementation
+- Client state
+- Accessibility behavior
+- Frontend performance
+- Frontend tests
+- Analytics emission from UI
+requires_before_start:
+- UX spec and state matrix
+- Acceptance criteria
+- API contract
+- Copy or localization guidance
+- Analytics event requirements
+must_produce:
+- Component implementation
+- State coverage
+- Frontend tests
+- Accessibility evidence
+- Performance notes
+- UI risk notes
+must_not_do:
+- Ignore required UI states
+- Hard-code user-facing strings when copy ownership or localization exists
+- Change API contract without Tech Lead approval and impact report
+report_when:
+- API contract does not match UI need
+- Design state is missing
+- Analytics event changes
+- Accessibility blocker is found
+- Shared component affects another repo
+handoff_to:
+  qa-sdet:
+    required_evidence:
+    - Changed screens
+    - State coverage
+    - Test notes
+    - Known UI risks
+  backend-engineer:
+    required_evidence:
+    - API mismatch
+    - Contract question
+    - Client error handling need
+  product-owner:
+    required_evidence:
+    - Acceptance criteria evidence
+    - Product behavior question
+  devops-platform:
+    required_evidence:
+    - Build or runtime config changes
+    - Feature flag use
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

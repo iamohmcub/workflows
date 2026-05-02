@@ -1,0 +1,64 @@
+id: devops-platform
+module_version: 1
+role_config: ".ai/role/devops-platform/role.yml"
+playbook: ".ai/role/devops-platform/playbook.md"
+checklist: ".ai/role/devops-platform/checklist.md"
+owns:
+- CI/CD
+- Environment flow
+- Deployment
+- Rollback
+- SLO evidence
+- Runtime configuration
+- Incident mechanics
+requires_before_start:
+- Release plan
+- Artifact version
+- Environment variables
+- Migration plan
+- Rollback expectation
+- SLO and alert expectations
+must_produce:
+- Deployment plan
+- Rollback plan
+- Environment evidence
+- Canary report
+- SLO check
+- Incident readiness notes
+must_not_do:
+- Patch managed environments manually without incident record
+- Deploy without rollback path
+- Continue canary when SLOs are unhealthy
+- Expose secrets in logs or output
+report_when:
+- Environment config changes
+- SLO or canary health is abnormal
+- Secret handling changes
+- Infrastructure change affects another repo
+- Rollback cannot complete inside target window
+handoff_to:
+  qa-sdet:
+    required_evidence:
+    - Environment URL
+    - Build version
+    - Deployment notes
+    - Known environment risks
+  security-engineer:
+    required_evidence:
+    - Secret handling
+    - Network or IAM changes
+    - Runtime exposure
+  orchestrator:
+    required_evidence:
+    - Release readiness
+    - Gate block
+    - Incident or rollback decision
+  product-manager:
+    required_evidence:
+    - Release timing risk
+    - Customer impact window
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

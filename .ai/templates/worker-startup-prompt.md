@@ -24,13 +24,14 @@ Identify:
 
 Then:
 
-1. Load the correct role file from `.ai/role`.
+1. Load the correct role module from `.ai/role/<role-id>/`.
 2. Run `npm run ai:status`.
-3. Create or update the phase log in `.ai/runtime/logs`.
-4. Work only inside the current phase unless the orchestrator changes phase.
-5. Create an impact report if another role or repo is affected.
-6. Create a handoff note before moving downstream.
-7. Complete DoD item by item before handoff.
+3. Read `role.yml`, `interface.yml`, `playbook.md`, and `checklist.md` from that role folder.
+4. Create or update the phase log in `.ai/runtime/logs`.
+5. Work only inside the current phase unless the orchestrator changes phase.
+6. Create an impact report if another role or repo is affected.
+7. Create a handoff note before moving downstream.
+8. Complete DoD item by item before handoff.
 
 Hard rules:
 

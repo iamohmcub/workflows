@@ -23,7 +23,10 @@ The worker reads:
 8. `.ai/global/sdlc.phases.yml`
 9. `.ai/repo-group/workspace.yml`
 10. `.ai/repo-group/impact-policy.yml`
-11. `.ai/role/product-manager.yml`
+11. `.ai/role/product-manager/role.yml`
+12. `.ai/role/product-manager/interface.yml`
+13. `.ai/role/product-manager/playbook.md`
+14. `.ai/role/product-manager/checklist.md`
 
 ## Worker Identifies Context
 

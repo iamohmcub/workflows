@@ -13,8 +13,9 @@ When a worker starts:
 3. Read this file.
 4. Read `.ai/project.yml`.
 5. Follow the manifest `load_order`.
-6. Select the correct role from `.ai/role`.
-7. Create or update the current phase log.
+6. Select the correct role module from `.ai/role/<role-id>/`.
+7. Read the role module in this order: `role.yml`, `interface.yml`, `playbook.md`, `checklist.md`.
+8. Create or update the current phase log.
 
 If the worker cannot identify the repo group, repo, phase, or owner role, it must stop and ask for that missing information.
 
@@ -106,4 +107,3 @@ The worker must block on:
 - Missing peer review for release paths
 - Production release without security signoff
 - Cross-repo impact without report
-

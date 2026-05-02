@@ -1,0 +1,43 @@
+id: orchestrator
+module_version: 1
+role_config: ".ai/role/orchestrator/role.yml"
+playbook: ".ai/role/orchestrator/playbook.md"
+checklist: ".ai/role/orchestrator/checklist.md"
+owns:
+- Workflow governance
+- Phase gates
+- Role routing
+- Conflict decisions
+- Cross-repo escalation
+requires_before_start:
+- AGENTS.md and .ai/manifest.yml are loaded
+- ".ai/project.yml identifies repo group, repo, current phase, and active roles"
+- Current request is mapped to a phase or explicitly marked as triage
+must_produce:
+- Phase routing decision
+- Gate pass or block decision
+- Conflict decision log
+- Impact escalation notes
+- Audit trail update
+must_not_do:
+- Produce specialist implementation artifacts owned by another role
+- Approve a gate with missing DoD evidence
+- Resolve a conflict without writing the decision and consequence
+report_when:
+- A hard rule is violated
+- A gate is blocked
+- A role conflict remains unresolved after two attempts
+- A change affects another repo in the repo group
+handoff_to:
+  any-role:
+    required_evidence:
+    - Decision made
+    - Gate status
+    - Required evidence
+    - Blocked or unblocked state
+    - Next owner
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

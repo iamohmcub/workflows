@@ -27,6 +27,8 @@ const EVENT_ALIASES = {
   on_bug_detected: "impact"
 };
 
+const ROLE_MODULE_FILES = ["role.yml", "interface.yml", "playbook.md", "checklist.md"];
+
 main(process.argv.slice(2));
 
 function main(argv) {
@@ -208,7 +210,11 @@ Gate: ${phase.gate}
 - [x] Read .ai/manifest.yml
 - [x] Read .ai/SKILLS.md
 - [x] Read .ai/project.yml
-- [x] Loaded role: .ai/role/${phase.owner}.yml
+- [x] Loaded role module: .ai/role/${phase.owner}/
+- [x] Loaded role config: .ai/role/${phase.owner}/role.yml
+- [x] Loaded role interface: .ai/role/${phase.owner}/interface.yml
+- [x] Loaded role playbook: .ai/role/${phase.owner}/playbook.md
+- [x] Loaded role checklist: .ai/role/${phase.owner}/checklist.md
 
 ## Work Completed
 
@@ -264,7 +270,10 @@ Created phase log:
   ${relative(file)}
 
 Next:
-  Read .ai/role/${phase.owner}.yml
+  Read .ai/role/${phase.owner}/role.yml
+  Read .ai/role/${phase.owner}/interface.yml
+  Read .ai/role/${phase.owner}/playbook.md
+  Read .ai/role/${phase.owner}/checklist.md
   Complete DoD item by item
   Run npm run ai:impact -- --title "<title>" if another role or repo is affected
 `);
@@ -483,6 +492,16 @@ function validate() {
   if (!project.currentPhase) errors.push("project.lifecycle.current_phase is empty");
   if (!phase) errors.push(`Current phase is not defined in sdlc.phases.yml: ${project.currentPhase}`);
 
+  const rolesToValidate = unique(["orchestrator", ...project.activeRoles, phase?.owner].filter(Boolean));
+  for (const role of rolesToValidate) {
+    for (const file of ROLE_MODULE_FILES) {
+      const roleFile = path.join(AI_DIR, "role", role, file);
+      if (!fs.existsSync(roleFile)) {
+        errors.push(`Missing role module file: .ai/role/${role}/${file}`);
+      }
+    }
+  }
+
   for (const dir of ["logs", "reports", "decisions", "handoffs"]) {
     const full = path.join(RUNTIME_DIR, dir);
     if (!fs.existsSync(full)) errors.push(`Missing runtime folder: .ai/runtime/${dir}`);
@@ -502,6 +521,7 @@ ${errors.map((item) => `- ${item}`).join("\n")}
 Repo: ${project.repoId}
 Current phase: ${project.currentPhase}
 Owner role: ${phase.owner}
+Role module: .ai/role/${phase.owner}/
 Known phases: ${phases.length}
 `);
 }

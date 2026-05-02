@@ -1,0 +1,59 @@
+id: qa-sdet
+module_version: 1
+role_config: ".ai/role/qa-sdet/role.yml"
+playbook: ".ai/role/qa-sdet/playbook.md"
+checklist: ".ai/role/qa-sdet/checklist.md"
+owns:
+- Test strategy
+- Automation
+- Bug classification
+- Regression evidence
+- Release signoff or rejection
+requires_before_start:
+- Acceptance criteria
+- UX state matrix
+- Technical design
+- Environment readiness
+- Test data plan
+must_produce:
+- Test plan
+- Automated test evidence
+- Bug reports
+- Regression coverage
+- Release signoff or block report
+must_not_do:
+- Sign off with open P0 or P1 bugs
+- Skip regression coverage for a fixed bug
+- Test only happy paths when edge states are specified
+report_when:
+- Acceptance criteria are untestable
+- Environment is unstable
+- P0 or P1 bug is found
+- Test data is missing
+- Regression risk affects another repo
+handoff_to:
+  frontend-engineer:
+    required_evidence:
+    - UI defects
+    - Reproduction steps
+    - State-specific failures
+  backend-engineer:
+    required_evidence:
+    - API defects
+    - Data setup
+    - Logs and payloads
+  devops-platform:
+    required_evidence:
+    - Environment instability
+    - Deployment blockers
+    - Smoke test results
+  product-owner:
+    required_evidence:
+    - Acceptance result
+    - Product ambiguity
+    - Release confidence
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

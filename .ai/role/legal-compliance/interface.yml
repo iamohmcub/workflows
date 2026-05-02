@@ -1,0 +1,59 @@
+id: legal-compliance
+module_version: 1
+role_config: ".ai/role/legal-compliance/role.yml"
+playbook: ".ai/role/legal-compliance/playbook.md"
+checklist: ".ai/role/legal-compliance/checklist.md"
+owns:
+- Privacy requirements
+- Data retention
+- Vendor assessment
+- Accessibility compliance risk
+- License review
+- Regulated commitment review
+requires_before_start:
+- Data flow
+- Jurisdictions or customer commitments
+- Vendor list
+- Retention expectations
+- User-facing copy or policy impact
+must_produce:
+- Compliance requirements
+- Risk assessment
+- Retention notes
+- Vendor or license decision
+- Approval or block note
+must_not_do:
+- Leave legal guidance as vague policy language
+- Approve unclear PII handling
+- Treat compliance as a post-launch checklist
+report_when:
+- Personal data handling changes
+- New vendor is introduced
+- Regulated workflow changes
+- License risk appears
+- Accessibility compliance risk is found
+handoff_to:
+  security-engineer:
+    required_evidence:
+    - Privacy risk
+    - Data handling requirement
+    - Retention or deletion need
+  product-manager:
+    required_evidence:
+    - Product constraint
+    - User commitment wording
+    - Release risk
+  tech-lead:
+    required_evidence:
+    - Engineering requirement
+    - Data model constraint
+    - Audit requirement
+  ux-designer:
+    required_evidence:
+    - Consent or disclosure requirement
+    - Accessibility requirement
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

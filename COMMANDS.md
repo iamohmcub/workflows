@@ -125,8 +125,8 @@ Read AGENTS.md, .ai/manifest.yml, .ai/SKILLS.md, and .ai/project.yml.
 Follow the .ai load order.
 Run npm run ai:status.
 Run npm run ai:start -- <current-phase> if no phase log exists.
-Use the correct role definition from .ai/role.
+Use the correct role module from `.ai/role/<role-id>/`.
+Read `role.yml`, `interface.yml`, `playbook.md`, and `checklist.md`.
 Create an impact report if another role or repo is affected.
 Create a handoff note before moving to the next phase.
 ```
-

@@ -1,0 +1,68 @@
+id: tech-lead
+module_version: 1
+role_config: ".ai/role/tech-lead/role.yml"
+playbook: ".ai/role/tech-lead/playbook.md"
+checklist: ".ai/role/tech-lead/checklist.md"
+owns:
+- Technical design
+- Architecture decision records
+- API contracts
+- Task decomposition
+- Engineering tradeoffs
+- Review strategy
+requires_before_start:
+- PRD and acceptance criteria
+- UX design or flow intent
+- Known dependencies
+- Security and compliance constraints
+- Current architecture context
+must_produce:
+- Technical design
+- ADR
+- API or data contracts
+- Task breakdown
+- Risk register
+- Review plan
+must_not_do:
+- Start major implementation without technical design
+- Approve hotfixes that skip required emergency evidence
+- Allow cross-repo contracts to change without impact report
+report_when:
+- API contract changes
+- Database migration is required
+- Security boundary changes
+- Shared dependency or another repo is affected
+- Rollback plan changes
+handoff_to:
+  frontend-engineer:
+    required_evidence:
+    - API contract
+    - Task scope
+    - Feature flag plan
+    - Known risks
+  backend-engineer:
+    required_evidence:
+    - Architecture decision
+    - Data model expectation
+    - Migration constraints
+    - Observability requirement
+  devops-platform:
+    required_evidence:
+    - Deployment needs
+    - Environment changes
+    - Rollback expectations
+  security-engineer:
+    required_evidence:
+    - Threat model inputs
+    - Auth and data flow
+    - Dependency changes
+  qa-sdet:
+    required_evidence:
+    - Test strategy risks
+    - Integration points
+    - Critical paths
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

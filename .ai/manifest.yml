@@ -39,18 +39,24 @@ load_order:
   - .ai/repo-group/workspace.yml
   - .ai/repo-group/impact-policy.yml
   - .ai/repo-group/repo.template.yml
-  - .ai/role/orchestrator.yml
-  - .ai/role/product-manager.yml
-  - .ai/role/product-owner.yml
-  - .ai/role/ux-designer.yml
-  - .ai/role/tech-lead.yml
-  - .ai/role/frontend-engineer.yml
-  - .ai/role/backend-engineer.yml
-  - .ai/role/qa-sdet.yml
-  - .ai/role/devops-platform.yml
-  - .ai/role/security-engineer.yml
-  - .ai/role/data-analyst.yml
-  - .ai/role/legal-compliance.yml
+  - .ai/role/orchestrator/
+  - .ai/role/product-manager/
+  - .ai/role/product-owner/
+  - .ai/role/ux-designer/
+  - .ai/role/tech-lead/
+  - .ai/role/frontend-engineer/
+  - .ai/role/backend-engineer/
+  - .ai/role/qa-sdet/
+  - .ai/role/devops-platform/
+  - .ai/role/security-engineer/
+  - .ai/role/data-analyst/
+  - .ai/role/legal-compliance/
+
+role_module_load_order:
+  - role.yml
+  - interface.yml
+  - playbook.md
+  - checklist.md
 
 runtime:
   phase_logs: .ai/runtime/logs

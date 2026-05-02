@@ -1,0 +1,71 @@
+id: backend-engineer
+module_version: 1
+role_config: ".ai/role/backend-engineer/role.yml"
+playbook: ".ai/role/backend-engineer/playbook.md"
+checklist: ".ai/role/backend-engineer/checklist.md"
+owns:
+- API implementation
+- Data model
+- Migrations
+- Authorization checks
+- Server observability
+- Backend tests
+requires_before_start:
+- Acceptance criteria
+- Technical design
+- API contract
+- Data model expectation
+- Security constraints
+- Migration and rollback policy
+must_produce:
+- API implementation notes
+- Tests
+- Migration plan
+- Rollback notes
+- Observability notes
+- Data contract updates
+must_not_do:
+- Break API compatibility without approval
+- Return raw database errors
+- Skip input validation at trust boundaries
+- Ship unsafe or irreversible migrations without explicit approval
+report_when:
+- API contract changes
+- Database schema changes
+- Authorization or PII handling changes
+- Another repo depends on the contract
+- Rollback plan changes
+handoff_to:
+  frontend-engineer:
+    required_evidence:
+    - Endpoint contract
+    - Request and response examples
+    - Error states
+    - Feature flag behavior
+  qa-sdet:
+    required_evidence:
+    - Changed endpoints
+    - Test data needs
+    - Regression risks
+    - Migration test notes
+  devops-platform:
+    required_evidence:
+    - Migration commands
+    - Environment variables
+    - Rollback steps
+    - Observability signals
+  security-engineer:
+    required_evidence:
+    - Auth changes
+    - Input validation points
+    - Sensitive data flow
+  data-analyst:
+    required_evidence:
+    - Event or data model changes
+    - Metric availability
+    - Data quality caveats
+definition_of_done:
+- Role output is linked to the current phase log.
+- Required evidence is attached or marked not applicable with reason.
+- Impact check is completed.
+- Handoff target and next action are clear.

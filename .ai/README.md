@@ -26,7 +26,10 @@ Every role follows the same global rules, but each role has its own character, s
 8. `.ai/repo-group/workspace.yml`
 9. `.ai/repo-group/impact-policy.yml`
 10. `.ai/repo-group/repo.template.yml`
-11. `.ai/role/*.yml`
+11. `.ai/role/<role-id>/role.yml`
+12. `.ai/role/<role-id>/interface.yml`
+13. `.ai/role/<role-id>/playbook.md`
+14. `.ai/role/<role-id>/checklist.md`
 
 ## Required Outputs
 
@@ -55,3 +58,14 @@ Use `.ai/AUTOMATION.md` for hook triggers and GitHub Actions behavior.
 Read `DEMO.md` from the repo root, then inspect `.ai/examples`.
 
 The demo shows a checkout-service project moving through the first OKR phase with a phase log, impact report, decision log, and handoff note.
+
+## Role Modules
+
+Roles are folders under `.ai/role`.
+
+Each role folder contains:
+
+- `role.yml`: compact identity, hooks, and hard rules.
+- `interface.yml`: machine-readable execution contract.
+- `playbook.md`: detailed AI worker behavior.
+- `checklist.md`: before-start, output, impact, and handoff checklist.
