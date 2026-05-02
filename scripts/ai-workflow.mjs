@@ -3,7 +3,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
+const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ROOT = process.cwd();
 const AI_DIR = path.join(ROOT, ".ai");
 const PROJECT_FILE = path.join(AI_DIR, "project.yml");
@@ -14,7 +16,6 @@ const RUNTIME_DIR = path.join(AI_DIR, "runtime");
 const WORKSPACE_FILE = path.join(AI_DIR, "workspace", "workspace.yml");
 
 const REQUIRED_FILES = [
-  "README.md",
   "AGENTS.md",
   ".ai/manifest.yml",
   ".ai/SKILLS.md",
@@ -43,6 +44,7 @@ const EVENT_ALIASES = {
 };
 
 const ROLE_MODULE_FILES = ["role.yml", "interface.yml", "playbook.md", "checklist.md", "workspace.yml"];
+const LOCAL_SCRIPT_ENTRY = "node scripts/ai-workflow.mjs";
 
 main(process.argv.slice(2));
 
@@ -97,6 +99,8 @@ function printHelp() {
   console.log(`AI workflow commands
 
 Usage:
+  npx @iamohmcub/ai-orchestration init
+  npx @iamohmcub/ai-orchestration init -- --repo-id checkout-service --repo-name "Checkout Service" --phase okr
   npm run ai -- help
   npm run ai:status
   npm run ai:init -- --repo-group-id acme --repo-group-name "Acme Platform" --repo-id checkout-service --repo-name "Checkout Service" --type product-service --phase okr --workspace-profile web-saas --frontend-stack nextjs-typescript --backend-stack node-api-typescript --infra-stack netlify-or-container --qa-profile playwright-vitest
@@ -145,6 +149,7 @@ Next commands:
 
 function init(argv) {
   const options = parseOptions(argv);
+  scaffoldProject(options);
   ensureRuntimeDirs();
 
   if (Object.keys(options).length > 0) {
@@ -204,6 +209,39 @@ Next:
   npm run ai:status
   npm run ai:start -- ${options.phase || readProject().currentPhase}
 `);
+}
+
+function scaffoldProject(options) {
+  const hasLocalSystem = fs.existsSync(path.join(ROOT, ".ai", "manifest.yml")) && fs.existsSync(path.join(ROOT, "AGENTS.md"));
+  const isTemplateRepo = path.resolve(ROOT) === path.resolve(PACKAGE_ROOT);
+  const shouldScaffold = options.force || !hasLocalSystem;
+
+  if (!shouldScaffold) return;
+
+  if (isTemplateRepo && hasLocalSystem && !options.force) return;
+
+  const items = [
+    [path.join(PACKAGE_ROOT, ".ai"), path.join(ROOT, ".ai")],
+    [path.join(PACKAGE_ROOT, "AGENTS.md"), path.join(ROOT, "AGENTS.md")],
+    [path.join(PACKAGE_ROOT, "COMMANDS.md"), path.join(ROOT, "COMMANDS.md")]
+  ];
+
+  if (!options.minimal) {
+    items.push([path.join(PACKAGE_ROOT, "scripts", "ai-workflow.mjs"), path.join(ROOT, "scripts", "ai-workflow.mjs")]);
+  }
+
+  if (options["with-github-action"]) {
+    items.push([
+      path.join(PACKAGE_ROOT, ".github", "workflows", "ai-workflow.yml"),
+      path.join(ROOT, ".github", "workflows", "ai-workflow.yml")
+    ]);
+  }
+
+  for (const [source, target] of items) {
+    copyTemplateItem(source, target, Boolean(options.force));
+  }
+
+  if (!options.minimal) ensurePackageScripts(Boolean(options.force));
 }
 
 function startPhase(argv) {
@@ -943,6 +981,67 @@ function ensureRuntimeDirs() {
   for (const dir of ["logs", "reports", "decisions", "handoffs"]) {
     fs.mkdirSync(path.join(RUNTIME_DIR, dir), { recursive: true });
   }
+}
+
+function copyTemplateItem(source, target, force) {
+  if (!fs.existsSync(source)) return;
+
+  const stat = fs.statSync(source);
+  if (stat.isDirectory()) {
+    copyTemplateDirectory(source, target, force);
+    return;
+  }
+
+  if (fs.existsSync(target) && !force) return;
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.copyFileSync(source, target);
+}
+
+function copyTemplateDirectory(source, target, force) {
+  fs.mkdirSync(target, { recursive: true });
+
+  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
+    const sourcePath = path.join(source, entry.name);
+    const targetPath = path.join(target, entry.name);
+
+    if (entry.isDirectory()) {
+      copyTemplateDirectory(sourcePath, targetPath, force);
+    } else if (force || !fs.existsSync(targetPath)) {
+      fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+      fs.copyFileSync(sourcePath, targetPath);
+    }
+  }
+}
+
+function ensurePackageScripts(force) {
+  const packageFile = path.join(ROOT, "package.json");
+  const packageJson = fs.existsSync(packageFile)
+    ? JSON.parse(fs.readFileSync(packageFile, "utf8"))
+    : {
+        name: slug(path.basename(ROOT)) || "ai-orchestrated-project",
+        version: "0.0.0",
+        private: true
+      };
+
+  packageJson.scripts = packageJson.scripts || {};
+  const scripts = {
+    ai: LOCAL_SCRIPT_ENTRY,
+    "ai:status": `${LOCAL_SCRIPT_ENTRY} status`,
+    "ai:init": `${LOCAL_SCRIPT_ENTRY} init`,
+    "ai:start": `${LOCAL_SCRIPT_ENTRY} start-phase`,
+    "ai:trigger": `${LOCAL_SCRIPT_ENTRY} trigger`,
+    "ai:impact": `${LOCAL_SCRIPT_ENTRY} impact`,
+    "ai:handoff": `${LOCAL_SCRIPT_ENTRY} handoff`,
+    "ai:commit": `${LOCAL_SCRIPT_ENTRY} commit`,
+    "ai:commit-check": `${LOCAL_SCRIPT_ENTRY} commit-check`,
+    "ai:validate": `${LOCAL_SCRIPT_ENTRY} validate`
+  };
+
+  for (const [key, value] of Object.entries(scripts)) {
+    if (force || !packageJson.scripts[key]) packageJson.scripts[key] = value;
+  }
+
+  fs.writeFileSync(packageFile, `${JSON.stringify(packageJson, null, 2)}\n`);
 }
 
 function parseOptions(argv) {

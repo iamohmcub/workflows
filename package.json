@@ -1,10 +1,31 @@
 {
-  "name": "ai-engineering-workflows",
+  "name": "@iamohmcub/ai-orchestration",
   "version": "0.1.0",
-  "description": "AI engineering workflow orchestration scaffold with commands for phases, triggers, logs, and impact reports.",
+  "description": "AI engineering workflow orchestration scaffold with agents, phases, logs, impact reports, handoffs, and agent-authored commits.",
   "type": "module",
   "bin": {
+    "ai-orchestration": "scripts/ai-workflow.mjs",
     "ai-workflow": "scripts/ai-workflow.mjs"
+  },
+  "files": [
+    ".ai",
+    ".github/workflows/ai-workflow.yml",
+    "AGENTS.md",
+    "COMMANDS.md",
+    "README.md",
+    "ai-orchestration-map.html",
+    "scripts/ai-workflow.mjs"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamohmcub/workflows.git"
+  },
+  "homepage": "https://github.com/iamohmcub/workflows#readme",
+  "bugs": {
+    "url": "https://github.com/iamohmcub/workflows/issues"
   },
   "scripts": {
     "ai": "node scripts/ai-workflow.mjs",

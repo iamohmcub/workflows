@@ -6,7 +6,19 @@ The command layer does not replace the AI worker. It gives the worker and humans
 
 ## Install
 
-No npm packages are required.
+Install the workflow into any repo:
+
+```bash
+npx @iamohmcub/ai-orchestration init
+```
+
+For only the worker-readable rulebook:
+
+```bash
+npx @iamohmcub/ai-orchestration init -- --minimal
+```
+
+No runtime npm dependencies are required.
 
 Run commands directly:
 

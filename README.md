@@ -2,6 +2,23 @@
 
 Reusable `.ai` workflow system for AI workers, repo groups, repos, roles, logs, impact reports, and handoffs.
 
+## Install Into Any Repo
+
+Use the npm scaffolding CLI from any project, including Node, Go, Python, mobile, infra, or documentation repos:
+
+```bash
+npx @iamohmcub/ai-orchestration init -- \
+  --repo-group-id acme-platform \
+  --repo-group-name "Acme Platform" \
+  --repo-id checkout-service \
+  --repo-name "Checkout Service" \
+  --type product-service \
+  --phase okr \
+  --workspace-profile web-saas
+```
+
+This creates or updates `.ai/`, `AGENTS.md`, `COMMANDS.md`, `scripts/ai-workflow.mjs`, and npm helper scripts. Use `--minimal` if you only want `.ai/`, `AGENTS.md`, and `COMMANDS.md`.
+
 ## What This Repo Gives You
 
 Copy this into a project and the AI worker gets:
@@ -18,6 +35,7 @@ Copy this into a project and the AI worker gets:
 ## Quick Start
 
 ```bash
+npx @iamohmcub/ai-orchestration init
 npm run ai:init -- \
   --repo-group-id acme-platform \
   --repo-group-name "Acme Platform" \
