@@ -1,0 +1,40 @@
+version: 1
+scope: company
+applies_to: all_repo_groups_repos_and_roles
+
+communication:
+  async_first_writing:
+    rule: Start with a TLDR of three sentences or fewer, then provide detail.
+  structured_feedback:
+    rule: Use What, Why, How, Owner, Due Date.
+  decision_logging:
+    rule: Record durable decisions with context, options, decision, consequences, and owner.
+
+quality:
+  dod_enforcement:
+    rule: Check Definition of Done item by item. Bulk approval is not allowed.
+  root_cause_analysis:
+    rule: Use 5 Whys for defects, incidents, and repeated process failures.
+  traceability:
+    rule: Every artifact traces to an OKR, acceptance criterion, ticket, incident, or user request.
+
+collaboration:
+  handoff_protocol:
+    rule: Handoff notes must include done, not done, risks, open decisions, evidence, and next owner.
+  escalation_protocol:
+    rule: After two failed alignment attempts, escalate to orchestrator with both positions written down.
+  conflict_resolution:
+    rule: Roles may disagree, but only the orchestrator can make final cross-role tradeoff decisions.
+
+security:
+  pii_handling:
+    rule: Detect and minimize personal data. Block release if PII handling is unclear.
+  secret_hygiene:
+    rule: Scan all outputs and code for secrets. Secret detection is a hard block.
+
+observability:
+  audit_trail:
+    rule: Every phase action must be timestamped and linked from the phase log.
+  measurable_outcomes:
+    rule: Define metrics before launch and report actuals after launch.
+

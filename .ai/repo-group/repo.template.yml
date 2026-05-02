@@ -1,0 +1,50 @@
+version: 1
+repo:
+  id: replace-with-repo-id
+  name: Replace With Repo Name
+  type: company-or-domain
+  description: Describe the company, product, service, or domain this repo owns.
+  parent_repo: null
+  child_repos: []
+
+ownership:
+  accountable_role: orchestrator
+  product_roles:
+    - product-manager
+    - product-owner
+    - ux-designer
+  engineering_roles:
+    - tech-lead
+    - frontend-engineer
+    - backend-engineer
+    - qa-sdet
+    - devops-platform
+    - security-engineer
+  insight_roles:
+    - data-analyst
+    - legal-compliance
+
+runtime:
+  phase_log_dir: .ai/runtime/logs
+  impact_report_dir: .ai/runtime/reports
+  decision_dir: .ai/runtime/decisions
+
+environments:
+  flow: DEV -> STAGING -> UAT -> PROD
+  demo_source: PROD tag
+  rules:
+    - Never patch directly in UAT or PROD.
+    - Never reverse flow from a higher environment to a lower environment.
+    - Emergency compression may shorten timelines but does not remove CI, review, or evidence.
+
+phase_execution:
+  default_phase_source: .ai/global/sdlc.phases.yml
+  phase_log_template: .ai/templates/phase-log.md
+  handoff_template: .ai/templates/handoff-note.md
+  decision_template: .ai/templates/decision-log.md
+
+impact_reporting:
+  role_impact: Required when another role must change work, sign off, retest, or accept risk.
+  repo_impact: Required when API, data, dependency, environment, deployment, customer, SLA, security, or compliance surface changes.
+  group_impact: Required when another repo in the repo group is affected.
+

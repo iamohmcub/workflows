@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Engineering Orchestration Map</title>
+  <style>
+    :root {
+      --bg: #f7faf9;
+      --surface: #ffffff;
+      --ink: #15202b;
+      --muted: #52616b;
+      --line: #d8e1df;
+      --teal: #0f766e;
+      --blue: #2457a6;
+      --amber: #b26b00;
+      --red: #b42318;
+      --green: #237a3b;
+      --shadow: 0 12px 30px rgba(21, 32, 43, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: #edf5f2;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.55rem, 2.4vw, 2.4rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 780px;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    nav a,
+    .filter button {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.92rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    nav a:hover,
+    .filter button:hover,
+    .filter button.active {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    main {
+      padding: 24px 0 44px;
+    }
+
+    section {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 620px;
+      font-size: 0.95rem;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .hierarchy {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .node {
+      min-height: 190px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfdfc;
+      position: relative;
+    }
+
+    .node::after {
+      content: "->";
+      position: absolute;
+      right: -23px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .node:last-child::after {
+      content: "";
+    }
+
+    .node .eyebrow {
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .node h3 {
+      margin: 8px 0;
+      font-size: 1.15rem;
+      letter-spacing: 0;
+    }
+
+    .node p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .node ul,
+    .rule-list,
+    .role-card ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--ink);
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .phase {
+      min-height: 128px;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--blue);
+      border-radius: 8px;
+      padding: 12px;
+      background: var(--surface);
+    }
+
+    .phase[data-family="strategy"] {
+      border-left-color: var(--blue);
+    }
+
+    .phase[data-family="design"] {
+      border-left-color: var(--amber);
+    }
+
+    .phase[data-family="engineering"] {
+      border-left-color: var(--teal);
+    }
+
+    .phase[data-family="quality"] {
+      border-left-color: var(--red);
+    }
+
+    .phase[data-family="insight"] {
+      border-left-color: var(--green);
+    }
+
+    .phase h3 {
+      margin: 0;
+      font-size: 0.98rem;
+      letter-spacing: 0;
+    }
+
+    .phase p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .gate {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      margin-top: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #edf5f2;
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .role-card {
+      min-height: 178px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--surface);
+    }
+
+    .role-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .role-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      margin-bottom: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eef3ff;
+      color: var(--blue);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .tag.strategy {
+      background: #eef3ff;
+      color: var(--blue);
+    }
+
+    .tag.design {
+      background: #fff5df;
+      color: var(--amber);
+    }
+
+    .tag.engineering,
+    .tag.infrastructure {
+      background: #edf5f2;
+      color: var(--teal);
+    }
+
+    .tag.quality {
+      background: #fff0ef;
+      color: var(--red);
+    }
+
+    .tag.insight {
+      background: #eef8f0;
+      color: var(--green);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .flow-step {
+      min-height: 122px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfdfc;
+      position: relative;
+    }
+
+    .flow-step::after {
+      content: "->";
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .flow-step:last-child::after {
+      content: "";
+    }
+
+    .flow-step strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .flow-step span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .rule-list li {
+      margin: 7px 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 940px) {
+      .topbar,
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+
+      .hierarchy,
+      .phase-grid,
+      .role-grid,
+      .flow,
+      .two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .node::after,
+      .flow-step::after {
+        content: "";
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .hierarchy,
+      .phase-grid,
+      .role-grid,
+      .flow,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <h1>AI Engineering Orchestration Map</h1>
+        <p>How `.ai` and `AGENTS.md` organize repo groups, repos, expert roles, SDLC gates, logs, and impact reports.</p>
+      </div>
+      <nav aria-label="Page sections">
+        <a href="#hierarchy">Hierarchy</a>
+        <a href="#cycle">SDLC</a>
+        <a href="#roles">Roles</a>
+        <a href="#reports">Reports</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="hierarchy">
+      <div class="section-title">
+        <h2>Repo Group -> Repo -> Role</h2>
+        <p>Repo groups coordinate many company/domain repos. Repos run SDLC phases. Roles execute expert work under the same global rules.</p>
+      </div>
+      <div class="panel hierarchy">
+        <article class="node" data-layer="group">
+          <div class="eyebrow">Layer 1</div>
+          <h3>Repo Group</h3>
+          <p>Workspace for many companies, repos, products, services, or domains.</p>
+          <ul>
+            <li>Owns shared rules</li>
+            <li>Tracks cross-repo impact</li>
+            <li>Escalates unresolved conflicts</li>
+          </ul>
+        </article>
+        <article class="node" data-layer="repo">
+          <div class="eyebrow">Layer 2</div>
+          <h3>Repo</h3>
+          <p>Company or domain unit that runs the full software development cycle.</p>
+          <ul>
+            <li>Owns phase logs</li>
+            <li>Owns repo decisions</li>
+            <li>May declare child repos</li>
+          </ul>
+        </article>
+        <article class="node" data-layer="role">
+          <div class="eyebrow">Layer 3</div>
+          <h3>Role</h3>
+          <p>Domain expert agent with character, skills, responsibilities, hooks, and rules.</p>
+          <ul>
+            <li>Owns specialist output</li>
+            <li>Creates handoff notes</li>
+            <li>Reports impact outside scope</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="cycle">
+      <div class="section-title">
+        <div>
+          <h2>SDLC Cycle</h2>
+          <p>Each phase requires a log, DoD evidence, and an explicit impact check before the next gate.</p>
+        </div>
+        <div class="filter" aria-label="Filter phases">
+          <button type="button" class="active" data-filter="all">All</button>
+          <button type="button" data-filter="strategy">Strategy</button>
+          <button type="button" data-filter="design">Design</button>
+          <button type="button" data-filter="engineering">Engineering</button>
+          <button type="button" data-filter="quality">Quality</button>
+          <button type="button" data-filter="insight">Insight</button>
+        </div>
+      </div>
+      <div class="phase-grid">
+        <article class="phase" data-family="strategy">
+          <h3>1. OKR Setting</h3>
+          <p>Owner: Product Manager. Define measurable outcomes.</p>
+          <span class="gate">Gate 1</span>
+        </article>
+        <article class="phase" data-family="design">
+          <h3>2. User Research</h3>
+          <p>Owner: UX Designer. Gather user signals and assumptions.</p>
+          <span class="gate">Gate 2</span>
+        </article>
+        <article class="phase" data-family="strategy">
+          <h3>3. PRD</h3>
+          <p>Owner: Product Manager. Scope, AC, risks, metrics.</p>
+          <span class="gate">Gate 3</span>
+        </article>
+        <article class="phase" data-family="design">
+          <h3>4. UX Design</h3>
+          <p>Owner: UX Designer. Flows, states, accessibility.</p>
+          <span class="gate">Gate 4</span>
+        </article>
+        <article class="phase" data-family="engineering">
+          <h3>5. Technical Design</h3>
+          <p>Owner: Tech Lead. Architecture, contracts, ADRs.</p>
+          <span class="gate">Gate 5</span>
+        </article>
+        <article class="phase" data-family="engineering">
+          <h3>6. Development</h3>
+          <p>Owner: Tech Lead. Build with tests, review, CI.</p>
+          <span class="gate">Gate 6</span>
+        </article>
+        <article class="phase" data-family="quality">
+          <h3>7. QA and Testing</h3>
+          <p>Owner: QA/SDET. Verify AC and regression safety.</p>
+          <span class="gate">Gate 7</span>
+        </article>
+        <article class="phase" data-family="engineering">
+          <h3>8. Release</h3>
+          <p>Owner: DevOps. Rollout, canary, rollback plan.</p>
+          <span class="gate">Gate 8</span>
+        </article>
+        <article class="phase" data-family="engineering">
+          <h3>9. Monitoring</h3>
+          <p>Owner: DevOps. SLOs, dashboards, incident checks.</p>
+          <span class="gate">Gate 9</span>
+        </article>
+        <article class="phase" data-family="insight">
+          <h3>10. Measure and Iterate</h3>
+          <p>Owner: Data Analyst. Compare actuals to expected KRs.</p>
+          <span class="gate">Gate 10</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="roles">
+      <div class="section-title">
+        <h2>Expert Roles</h2>
+        <p>Role files live in `.ai/role`. Each file defines character, skills, responsibilities, hooks, and rules.</p>
+      </div>
+      <div class="role-grid">
+        <article class="role-card">
+          <span class="tag engineering">Governance</span>
+          <h3>Orchestrator</h3>
+          <p>Governs workflow, gates, conflicts, and cross-repo impact.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag strategy">Strategy</span>
+          <h3>Product Manager</h3>
+          <p>Owns OKR, PRD, scope, non-goals, and launch outcomes.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag strategy">Strategy</span>
+          <h3>Product Owner</h3>
+          <p>Owns backlog clarity and acceptance decisions.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag design">Design</span>
+          <h3>UX Designer</h3>
+          <p>Owns research, flows, states, usability, and accessibility.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag engineering">Engineering</span>
+          <h3>Tech Lead</h3>
+          <p>Owns architecture, contracts, decomposition, and ADRs.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag engineering">Engineering</span>
+          <h3>Frontend Engineer</h3>
+          <p>Owns user-facing UI, interactions, states, and frontend tests.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag engineering">Engineering</span>
+          <h3>Backend Engineer</h3>
+          <p>Owns APIs, data contracts, migrations, and observability.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag quality">Quality</span>
+          <h3>QA/SDET</h3>
+          <p>Owns test strategy, bug classification, and regression proof.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag infrastructure">Infrastructure</span>
+          <h3>DevOps Platform</h3>
+          <p>Owns environments, deployment, rollback, SLOs, and canary.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag infrastructure">Infrastructure</span>
+          <h3>Security Engineer</h3>
+          <p>Owns threat model, secret hygiene, dependency risk, release security.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag insight">Insight</span>
+          <h3>Data Analyst</h3>
+          <p>Owns metrics, instrumentation, data quality, and learning loop.</p>
+        </article>
+        <article class="role-card">
+          <span class="tag insight">Insight</span>
+          <h3>Legal Compliance</h3>
+          <p>Owns privacy, accessibility, vendors, licenses, and regulated risk.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="reports">
+      <div class="section-title">
+        <h2>Logs and Impact Reports</h2>
+        <p>The goal is not just to finish work. The goal is to finish each phase with evidence and report anything that affects another role or repo.</p>
+      </div>
+      <div class="panel flow">
+        <div class="flow-step">
+          <strong>Phase starts</strong>
+          <span>Create phase log from `.ai/templates/phase-log.md`.</span>
+        </div>
+        <div class="flow-step">
+          <strong>Role works</strong>
+          <span>Use role character, skills, responsibilities, hooks, and rules.</span>
+        </div>
+        <div class="flow-step">
+          <strong>Impact check</strong>
+          <span>If another role or repo is affected, create impact report.</span>
+        </div>
+        <div class="flow-step">
+          <strong>Gate review</strong>
+          <span>Check DoD item by item. No bulk approval.</span>
+        </div>
+        <div class="flow-step">
+          <strong>Handoff</strong>
+          <span>Write handoff note and link evidence before next phase.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="rules">
+      <div class="section-title">
+        <h2>Non-Negotiables</h2>
+        <p>These rules apply across every repo group, repo, role, phase, and emergency path.</p>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <h3>Delivery</h3>
+          <ul class="rule-list">
+            <li>Every phase must end with a phase log.</li>
+            <li>DoD is checked item by item.</li>
+            <li>DEV -> STAGING -> UAT -> PROD is the default flow.</li>
+            <li>CI, peer review, and secret scanning are required.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Coordination</h3>
+          <ul class="rule-list">
+            <li>Cross-role impact requires a report.</li>
+            <li>Cross-repo impact requires a group report.</li>
+            <li>Orchestrator resolves unresolved conflicts.</li>
+            <li>P0 and P1 incidents require post-mortems within 24 hours.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const buttons = document.querySelectorAll("[data-filter]");
+    const phases = document.querySelectorAll(".phase");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
+
+        buttons.forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+
+        phases.forEach((phase) => {
+          const isVisible = filter === "all" || phase.dataset.family === filter;
+          phase.classList.toggle("hidden", !isVisible);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

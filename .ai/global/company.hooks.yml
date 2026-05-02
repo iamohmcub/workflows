@@ -1,0 +1,70 @@
+version: 1
+scope: company
+applies_to: all_repo_groups_repos_and_roles
+
+hooks:
+  on_project_init:
+    trigger: New repo group, repo, or project is created.
+    actions:
+      - Load manifest and global rules.
+      - Register repo group, repo, and roles.
+      - Create runtime folders for logs, reports, and decisions.
+
+  on_phase_start:
+    trigger: A new SDLC phase begins.
+    actions:
+      - Verify previous phase DoD is complete.
+      - Assign owner role and supporting roles.
+      - Create phase log from template.
+
+  on_artifact_created:
+    trigger: Any artifact, design, code, test, report, or release note is produced.
+    actions:
+      - Check traceability to OKR, AC, ticket, incident, or request.
+      - Scan for secrets and PII.
+      - Add artifact link to the phase log.
+
+  on_artifact_rejected:
+    trigger: Artifact fails DoD or reviewer acceptance.
+    actions:
+      - Return artifact to owner with itemized feedback.
+      - Log rejection reason.
+      - Escalate after three rejections.
+
+  on_impact_detected:
+    trigger: Work affects another role, repo, customer, environment, API, data contract, security boundary, or SLA.
+    actions:
+      - Create impact report.
+      - Notify affected owners.
+      - Block next gate until acknowledged or explicitly accepted by orchestrator.
+
+  on_secret_detected:
+    trigger: Secret appears in code, logs, prompt, output, or artifact.
+    actions:
+      - Hard block immediately.
+      - Remove exposure.
+      - Rotate secret if exposure is confirmed.
+      - Record security decision.
+
+  on_bug_detected:
+    trigger: Bug is found in any phase or environment.
+    actions:
+      - Classify P0, P1, P2, or P3.
+      - Route to standard, fast-track, or emergency workflow.
+      - Require regression test for every fixed bug.
+
+  on_p0_emergency:
+    trigger: System down, data loss, security breach, or all users blocked.
+    actions:
+      - Pause non-critical work.
+      - Try feature flag mitigation first.
+      - Choose rollback or hotfix within 10 minutes.
+      - Keep CI, peer review, and evidence requirements.
+
+  on_incident_resolved:
+    trigger: P0 or P1 incident is closed.
+    actions:
+      - Schedule post-mortem within 24 hours.
+      - Record timeline, impact, root cause, and action items.
+      - Add follow-up work to backlog.
+

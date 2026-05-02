@@ -1,0 +1,63 @@
+version: 1
+name: ai-engineering-orchestration
+entrypoint: AGENTS.md
+description: >
+  Repo group, repo, and role orchestration for domain-expert AI teams that run
+  a complete software development lifecycle with logs, gates, and impact reports.
+
+hierarchy:
+  repo_group:
+    meaning: Workspace or group containing many companies, products, services, or repos.
+    contains:
+      - repos
+      - shared standards
+      - cross-repo impact reports
+  repo:
+    meaning: Company, product, service, or domain unit that runs SDLC phases.
+    contains:
+      - roles
+      - repo-specific decisions
+      - phase logs
+      - optional child_repos
+  role:
+    meaning: Domain expert agent responsible for a specific part of the SDLC.
+    contains:
+      - character
+      - skills
+      - responsibilities
+      - hooks
+      - rules
+
+load_order:
+  - .ai/global/company.skills.yml
+  - .ai/global/company.hooks.yml
+  - .ai/global/company.rules.yml
+  - .ai/global/sdlc.phases.yml
+  - .ai/repo-group/workspace.yml
+  - .ai/repo-group/impact-policy.yml
+  - .ai/repo-group/repo.template.yml
+  - .ai/role/orchestrator.yml
+  - .ai/role/product-manager.yml
+  - .ai/role/product-owner.yml
+  - .ai/role/ux-designer.yml
+  - .ai/role/tech-lead.yml
+  - .ai/role/frontend-engineer.yml
+  - .ai/role/backend-engineer.yml
+  - .ai/role/qa-sdet.yml
+  - .ai/role/devops-platform.yml
+  - .ai/role/security-engineer.yml
+  - .ai/role/data-analyst.yml
+  - .ai/role/legal-compliance.yml
+
+runtime:
+  phase_logs: .ai/runtime/logs
+  impact_reports: .ai/runtime/reports
+  decisions: .ai/runtime/decisions
+  templates: .ai/templates
+
+hard_requirements:
+  - Every phase must end with a phase log.
+  - Every handoff must include done, not done, risks, evidence, and DoD status.
+  - Every cross-role or cross-repo impact must be reported before the next gate.
+  - The orchestrator is the only role that can resolve unresolved role conflicts.
+

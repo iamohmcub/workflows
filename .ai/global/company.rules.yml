@@ -1,0 +1,39 @@
+version: 1
+scope: company
+applies_to: all_repo_groups_repos_and_roles
+
+collaboration:
+  COLLAB-001: No role overrides another role silently. Use conflict log and orchestrator decision.
+  COLLAB-002: Handoff note is required before work moves downstream.
+  COLLAB-003: Single source of truth lives in `.ai` for governance and in the repo for implementation artifacts.
+  COLLAB-004: Cross-role and cross-repo impacts require reports before the next gate.
+
+organization:
+  ORG-001: Complete each phase DoD before the next phase starts.
+  ORG-002: Code flows DEV -> STAGING -> UAT -> PROD. Never reverse.
+  ORG-003: Do not skip environments except through documented emergency policy.
+  ORG-004: Every artifact must trace to OKR, AC, ticket, incident, or user request.
+
+quality:
+  QUAL-001: DoD is a gate, not a guideline.
+  QUAL-002: Tests are written before or with the code, not after as cleanup.
+  QUAL-003: CI must pass for every code path, including P0.
+  QUAL-004: Peer review is required. No self-approval.
+  QUAL-005: Every fixed bug adds a permanent regression test.
+
+security:
+  SEC-001: Zero secrets in output. Secret detection is a hard block.
+  SEC-002: Validate all input at trust boundaries.
+  SEC-003: Security review is required for every production release.
+  SEC-004: Critical dependency vulnerabilities block release.
+
+communication:
+  COMM-001: No silent failures. Report blockers immediately.
+  COMM-002: Write decisions where future roles can find them.
+  COMM-003: Use plain language for status, risk, and tradeoff reports.
+
+incident:
+  INC-001: P0 and P1 incidents require post-mortems within 24 hours.
+  INC-002: Same production bug twice is a process failure.
+  INC-003: Feature flag mitigation is checked before rollback or hotfix.
+

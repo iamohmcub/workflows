@@ -1,0 +1,54 @@
+version: 1
+scope: repo_group
+
+impact_levels:
+  role:
+    meaning: Affects another role inside the same repo.
+    examples:
+      - Acceptance criteria changed after design started.
+      - API contract changed after frontend implementation started.
+      - QA must add or change regression tests.
+    required_output: .ai/runtime/reports/role-impact-<date>-<slug>.md
+
+  repo:
+    meaning: Affects the owning repo beyond one role.
+    examples:
+      - Database migration changes rollback plan.
+      - Release requires feature flag or canary.
+      - Security review blocks release.
+    required_output: .ai/runtime/reports/repo-impact-<date>-<slug>.md
+
+  group:
+    meaning: Affects another repo in the same repo group.
+    examples:
+      - Shared API contract changes.
+      - Shared design system component changes.
+      - Auth, billing, analytics, or deployment dependency changes.
+    required_output: .ai/runtime/reports/group-impact-<date>-<slug>.md
+
+required_fields:
+  - summary
+  - source_repo
+  - source_role
+  - affected_repos
+  - affected_roles
+  - phase
+  - impact_type
+  - severity
+  - required_action
+  - owner
+  - due_date
+  - gate_blocking
+  - evidence
+
+severity:
+  P0: System down, data loss, breach, or all users blocked.
+  P1: Core workflow broken or release blocked.
+  P2: Partial impact with workaround.
+  P3: Cosmetic, edge case, or documentation only.
+
+acknowledgement:
+  required_before_next_gate: true
+  timeout: 1 business day
+  unresolved_owner: orchestrator
+

@@ -1,0 +1,37 @@
+version: 1
+repo_group:
+  id: default-workspace
+  name: Default Repo Group
+  meaning: Workspace that can contain many companies, products, services, or repos.
+  owner_role: orchestrator
+
+governance:
+  global_rules_source: .ai/global/company.rules.yml
+  global_hooks_source: .ai/global/company.hooks.yml
+  global_skills_source: .ai/global/company.skills.yml
+  phase_source: .ai/global/sdlc.phases.yml
+
+repos:
+  - id: example-company
+    name: Example Company Repo
+    description: Replace with a real company, product, service, or domain repo.
+    config_template: .ai/repo-group/repo.template.yml
+    primary_roles:
+      - product-manager
+      - product-owner
+      - ux-designer
+      - tech-lead
+      - frontend-engineer
+      - backend-engineer
+      - qa-sdet
+      - devops-platform
+      - security-engineer
+      - data-analyst
+      - legal-compliance
+
+cross_repo_policy:
+  report_required: true
+  report_template: .ai/templates/impact-report.md
+  acknowledgement_required_before_next_gate: true
+  unresolved_conflict_owner: orchestrator
+

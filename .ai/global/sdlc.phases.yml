@@ -1,0 +1,109 @@
+version: 1
+scope: company
+
+definition:
+  gate_question: Is this ready for the next role to do their best work?
+  phase_log_required: true
+  impact_report_required_when: Work affects another role, repo, environment, API, data contract, SLA, security boundary, or customer commitment.
+
+phases:
+  - id: okr
+    name: OKR Setting
+    owner: product-manager
+    gate: Gate 1
+    dod:
+      - Objective is written in outcome language.
+      - Key results are measurable.
+      - Target users and business context are identified.
+      - Data analyst confirms measurement approach.
+
+  - id: user-research
+    name: User Research
+    owner: ux-designer
+    gate: Gate 2
+    dod:
+      - Research questions are tied to OKR.
+      - Findings distinguish observation from interpretation.
+      - At least three user signals are captured or an exception is logged.
+      - Risks and assumptions are documented.
+
+  - id: prd
+    name: PRD
+    owner: product-manager
+    gate: Gate 3
+    dod:
+      - Problem, goals, non-goals, and scope are clear.
+      - Acceptance criteria are testable.
+      - Dependencies and impacted repos are identified.
+      - Release metric and rollback expectation are stated.
+
+  - id: ux-design
+    name: UX Design
+    owner: ux-designer
+    gate: Gate 4
+    dod:
+      - Core flows and edge cases are designed.
+      - Loading, empty, error, success, and permission states are specified.
+      - Accessibility expectations are included.
+      - Product owner accepts that AC is represented in the design.
+
+  - id: technical-design
+    name: Technical Design
+    owner: tech-lead
+    gate: Gate 5
+    dod:
+      - Architecture, API contracts, data model, and migration plan are documented.
+      - Security and compliance risks are reviewed.
+      - Work is decomposed into tasks of two days or fewer.
+      - ADR is recorded for durable architecture decisions.
+
+  - id: development
+    name: Development
+    owner: tech-lead
+    gate: Gate 6
+    dod:
+      - Tests cover acceptance criteria and critical regressions.
+      - Code passes CI, review, lint, and secret scan.
+      - Observability and feature flag needs are implemented.
+      - DEV deployment evidence is linked.
+
+  - id: qa-testing
+    name: QA and Testing
+    owner: qa-sdet
+    gate: Gate 7
+    dod:
+      - Test plan maps to acceptance criteria.
+      - P0 and P1 bugs are closed.
+      - Regression, accessibility, and targeted integration tests pass.
+      - STAGING and UAT evidence is linked.
+
+  - id: release-deployment
+    name: Release and Deployment
+    owner: devops-platform
+    gate: Gate 8
+    dod:
+      - Release notes, rollout plan, and rollback plan are approved.
+      - Security signs off production release.
+      - Canary or progressive rollout is monitored.
+      - PROD evidence is linked.
+
+  - id: monitoring
+    name: Monitoring
+    owner: devops-platform
+    gate: Gate 9
+    dod:
+      - SLOs, dashboards, logs, and alerts are checked.
+      - Error budget impact is known.
+      - Customer-impacting anomalies are triaged.
+      - Incident follow-up is created if needed.
+
+  - id: measure-iterate
+    name: Measure and Iterate
+    owner: data-analyst
+    gate: Gate 10
+    dod:
+      - Actual metrics are compared to expected key results.
+      - Learning is documented.
+      - Follow-up decisions are added to backlog or next OKR.
+      - Repo group learnings are reported if reusable across repos.
+
